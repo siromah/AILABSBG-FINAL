@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Lock, Paperclip, X, Save } from 'lucide-react';
+import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock, BookOpen } from 'lucide-react';
 import { LESSONS_MODS } from '../data';
 import { Button } from '../components/ui/Button';
-import { Card, CardBody } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { Input } from '../components/ui/Input';
@@ -25,17 +24,13 @@ export default function Lessons({ db, updateDb, showToast }: any) {
   const [attachUrl, setAttachUrl] = useState('');
   const [notes, setNotes] = useState<Record<string, string>>({});
 
-  // Load notes from localStorage on mount
   useEffect(() => {
     try {
       const raw = localStorage.getItem('ailabs_lessonNotes');
       if (raw) setNotes(JSON.parse(raw));
-    } catch {
-      // ignore parse errors
-    }
+    } catch { /* silently ignore */ }
   }, []);
 
-  // Persist notes
   useEffect(() => {
     localStorage.setItem('ailabs_lessonNotes', JSON.stringify(notes));
   }, [notes]);
@@ -49,13 +44,10 @@ export default function Lessons({ db, updateDb, showToast }: any) {
   const prev = idx > 0 ? allLessons[idx - 1] : null;
   const next = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
 
-  // Attached videos per lesson
   const attachedVideos = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem('ailabs_attachedVideos') || '{}');
-    } catch {
-      return {};
-    }
+    } catch { return {}; }
   }, [showAttachModal, currentLesson.id]);
 
   const currentVideo = attachedVideos[currentLesson.id] || '';
@@ -63,8 +55,8 @@ export default function Lessons({ db, updateDb, showToast }: any) {
 
   const markLesson = (id: string) => {
     updateDb('lessonProg', { ...prog, [id]: !prog[id] });
-    if (!prog[id]) showToast('Lesson marked as complete');
-    else showToast('Lesson marked as incomplete');
+    if (!prog[id]) showToast('Урокът е завършен');
+    else showToast('Маркиран като незавършен');
   };
 
   const saveAttachedVideo = () => {
@@ -74,7 +66,7 @@ export default function Lessons({ db, updateDb, showToast }: any) {
     localStorage.setItem('ailabs_attachedVideos', JSON.stringify(existing));
     setAttachUrl('');
     setShowAttachModal(false);
-    showToast('Video attached');
+    showToast('Видеото е прикачено');
   };
 
   const removeAttachedVideo = () => {
@@ -82,84 +74,81 @@ export default function Lessons({ db, updateDb, showToast }: any) {
     delete existing[currentLesson.id];
     localStorage.setItem('ailabs_attachedVideos', JSON.stringify(existing));
     setShowAttachModal(false);
-    showToast('Video removed');
+    showToast('Видеото е премахнато');
   };
 
   return (
-    <div className="min-h-screen warm-gradient text-text-primary px-4 md:px-6 py-6 md:py-12">
-      <div className="max-w-7xl mx-auto">
-        
+    <div className="min-h-screen text-[var(--text-primary)] grain">
+      <div className="section-shell py-6 md:py-10">
+
         {/* PAGE HEADER */}
-        <div className="mb-10">
-          <Badge variant="accent" className="mb-4 rounded-full">AI Academy</Badge>
-          <h1 className="text-[32px] md:text-[44px] font-semibold text-ink-900 tracking-tight leading-tight">
-            AI Engineering for Founders
+        <div className="mb-8 md:mb-10">
+          <span className="label-caps mb-3 block">AI Академия</span>
+          <h1 className="display-md text-[var(--ink-900)] mb-3">
+            AI инженеринг за предприемачи
           </h1>
-          <p className="text-[17px] text-text-secondary mt-2 max-w-2xl">
-            Learn how to automate workflows and build AI systems from scratch.
+          <p className="text-[16px] text-[var(--text-secondary)] max-w-xl leading-relaxed">
+            Научете се да автоматизирате workflows и да изграждате AI системи от нулата — с ясни стъпки и практически упражнения.
           </p>
         </div>
-        
+
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          
+
           {/* SIDEBAR */}
-          <div className="w-full lg:w-[320px] lg:sticky lg:top-[96px] flex flex-col gap-6 lg:h-[calc(100vh-120px)] lg:overflow-y-auto custom-scrollbar pr-2">
-            
+          <div className="w-full lg:w-[320px] lg:sticky lg:top-[88px] flex flex-col gap-6 lg:h-[calc(100vh-120px)] lg:overflow-y-auto custom-scrollbar pr-1">
+
             {/* Progress Card */}
-            <Card className="bg-bg border-border/50">
-              <CardBody className="py-5 flex flex-col gap-3">
-                <div className="flex justify-between items-end mb-1">
-                  <h3 className="text-[14px] font-semibold text-ink-900">Your Progress</h3>
-                  <span className="text-[12px] font-medium text-text-secondary">{doneCount} / {total} lessons</span>
-                </div>
-                <ProgressBar value={Math.round((doneCount / total) * 100)} />
-                <div className="text-[12px] text-text-tertiary">
-                  {doneCount === total ? 'Course completed.' : 'Keep going, you are doing great.'}
-                </div>
-              </CardBody>
-            </Card>
-            
+            <div className="premium-card p-5">
+              <div className="flex justify-between items-end mb-2">
+                <span className="text-[13px] font-semibold text-[var(--ink-900)]">Прогрес</span>
+                <span className="text-[12px] font-medium text-[var(--text-secondary)]">{doneCount} / {total}</span>
+              </div>
+              <ProgressBar value={Math.round((doneCount / total) * 100)} />
+              <div className="text-[12px] text-[var(--text-tertiary)] mt-2">
+                {doneCount === total ? 'Курсът е завършен. Отлична работа.' : 'Продължавайте, вървите добре.'}
+              </div>
+            </div>
+
             {/* Content Outline */}
             <div className="flex flex-col gap-6">
               {LESSONS_MODS.map((mod:any, mIdx: number) => (
                 <div key={mod.title} className="flex flex-col">
-                  {/* Module Header */}
-                  <div className="sticky top-0 bg-bg-subtle/90 backdrop-blur pb-3 mb-2 z-10 pt-2">
-                    <h4 className="text-[11px] font-bold text-text-tertiary uppercase tracking-wider">
-                      Module {mIdx + 1}
-                    </h4>
-                    <div className="text-[15px] font-semibold text-ink-900 mt-1">{mod.title}</div>
+                  <div className="flex items-baseline gap-2.5 mb-3">
+                    <span className="text-[28px] font-medium text-[var(--ink-200)] leading-none">{String(mIdx + 1).padStart(2, '0')}</span>
+                    <div>
+                      <h4 className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Модул {mIdx + 1}</h4>
+                      <div className="text-[15px] font-semibold text-[var(--ink-900)] mt-0.5">{mod.title}</div>
+                    </div>
                   </div>
-                  
-                  {/* Lessons */}
-                  <div className="flex flex-col gap-1.5">
+
+                  <div className="flex flex-col gap-0.5 ml-1 border-l border-[var(--border)] pl-4">
                     {mod.lessons.map((l:any) => {
                       const done = prog[l.id];
                       const active = currentLesson.id === l.id;
                       return (
-                        <button 
+                        <button
                           key={l.id}
                           onClick={() => setCurrentLesson(l)}
                           className={`
-                            group flex items-start gap-3 p-3 rounded-xl text-left transition-colors border
-                            ${active ? 'bg-bg border-border shadow-sm' : 'border-transparent hover:bg-black/5'}
+                            group flex items-start gap-2.5 py-2.5 pr-2 rounded-xl text-left transition-colors
+                            ${active ? 'bg-[var(--bg-soft)]' : 'hover:bg-[var(--bg-soft)]/50'}
                           `}
                         >
                           <div className="mt-0.5 shrink-0">
                             {done ? (
-                              <CheckCircle2 size={18} className="text-emerald" />
+                              <CheckCircle2 size={16} className="text-[var(--emerald)]" />
                             ) : active ? (
-                              <Circle size={18} className="text-accent fill-accent/20" />
+                              <Circle size={16} className="text-[var(--accent)] fill-[var(--accent)]/20" />
                             ) : (
-                              <Circle size={18} className="text-text-disabled group-hover:text-text-tertiary" />
+                              <Circle size={16} className="text-[var(--text-disabled)] group-hover:text-[var(--text-tertiary)]" />
                             )}
                           </div>
-                          <div className="flex-1">
-                            <div className={`text-[14px] font-medium leading-tight mb-1 ${active ? 'text-ink-900' : 'text-text-secondary'}`}>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-[13px] font-medium leading-snug ${active ? 'text-[var(--ink-900)]' : 'text-[var(--text-secondary)]'}`}>
                               {l.title}
                             </div>
-                            <div className="text-[12px] text-text-tertiary flex items-center gap-1.5">
-                              <Play size={10} /> {l.dur}
+                            <div className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1 mt-0.5">
+                              <Play size={8} /> {l.dur}
                             </div>
                           </div>
                         </button>
@@ -170,181 +159,170 @@ export default function Lessons({ db, updateDb, showToast }: any) {
               ))}
             </div>
           </div>
-          
+
           {/* MAIN CONTENT */}
           <div className="flex-1 w-full min-w-0 flex flex-col gap-6">
-            
+
             {/* VIDEO PLAYER */}
             <AnimatePresence mode="wait">
-              <motion.div 
+              <motion.div
                 key={`video-${currentLesson.id}`}
-                initial={{opacity: 0, y: 10}}
+                initial={{opacity: 0, y: 8}}
                 animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: -10}}
-                transition={{duration: 0.3}}
-                className="w-full aspect-video bg-ink-900 rounded-2xl overflow-hidden relative shadow-lg border border-border/50"
+                exit={{opacity: 0, y: -8}}
+                transition={{duration: 0.25}}
+                className="w-full aspect-video bg-[var(--ink-900)] rounded-[24px] overflow-hidden relative shadow-lg border border-[var(--border)]"
               >
                 {videoInfo.type === 'youtube' && (
-                  <iframe 
-                    src={videoInfo.src} 
+                  <iframe
+                    src={videoInfo.src}
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    title="Lesson video"
+                    title="Видео урок"
                   />
                 )}
                 {videoInfo.type === 'vimeo' && (
-                  <iframe 
-                    src={videoInfo.src} 
+                  <iframe
+                    src={videoInfo.src}
                     className="w-full h-full"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
-                    title="Lesson video"
+                    title="Видео урок"
                   />
                 )}
                 {videoInfo.type === 'mp4' && (
-                  <video 
-                    src={videoInfo.src} 
-                    className="w-full h-full"
-                    controls
-                  />
+                  <video src={videoInfo.src} className="w-full h-full" controls />
                 )}
                 {videoInfo.type === 'unknown' && (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-white gap-4">
-                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                      <Play size={28} className="fill-white ml-1" />
+                  <div className="w-full h-full flex flex-col items-center justify-center text-white gap-3">
+                    <div className="w-14 h-14 rounded-full bg-white/8 flex items-center justify-center backdrop-blur-sm">
+                      <Play size={24} className="fill-white ml-0.5 opacity-80" />
                     </div>
-                    <div className="text-[14px] text-white/70">No video attached</div>
-                    <Button size="sm" variant="secondary" className="rounded-full" onClick={() => setShowAttachModal(true)}>
-                      <Paperclip size={14} /> Attach Video
+                    <div className="text-[13px] text-white/60">Няма прикачено видео</div>
+                    <Button size="sm" variant="secondary" className="rounded-full bg-white/10 text-white border-white/10 hover:bg-white/20" onClick={() => setShowAttachModal(true)}>
+                      <Paperclip size={13} /> Прикачи
                     </Button>
                   </div>
                 )}
 
-                {/* Overlay controls when video exists */}
                 {videoInfo.type !== 'unknown' && (
                   <div className="absolute top-3 right-3 z-10">
-                    <Button size="sm" variant="secondary" className="bg-black/50 text-white border-white/10 hover:bg-black/70 rounded-full" onClick={() => setShowAttachModal(true)}>
-                      <Paperclip size={14} /> Change
+                    <Button size="sm" variant="secondary" className="bg-black/40 text-white border-white/8 hover:bg-black/60 rounded-full backdrop-blur-sm" onClick={() => setShowAttachModal(true)}>
+                      <Paperclip size={13} /> Смени
                     </Button>
                   </div>
                 )}
               </motion.div>
             </AnimatePresence>
-            
+
             {/* LESSON CONTENT */}
-            <Card>
-              <CardBody className="p-6 md:p-10">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-8">
+            <div className="premium-card overflow-hidden">
+              <div className="p-5 md:p-8">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-5 mb-8">
                   <div>
-                    <Badge variant="outline" className="mb-3 rounded-full">Module Insight</Badge>
-                    <h2 className="text-[24px] md:text-[28px] font-semibold text-ink-900 tracking-tight leading-tight">
+                    <Badge variant="outline" className="mb-2 rounded-full text-[10px] uppercase tracking-wider">Модул</Badge>
+                    <h2 className="text-[22px] md:text-[28px] font-semibold text-[var(--ink-900)] tracking-tight leading-tight">
                       {currentLesson.h}
                     </h2>
                   </div>
-                  <Button 
-                    variant={isDone ? 'secondary' : 'primary'} 
+                  <Button
+                    variant={isDone ? 'secondary' : 'primary'}
                     onClick={() => markLesson(currentLesson.id)}
-                    className="shrink-0 rounded-full"
+                    className="shrink-0"
                   >
                     {isDone ? (
-                      <><CheckCircle2 size={16} /> Completed</>
+                      <><CheckCircle2 size={15} /> Завършен</>
                     ) : (
-                      'Mark as Complete'
+                      'Маркирай като завършен'
                     )}
                   </Button>
                 </div>
-                
-                <div className="text-[16px] text-text-secondary leading-[1.7] space-y-5">
+
+                <div className="text-[15px] text-[var(--text-secondary)] leading-[1.75] space-y-5">
                   <p>{currentLesson.p1}</p>
                   <p>{currentLesson.p2}</p>
                   <p>{currentLesson.p3}</p>
                 </div>
-                
+
                 {/* NOTES */}
-                <div className="mt-10 pt-8 border-t border-border">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[16px] font-semibold text-ink-900">My Notes</h3>
-                    <span className="text-[12px] text-text-tertiary">Auto-saved</span>
+                <div className="mt-10 pt-6 border-t border-[var(--border)]">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-[14px] font-semibold text-[var(--ink-900)]">Бележки</h3>
+                    <span className="text-[11px] text-[var(--text-tertiary)]">Автоматично запазване</span>
                   </div>
                   <textarea
-                    className="w-full bg-bg-subtle border border-border/50 rounded-xl p-4 text-[14px] text-ink-900 placeholder:text-text-disabled focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors min-h-[120px] resize-y custom-scrollbar"
-                    placeholder="Write your notes for this lesson..."
+                    className="w-full bg-[var(--bg-soft)] border border-[var(--border)] rounded-2xl p-4 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors min-h-[120px] resize-y custom-scrollbar"
+                    placeholder="Напишете вашите бележки..."
                     value={notes[currentLesson.id] || ''}
                     onChange={(e) => setNotes(prev => ({ ...prev, [currentLesson.id]: e.target.value }))}
                   />
                 </div>
-                
+
                 {/* NAVIGATION */}
-                <div className="flex justify-between items-center mt-12 pt-8 border-t border-border">
+                <div className="flex justify-between items-center mt-10 pt-6 border-t border-[var(--border)]">
                   {prev ? (
-                    <Button variant="ghost" className="rounded-full" onClick={() => setCurrentLesson(prev)}>
-                      <ChevronLeft size={16} /> Previous Lesson
+                    <Button variant="ghost" onClick={() => setCurrentLesson(prev)}>
+                      <ChevronLeft size={15} /> Предишен
                     </Button>
                   ) : <div></div>}
                   {next ? (
-                    <Button className="rounded-full" onClick={() => setCurrentLesson(next)}>
-                      Next Lesson <ChevronRight size={16} />
+                    <Button onClick={() => setCurrentLesson(next)}>
+                      Следващ <ChevronRight size={15} />
                     </Button>
                   ) : (
-                    <div className="text-emerald font-semibold text-[15px] flex items-center gap-2">
-                      <CheckCircle2 size={16} /> Module Complete
+                    <div className="text-[var(--emerald)] font-medium text-[14px] flex items-center gap-2">
+                      <CheckCircle2 size={15} /> Модулът е завършен
                     </div>
                   )}
                 </div>
-              </CardBody>
-            </Card>
-            
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-      
+
       {/* ATTACH VIDEO MODAL */}
       <AnimatePresence>
         {showAttachModal && (
-          <motion.div 
+          <motion.div
             initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
-            className="fixed inset-0 bg-ink-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-[var(--ink-900)]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setShowAttachModal(false)}
           >
             <motion.div
               initial={{scale: 0.95, opacity: 0}} animate={{scale: 1, opacity: 1}} exit={{scale: 0.95, opacity: 0}}
               onClick={(e) => e.stopPropagation()}
-              className="bg-bg border border-border rounded-2xl shadow-xl w-full max-w-md p-6"
+              className="bg-[var(--surface-strong)] border border-[var(--border)] rounded-[24px] shadow-xl w-full max-w-md p-7"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-[18px] font-semibold text-ink-900">Attach Video</h3>
-                <button onClick={() => setShowAttachModal(false)} className="p-1 text-text-tertiary hover:text-ink-900"><X size={18} /></button>
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-[17px] font-semibold text-[var(--ink-900)]">Прикачи видео</h3>
+                <button onClick={() => setShowAttachModal(false)} className="p-1 text-[var(--text-tertiary)] hover:text-[var(--ink-900)]"><X size={17} /></button>
               </div>
-              <p className="text-[14px] text-text-secondary mb-4">
-                Paste a YouTube, Vimeo, or direct MP4 link for this lesson.
+              <p className="text-[13px] text-[var(--text-secondary)] mb-4">
+                YouTube, Vimeo или директен MP4 линк за този урок.
               </p>
               <Input
                 value={attachUrl}
                 onChange={(e:any) => setAttachUrl(e.target.value)}
                 placeholder="https://..."
-                className="h-12 mb-4 rounded-xl"
+                className="h-11 mb-4 rounded-xl"
               />
               <div className="flex gap-3">
                 {currentVideo && (
-                  <Button variant="danger" className="flex-1 rounded-full" onClick={removeAttachedVideo}>
-                    Remove
+                  <Button variant="danger" className="flex-1" onClick={removeAttachedVideo}>
+                    Премахни
                   </Button>
                 )}
-                <Button className="flex-1 rounded-full" onClick={saveAttachedVideo} disabled={!attachUrl.trim()}>
-                  <Save size={16} /> Save
+                <Button className="flex-1" onClick={saveAttachedVideo} disabled={!attachUrl.trim()}>
+                  <Save size={15} /> Запази
                 </Button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-      `}</style>
     </div>
   );
 }

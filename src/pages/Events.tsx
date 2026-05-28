@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Calendar, Clock, Users, Video, CheckCircle2 } from 'lucide-react';
+import { Clock, Users, Video, CheckCircle2, ArrowRight, CalendarDays, Sparkles } from 'lucide-react';
 import { EVENTS_DATA } from '../data';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardBody } from '../components/ui/Card';
 
 export default function Events({ currentUser, openModal, showToast }: any) {
   const [joined, setJoined] = useState<string[]>([]);
@@ -13,9 +12,7 @@ export default function Events({ currentUser, openModal, showToast }: any) {
     try {
       const raw = localStorage.getItem('ailabs_joinedEvents');
       if (raw) setJoined(JSON.parse(raw));
-    } catch {
-      // ignore parse errors
-    }
+    } catch { /* silently ignore */ }
   }, []);
 
   useEffect(() => {
@@ -26,111 +23,103 @@ export default function Events({ currentUser, openModal, showToast }: any) {
     if (!currentUser) { openModal('login'); return; }
     if (joined.includes(id)) return;
     setJoined([...joined, id]);
-    showToast('Successfully registered. Check your email.');
+    showToast('Успешна регистрация. Проверете имейла си.');
   };
 
   return (
-    <div className="min-h-screen warm-gradient text-text-primary px-4 md:px-6 py-12 md:py-20">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col items-center text-center space-y-4 mb-16">
-          <Badge variant="accent" className="rounded-full">Calendar</Badge>
-          <h1 className="text-[40px] md:text-[56px] font-semibold text-ink-900 tracking-tight leading-tight">
-            Upcoming Events
-          </h1>
-          <p className="text-[18px] md:text-[20px] text-text-secondary max-w-2xl leading-relaxed">
-            AI workshops, live Q&A, and office hours with our core engineers. Exclusive for community members.
-          </p>
-          <div className="flex items-center gap-2 text-text-tertiary text-[14px] font-medium mt-2">
-            <span>{EVENTS_DATA.length} upcoming</span>
-            <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-            <span>{joined.length} joined</span>
-          </div>
+    <div className="min-h-screen text-[var(--text-primary)] grain">
+      <div className="section-shell py-10 md:py-14">
+
+        <div className="mb-10 md:mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"
+          >
+            <div>
+              <span className="label-caps mb-3 block">Календар</span>
+              <h1 className="display-lg text-[var(--ink-900)]">
+                Предстоящи събития
+              </h1>
+            </div>
+            <div>
+              <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed max-w-sm">
+                Практически AI workshops, live сесии и консултации с нашия екип. Без теория — само работа.
+              </p>
+              <div className="flex items-center gap-3 mt-3 text-[13px] text-[var(--text-tertiary)]">
+                <span>{EVENTS_DATA.length} предстоящи</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                <span>{joined.length} записани</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
-        
-        <div className="flex flex-col gap-6">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {EVENTS_DATA.length === 0 ? (
-            <Card className="bg-bg-subtle border-dashed border-2 py-16 text-center">
-              <h3 className="text-[18px] font-semibold text-ink-900 mb-2">No upcoming events</h3>
-              <p className="text-text-secondary">Check back soon for new workshops and office hours.</p>
-            </Card>
-          ) : EVENTS_DATA.map((e:any) => {
+            <div className="premium-card py-14 text-center col-span-full">
+              <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-1">Няма предстоящи събития</h3>
+              <p className="text-[14px] text-[var(--text-secondary)]">Проверете отново скоро.</p>
+            </div>
+          ) : EVENTS_DATA.map((e:any, idx:number) => {
             const isJoined = joined.includes(e.id);
             return (
-              <motion.div 
-                initial={{opacity: 0, y: 10}}
+              <motion.div
+                initial={{opacity: 0, y: 12}}
                 whileInView={{opacity: 1, y: 0}}
                 viewport={{once: true}}
-                transition={{duration: 0.4}}
+                transition={{duration: 0.35, delay: idx * 0.05}}
                 key={e.id}
               >
-                <Card className="bg-bg transition-shadow hover:shadow-md border-border/50 group overflow-hidden relative">
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${isJoined ? 'bg-emerald' : 'bg-border-strong group-hover:bg-accent transition-colors'}`}></div>
-                  <CardBody className="p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
-                    
-                    {/* Date Block */}
-                    <div className={`flex flex-col items-center justify-center shrink-0 w-24 h-24 rounded-2xl border transition-colors ${
-                      isJoined 
-                        ? 'bg-emerald-50 border-emerald-100 text-emerald' 
-                        : 'bg-bg-subtle border-border/50 text-ink-900 group-hover:bg-bg group-hover:border-accent/20'
-                    }`}>
-                      <span className="text-[32px] font-bold leading-none tracking-tight mb-1">{e.day}</span>
-                      <span className="text-[12px] font-semibold uppercase tracking-widest opacity-80">{e.mo}</span>
+                <div className={`group relative premium-card p-5 md:p-6 flex flex-col h-full ${isJoined ? 'border-[var(--emerald)]/20' : ''}`}>
+                  <div className={`absolute left-0 top-4 bottom-4 w-[3px] rounded-r-full ${isJoined ? 'bg-[var(--emerald)]' : 'bg-[var(--border-strong)] group-hover:bg-[var(--accent)] transition-colors'}`} />
+
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`flex flex-col items-center justify-center shrink-0 w-14 h-14 rounded-2xl border ${isJoined ? 'bg-[var(--emerald-light)] border-[var(--emerald)]/20 text-[var(--emerald)]' : 'bg-[var(--bg-soft)] border-[var(--border)] text-[var(--ink-900)]'}`}>
+                      <span className="text-[22px] font-semibold leading-none tracking-tight">{e.day}</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-widest opacity-70 mt-0.5">{e.mo}</span>
                     </div>
-                    
-                    {/* Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap gap-2 mb-3">
+                    <div>
+                      <div className="flex flex-wrap gap-1.5 mb-1">
                         {isJoined ? (
-                          <Badge variant="success" className="gap-1 px-2 rounded-full"><CheckCircle2 size={12} /> Registered</Badge>
+                          <Badge variant="success" className="gap-1 px-2 rounded-full text-[10px]"><CheckCircle2 size={10} /> Записан</Badge>
                         ) : (
-                          <Badge variant="outline" className="rounded-full">Upcoming</Badge>
+                          <Badge variant="outline" className="rounded-full text-[10px]">Предстоящо</Badge>
                         )}
-                        <Badge variant="outline" className="gap-1.5 opacity-80 border-dashed rounded-full">
-                          <Video size={12} className="text-text-tertiary" /> {e.platform}
-                        </Badge>
                       </div>
-                      
-                      <h3 className="text-[22px] md:text-[24px] font-semibold text-ink-900 leading-tight mb-2">
-                        {e.title}
-                      </h3>
-                      
-                      <p className="text-[15px] text-text-secondary leading-relaxed mb-5 max-w-2xl">
-                        {e.desc}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-4 text-[13px] font-medium text-text-tertiary bg-bg-subtle rounded-xl px-4 py-3 inline-flex items-center">
-                        <span className="flex items-center gap-1.5">
-                          <Clock size={16} className="text-text-disabled" /> {e.time}
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-                        <span className="flex items-center gap-1.5">
-                          <Clock size={16} className="text-text-disabled" /> {e.dur}
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-                        <span className="flex items-center gap-1.5 text-ink-900">
-                          <Users size={16} className="text-accent" /> {e.spots} spots left
-                        </span>
+                      <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1">
+                        <Video size={11} className="text-[var(--text-tertiary)]" /> {e.platform}
                       </div>
                     </div>
-                    
-                    {/* Action */}
-                    <div className="w-full md:w-auto shrink-0 md:ml-4">
-                      {isJoined ? (
-                        <div className="w-full md:w-32 py-3 px-4 rounded-xl font-medium text-center bg-emerald-50 text-emerald text-[14px]">
-                          Joined
-                        </div>
-                      ) : (
-                        <Button 
-                          onClick={() => handleJoin(e.id)} 
-                          className="w-full md:w-auto min-w-[140px] rounded-full"
-                        >
-                          Save My Spot
-                        </Button>
-                      )}
-                    </div>
-                    
-                  </CardBody>
-                </Card>
+                  </div>
+
+                  <h3 className="text-[17px] md:text-[18px] font-semibold text-[var(--ink-900)] leading-tight mb-2 tracking-tight">
+                    {e.title}
+                  </h3>
+
+                  <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4 flex-1">
+                    {e.desc}
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 text-[12px] font-medium text-[var(--text-tertiary)] mb-5">
+                    <span className="flex items-center gap-1.5"><Clock size={13} /> {e.time}</span>
+                    <span className="flex items-center gap-1.5"><Clock size={13} /> {e.dur}</span>
+                    <span className="flex items-center gap-1.5 text-[var(--ink-900)]"><Users size={13} className="text-[var(--accent)]" /> {e.spots} места</span>
+                  </div>
+
+                  <div className="mt-auto">
+                    {isJoined ? (
+                      <div className="w-full py-2.5 px-4 rounded-xl font-medium text-center bg-[var(--emerald-light)] text-[var(--emerald)] text-[13px] border border-[var(--emerald)]/10">
+                        Записан
+                      </div>
+                    ) : (
+                      <Button onClick={() => handleJoin(e.id)} className="w-full">
+                        Запази място <ArrowRight size={13} />
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             );
           })}

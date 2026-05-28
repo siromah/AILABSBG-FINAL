@@ -13,19 +13,19 @@ export function StatusChip({ status, label, className = '', ...props }: StatusCh
   const statusConfig = {
     upcoming: {
       classes: 'bg-accent-light text-accent-text',
-      defaultLabel: 'UPCOMING'
+      defaultLabel: 'ПРЕДСТОИ'
     },
     live: {
       classes: 'bg-emerald-light text-emerald-text',
-      defaultLabel: 'LIVE'
+      defaultLabel: 'НА ЖИВО'
     },
     ended: {
       classes: 'bg-ink-100 text-ink-400',
-      defaultLabel: 'ENDED'
+      defaultLabel: 'ЗАВЪРШИЛО'
     },
     draft: {
       classes: 'bg-amber-light text-amber-text',
-      defaultLabel: 'DRAFT'
+      defaultLabel: 'ЧЕРНОВА'
     }
   };
 

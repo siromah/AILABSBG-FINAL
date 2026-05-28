@@ -1,93 +1,89 @@
 import React from 'react';
-import { Card, CardBody } from '../components/ui/Card';
 
 const LegalLayout = ({ title, children }: any) => (
-  <div className="min-h-screen bg-bg-subtle px-4 py-20">
-    <div className="max-w-3xl mx-auto">
-      <Card className="bg-bg shadow-sm">
-        <CardBody className="p-8 md:p-12">
-          <h1 className="text-[32px] md:text-[40px] font-semibold text-ink-900 tracking-tight leading-tight mb-8">
-            {title}
-          </h1>
-          <div className="text-[15px] leading-relaxed text-text-secondary space-y-6">
-            <div className="bg-amber-light border border-amber/20 px-5 py-4 rounded-xl text-[14px] text-amber-900 mb-8">
-              <strong>Disclaimer:</strong> This content is a technical prototype and does not represent an official legal document. It must be reviewed by legal counsel before public launch.
-            </div>
-            {children}
+  <div className="min-h-screen text-[var(--text-primary)] grain py-16 md:py-20">
+    <div className="section-shell max-w-3xl">
+      <div className="premium-card p-8 md:p-12">
+        <h1 className="display-lg text-[var(--ink-900)] mb-8">
+          {title}
+        </h1>
+        <div className="text-[15px] leading-relaxed text-[var(--text-secondary)] space-y-6">
+          <div className="bg-[var(--amber-light)] border border-[var(--amber)]/20 px-5 py-4 rounded-xl text-[14px] text-[var(--amber-text)] mb-8">
+            <strong>Отказ от отговорност:</strong> Това съдържание е технически прототип и не представлява официален правен документ. Трябва да бъде прегледано от юристи преди публично стартиране.
           </div>
-        </CardBody>
-      </Card>
+          {children}
+        </div>
+      </div>
     </div>
   </div>
 );
 
 export const PrivacyPolicy = () => (
-  <LegalLayout title="Privacy Policy">
-    <p>Last Updated: {new Date().toLocaleDateString()}</p>
-    
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">1. Who are we?</h3>
-    <p>This site is managed by AILABSBG and serves as a conceptual platform. This policy explains how we collect and use your data when using our services.</p>
+  <LegalLayout title="Политика за поверителност">
+    <p>Последна актуализация: {new Date().toLocaleDateString('bg-BG')}</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">2. Data we collect</h3>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">1. Кои сме ние?</h3>
+    <p>Този сайт се управлява от AILABSBG и служи като концептуална платформа. Тази политика обяснява как събираме и използваме вашите данни при използване на нашите услуги.</p>
+
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">2. Какви данни събираме</h3>
     <ul className="list-disc pl-5 space-y-2">
-      <li><strong>Profile Data:</strong> Names, email address, and professional role upon registration (using Supabase/Firebase Auth or similar).</li>
-      <li><strong>Content:</strong> Posts, comments, and saved prompts within your user session.</li>
-      <li><strong>Technical Data:</strong> IP address, cookies, and analytical information only if explicit consent is given.</li>
+      <li><strong>Профилни данни:</strong> Имена, имейл адрес и професионална роля при регистрация.</li>
+      <li><strong>Съдържание:</strong> Публикации, коментари и запазени prompts във вашата потребителска сесия.</li>
+      <li><strong>Технически данни:</strong> IP адрес, бисквитки и аналитична информация само при изрично съгласие.</li>
     </ul>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">3. Purpose of processing</h3>
-    <p>We use your data to:</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">3. Цел на обработката</h3>
+    <p>Използваме вашите данни, за да:</p>
     <ul className="list-disc pl-5 space-y-2">
-      <li>Ensure the functioning of the platform (e.g., user login).</li>
-      <li>Improve learning materials and the community through aggregated statistics.</li>
-      <li>Send you important system notifications.</li>
+      <li>Осигурим функционирането на платформата (напр. потребителски вход).</li>
+      <li>Подобрим учебните материали и общността чрез обобщена статистика.</li>
+      <li>Изпращаме важни системни известия.</li>
     </ul>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">4. Your GDPR Rights</h3>
-    <p>Under Regulation (EU) 2016/679 (GDPR), you have the right to access, rectify, erase, and port your data. You may withdraw your consent at any time.</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">4. Вашите GDPR права</h3>
+    <p>Съгласно Регламент (ЕС) 2016/679 (GDPR), имате право на достъп, коригиране, изтриване и преносимост на вашите данни. Можете да оттеглите съгласието си по всяко време.</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">5. Contact us</h3>
-    <p>For inquiries regarding privacy, please contact us at: <a href="mailto:privacy@ailabsbg.demo" className="text-accent hover:underline font-medium">privacy@ailabsbg.demo</a></p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">5. Свържете се с нас</h3>
+    <p>Запитвания относно поверителност: <a href="mailto:privacy@ailabsbg.demo" className="text-[var(--accent)] hover:underline font-medium">privacy@ailabsbg.demo</a></p>
   </LegalLayout>
 );
 
 export const CookiePolicy = () => (
-  <LegalLayout title="Cookie Policy">
-    <p>Last Updated: {new Date().toLocaleDateString()}</p>
-    
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">1. What are cookies?</h3>
-    <p>Cookies are small text files that are saved on your device when you visit a website. We use cookies and local storage (localStorage) to ensure the seamless operation of the platform.</p>
+  <LegalLayout title="Политика за бисквитки">
+    <p>Последна актуализация: {new Date().toLocaleDateString('bg-BG')}</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">2. Types of cookies we use</h3>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">1. Какво са бисквитките?</h3>
+    <p>Бисквитките са малки текстови файлове, които се запазват на вашето устройство при посещение на уебсайт. Използваме бисквитки и local storage, за да осигурим безпроблемната работа на платформата.</p>
+
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">2. Видове бисквитки, които използваме</h3>
     <ul className="list-disc pl-5 space-y-2">
-      <li><strong>Strictly Necessary:</strong> Mandatory for the site to work (e.g., saving login state, themes). Cannot be disabled.</li>
-      <li><strong>Analytical (Optional):</strong> Helps us understand how visitors interact with the site (e.g., number of visits, most viewed courses).</li>
-      <li><strong>Marketing (Optional):</strong> Used to track across different sites to show relevant ads.</li>
+      <li><strong>Строго необходими:</strong> Задължителни за работата на сайта (напр. запазване на сесия, тема). Не могат да бъдат изключени.</li>
+      <li><strong>Аналитични (по избор):</strong> Помагат ни да разберем как посетителите взаимодействат със сайта.</li>
+      <li><strong>Маркетингови (по избор):</strong> Използват се за проследяване между различни сайтове за показване на релевантни реклами.</li>
     </ul>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">3. Managing preferences</h3>
-    <p>You can change your cookie settings at any time using the "Cookie Settings" button.</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">3. Управление на предпочитания</h3>
+    <p>Можете да промените настройките си за бисквитки по всяко време чрез бутона "Настройки".</p>
   </LegalLayout>
 );
 
 export const TermsOfUse = () => (
-  <LegalLayout title="Terms of Use">
-    <p>Last Updated: {new Date().toLocaleDateString()}</p>
+  <LegalLayout title="Условия за ползване">
+    <p>Последна актуализация: {new Date().toLocaleDateString('bg-BG')}</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">1. Acceptance of Terms</h3>
-    <p>By accessing and using AILABSBG, you agree to be bound by these Terms of Use. This is a platform for learning and professional community building.</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">1. Приемане на условията</h3>
+    <p>С достъпването и използването на AILABSBG се съгласявате с тези Условия за ползване. Това е платформа за обучение и професионална общност.</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">2. User Accounts and Content</h3>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">2. Потребителски акаунти и съдържание</h3>
     <ul className="list-disc pl-5 space-y-2">
-      <li>You are responsible for maintaining the confidentiality of your password.</li>
-      <li>The content you share in the "Community" section must not violate the law, copyrights, or offend other users.</li>
+      <li>Вие сте отговорни за запазването на конфиденциалността на вашата парола.</li>
+      <li>Съдържанието, което споделяте в секцията "Общност", не трябва да нарушава закона, авторските права или да обижда други потребители.</li>
     </ul>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">3. Intellectual Property</h3>
-    <p>All learning content, texts, designs, and graphics on the platform are owned by AILABSBG, unless otherwise noted. User prompts remain the property of their creators but are displayed within the platform.</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">3. Интелектуална собственост</h3>
+    <p>Всички учебни материали, текстове, дизайни и графики на платформата са собственост на AILABSBG, освен ако не е посочено друго. Потребителските prompts остават собственост на своите създатели, но се показват в рамките на платформата.</p>
 
-    <h3 className="text-[18px] font-semibold text-ink-900 mt-10 mb-3">4. Limitation of Liability</h3>
-    <p>The platform and AI integrations are provided "as is". We are not responsible for damages arising from the use or inability to use the materials. AI-generated content must be verified as we do not guarantee its accuracy.</p>
+    <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">4. Ограничение на отговорността</h3>
+    <p>Платформата и AI интеграциите се предоставят "както са". Не носим отговорност за щети, произтичащи от използването или невъзможността за използване на материалите. AI генерираното съдържание трябва да бъде проверено, тъй като не гарантираме неговата точност.</p>
   </LegalLayout>
 );
-

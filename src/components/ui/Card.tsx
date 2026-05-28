@@ -2,9 +2,9 @@ import React from 'react';
 
 export function Card({ className = '', children, hover = false, glass = false, ...props }: React.HTMLAttributes<HTMLDivElement> & { hover?: boolean; glass?: boolean }) {
   const baseClasses = glass
-    ? 'glass rounded-2xl shadow-sm'
-    : 'bg-white border border-border/60 rounded-2xl shadow-xs';
-  const hoverClasses = hover ? 'transition-all duration-300 hover:shadow-md hover:-translate-y-[2px] hover:border-border-strong' : '';
+    ? 'glass-card rounded-[28px]'
+    : 'premium-card';
+  const hoverClasses = hover ? 'cursor-pointer' : '';
   return (
     <div className={`${baseClasses} ${hoverClasses} ${className}`} {...props}>
       {children}
@@ -30,7 +30,7 @@ export function CardBody({ className = '', children, ...props }: React.HTMLAttri
 
 export function CardFooter({ className = '', children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`px-6 pb-6 pt-0 border-t border-border mt-auto ${className}`} {...props}>
+    <div className={`px-6 pb-6 pt-0 border-t border-[var(--border)] mt-auto ${className}`} {...props}>
       {children}
     </div>
   );

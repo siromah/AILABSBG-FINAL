@@ -1,152 +1,154 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Send, MessageSquare } from 'lucide-react';
+import { Mail, Send, User, MessageSquare, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Textarea } from '../components/ui/Textarea';
-import { Card, CardBody } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
 
 export default function Contact({ showToast }: any) {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [consent, setConsent] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState<{name?:string, email?:string, message?:string}>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const validate = () => {
+    const e: typeof errors = {};
+    if (!form.name.trim() || form.name.trim().length < 2) e.name = 'Моля, въведете име';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Моля, въведете валиден имейл';
+    if (!form.message.trim() || form.message.trim().length < 10) e.message = 'Съобщението трябва да е поне 10 символа';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!consent) {
-      showToast('Please agree to the privacy policy.', true);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const endpoint = (import.meta as any).env?.VITE_CONTACT_ENDPOINT;
-      if (!endpoint) {
-        await new Promise(r => setTimeout(r, 800));
-        showToast('Message sent successfully');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setConsent(false);
-        return;
-      }
-      
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      if (!res.ok) throw new Error('Network error');
-      showToast('Message sent successfully');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setConsent(false);
-    } catch (error) {
-      showToast('An error occurred. Please try again later.', true);
-    } finally {
-      setLoading(false);
-    }
+    if (!validate()) return;
+    setSent(true);
+    setForm({ name: '', email: '', message: '' });
+    showToast('Съобщението е изпратено успешно');
+    setTimeout(() => setSent(false), 5000);
   };
 
   return (
-    <div className="min-h-screen warm-gradient text-text-primary px-4 md:px-6 py-12 md:py-20 lg:py-24">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex flex-col items-center text-center space-y-4 mb-12">
-          <div className="w-12 h-12 rounded-xl bg-accent-light/50 text-accent flex items-center justify-center mb-2">
-            <MessageSquare size={24} />
+    <div className="min-h-screen text-[var(--text-primary)] grain">
+      <div className="section-shell py-10 md:py-14">
+
+        {/* HEADER */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-14 items-end">
+          <div className="lg:col-span-7">
+            <span className="label-caps mb-3 block">Контакт</span>
+            <h1 className="display-lg text-[var(--ink-900)]">
+              Свържете се с нас
+            </h1>
           </div>
-          <h1 className="text-[40px] md:text-[56px] font-semibold text-ink-900 tracking-tight leading-tight">
-            Contact <span className="text-accent">Us</span>
-          </h1>
-          <p className="text-[18px] md:text-[20px] text-text-secondary max-w-xl leading-relaxed">
-            Have questions about our training programs, partnerships, or the platform? Drop us a line.
-          </p>
+          <div className="lg:col-span-5">
+            <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed">
+              Имате въпроси относно обученията, курсовете или бизнес колаборация? Изпратете ни съобщение и ще ви отговорим до 24 часа.
+            </p>
+          </div>
         </div>
 
-        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration: 0.4}}>
-          <Card className="bg-bg shadow-sm border-border/50">
-            <CardBody className="p-8 md:p-10">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-[14px] font-medium text-ink-900">Name</label>
-                    <Input 
-                      id="name" 
-                      type="text" 
-                      required 
-                      placeholder="Your name" 
-                      value={formData.name} 
-                      onChange={(e:any) => setFormData({...formData, name: e.target.value})} 
-                      disabled={loading} 
-                      className="h-12 rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-[14px] font-medium text-ink-900">Email Address</label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      required 
-                      placeholder="you@company.com" 
-                      value={formData.email} 
-                      onChange={(e:any) => setFormData({...formData, email: e.target.value})} 
-                      disabled={loading} 
-                      className="h-12 rounded-xl"
-                    />
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+          {/* FORM */}
+          <div className="lg:col-span-7">
+            {sent ? (
+              <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="h-full flex flex-col items-center justify-center text-center py-16 rounded-3xl border border-[var(--border)] bg-[var(--surface-strong)] px-8">
+                <div className="w-14 h-14 rounded-full bg-[var(--emerald-light)] flex items-center justify-center mb-5">
+                  <CheckCircle size={28} className="text-[var(--emerald)]" />
                 </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="text-[14px] font-medium text-ink-900">Subject</label>
-                  <Input 
-                    id="subject" 
-                    type="text" 
-                    required 
-                    placeholder="e.g. Question about Academy" 
-                    value={formData.subject} 
-                    onChange={(e:any) => setFormData({...formData, subject: e.target.value})} 
-                    disabled={loading} 
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-[14px] font-medium text-ink-900">Message</label>
-                  <Textarea 
-                    id="message" 
-                    required 
-                    placeholder="How can we help you?" 
-                    value={formData.message} 
-                    onChange={(e:any) => setFormData({...formData, message: e.target.value})} 
-                    disabled={loading} 
-                    className="min-h-[160px] resize-y custom-scrollbar rounded-xl"
-                  />
-                </div>
-                
-                <label className="flex items-start gap-3 pt-2 pb-2 cursor-pointer group">
-                  <div className="relative flex items-center justify-center mt-0.5">
-                    <input
-                      type="checkbox"
-                      required
-                      className="peer appearance-none w-5 h-5 border-2 border-border-strong rounded bg-bg checked:bg-accent checked:border-accent transition-colors"
-                      checked={consent}
-                      onChange={(event) => setConsent(event.target.checked)}
-                    />
-                    <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 placeholder:transition-opacity" viewBox="0 0 14 10" fill="none">
-                      <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <span className="text-[14px] text-text-secondary leading-snug">
-                    I agree that the data I provide will be processed to answer my request, in accordance with the <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a>.
-                  </span>
-                </label>
-                
-                <Button type="submit" disabled={loading} className="w-full h-12 text-[15px] gap-2 mt-4 inline-flex items-center justify-center rounded-full">
-                  {loading ? 'Sending...' : <>Send Message <Send size={16} /></>}
+                <h2 className="text-[20px] font-semibold text-[var(--ink-900)] mb-2">Съобщението е изпратено</h2>
+                <p className="text-[var(--text-secondary)] max-w-sm leading-relaxed text-[14px]">Благодарим ви. Ще се свържем с вас до 24 часа.</p>
+                <Button variant="secondary" className="mt-6" onClick={() => setSent(false)}>
+                  Новo съобщение <ArrowRight size={14} />
                 </Button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="premium-card p-6 md:p-10">
+                <div className="space-y-5">
+                  <div>
+                    <label className="label-caps block mb-2">Вашето име</label>
+                    <div className="relative">
+                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
+                      <input
+                        type="text"
+                        value={form.name}
+                        onChange={e => setForm({ ...form, name: e.target.value })}
+                        placeholder="Иван Петров"
+                        className={`w-full h-11 pl-10 pr-4 rounded-xl border bg-[var(--bg-soft)] text-[var(--ink-900)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-1 transition-all ${errors.name ? 'border-[var(--rose)] focus:ring-[var(--rose)]' : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]'}`}
+                      />
+                    </div>
+                    {errors.name && <p className="text-[12px] text-[var(--rose)] mt-1">{errors.name}</p>}
+                  </div>
+
+                  <div>
+                    <label className="label-caps block mb-2">Имейл адрес</label>
+                    <div className="relative">
+                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={e => setForm({ ...form, email: e.target.value })}
+                        placeholder="ivan@example.com"
+                        className={`w-full h-11 pl-10 pr-4 rounded-xl border bg-[var(--bg-soft)] text-[var(--ink-900)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-1 transition-all ${errors.email ? 'border-[var(--rose)] focus:ring-[var(--rose)]' : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]'}`}
+                      />
+                    </div>
+                    {errors.email && <p className="text-[12px] text-[var(--rose)] mt-1">{errors.email}</p>}
+                  </div>
+
+                  <div>
+                    <label className="label-caps block mb-2">Съобщение</label>
+                    <div className="relative">
+                      <MessageSquare size={16} className="absolute left-3.5 top-3.5 text-[var(--text-tertiary)]" />
+                      <textarea
+                        value={form.message}
+                        onChange={e => setForm({ ...form, message: e.target.value })}
+                        placeholder="Опишете въпроса си..."
+                        rows={5}
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl border bg-[var(--bg-soft)] text-[var(--ink-900)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-1 transition-all resize-none ${errors.message ? 'border-[var(--rose)] focus:ring-[var(--rose)]' : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]'}`}
+                      />
+                    </div>
+                    {errors.message && <p className="text-[12px] text-[var(--rose)] mt-1">{errors.message}</p>}
+                  </div>
+
+                  <Button type="submit" size="lg" className="w-full h-12 text-[15px] gap-2">
+                    <Send size={16} /> Изпрати съобщение
+                  </Button>
+                </div>
               </form>
-            </CardBody>
-          </Card>
-        </motion.div>
+            )}
+          </div>
+
+          {/* SIDEBAR INFO */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="premium-card p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
+                  <Clock size={18} />
+                </div>
+                <h3 className="text-[16px] font-semibold text-[var(--ink-900)] tracking-tight">Време за отговор</h3>
+              </div>
+              <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
+                Отговаряме в рамките на <strong className="text-[var(--ink-900)]">1–2 работни дни</strong> на всички съобщения. Предпочитаме детайлен отговор пред бърз.
+              </p>
+            </div>
+
+            <div className="premium-card p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[var(--amber-light)] text-[var(--amber)] flex items-center justify-center">
+                  <Mail size={18} />
+                </div>
+                <h3 className="text-[16px] font-semibold text-[var(--ink-900)] tracking-tight">Имейл директно</h3>
+              </div>
+              <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
+                hello@ailabsbg.com
+              </p>
+            </div>
+
+            <div className="rounded-3xl overflow-hidden h-40 relative border border-[var(--border)]">
+              <div className="absolute inset-0 bg-[var(--accent)]/5" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[28px] font-semibold text-[var(--ink-900)]/10 tracking-tight">AILABSBG</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

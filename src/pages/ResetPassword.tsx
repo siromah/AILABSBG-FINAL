@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { Card, CardBody } from '../components/ui/Card';
 import { Lock } from 'lucide-react';
 
 export function ResetPassword() {
@@ -22,17 +21,17 @@ export function ResetPassword() {
     setMessage('');
 
     if (!isConfigured) {
-      setError('Password reset is not configured.');
+      setError('Възстановяването на парола не е конфигурирано.');
       return;
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      setError('Паролата трябва да е поне 8 символа.');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Паролите не съвпадат.');
       return;
     }
 
@@ -45,7 +44,7 @@ export function ResetPassword() {
       return;
     }
 
-    setMessage('Password updated successfully.');
+    setMessage('Паролата е обновена успешно.');
 
     setTimeout(() => {
       navigate('/profile', { replace: true });
@@ -53,53 +52,51 @@ export function ResetPassword() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-80px)] bg-bg-subtle flex items-center justify-center p-4 py-12">
-      <Card className="w-full max-w-[440px] bg-bg shadow-sm">
-        <CardBody className="p-8 md:p-10">
-          <div className="text-center mb-10 flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald flex items-center justify-center mb-4">
-              <Lock size={24} />
-            </div>
-            <h1 className="text-[28px] font-semibold text-ink-900 tracking-tight mb-2">Create New Password</h1>
-            <p className="text-[15px] text-text-secondary">Please enter your new password below.</p>
+    <main className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 py-12">
+      <div className="w-full max-w-[440px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm rounded-3xl p-8 md:p-10">
+        <div className="text-center mb-10 flex flex-col items-center">
+          <div className="w-12 h-12 rounded-full bg-[var(--emerald-light)] text-[var(--emerald)] flex items-center justify-center mb-4">
+            <Lock size={24} />
+          </div>
+          <h1 className="text-[28px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Нова парола</h1>
+          <p className="text-[15px] text-[var(--text-secondary)]">Моля, въведете новата си парола по-долу.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-[14px] font-medium text-[var(--ink-900)]">Нова парола</label>
+            <Input
+              type="password"
+              value={password}
+              placeholder="Въведете нова парола"
+              autoComplete="new-password"
+              onChange={(event:any) => setPassword(event.target.value)}
+              className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-[14px] font-medium text-ink-900">New Password</label>
-              <Input
-                type="password"
-                value={password}
-                placeholder="Enter new password"
-                autoComplete="new-password"
-                onChange={(event:any) => setPassword(event.target.value)}
-                className="h-12 border-border"
-              />
-            </div>
+          <div className="space-y-1.5">
+            <label className="text-[14px] font-medium text-[var(--ink-900)]">Потвърдете паролата</label>
+            <Input
+              type="password"
+              value={confirmPassword}
+              placeholder="Потвърдете паролата"
+              autoComplete="new-password"
+              onChange={(event:any) => setConfirmPassword(event.target.value)}
+              className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
+            />
+          </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[14px] font-medium text-ink-900">Confirm Password</label>
-              <Input
-                type="password"
-                value={confirmPassword}
-                placeholder="Confirm your password"
-                autoComplete="new-password"
-                onChange={(event:any) => setConfirmPassword(event.target.value)}
-                className="h-12 border-border"
-              />
-            </div>
+          {error && <p className="text-[14px] text-[var(--rose)] font-medium mt-2">{error}</p>}
+          {message && <p className="text-[14px] text-[var(--emerald)] bg-[var(--emerald-light)] border border-[var(--emerald)]/20 px-4 py-3 rounded-xl font-medium mt-2">{message}</p>}
 
-            {error && <p className="text-[14px] text-rose font-medium mt-2">{error}</p>}
-            {message && <p className="text-[14px] text-emerald bg-emerald-50 border border-emerald-200 px-4 py-3 rounded-xl font-medium mt-2">{message}</p>}
-
-            <div className="pt-2">
-              <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
-                {loading ? 'Updating...' : 'Update Password'}
-              </Button>
-            </div>
-          </form>
-        </CardBody>
-      </Card>
+          <div className="pt-2">
+            <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
+              {loading ? 'Обновяване...' : 'Обнови паролата'}
+            </Button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }

@@ -16,18 +16,18 @@ export const INIT_NOTIFS = [
 ];
 
 export const PROMPTS = [
-  {id:'pr1',title:'Email sequence automation',cat:'automation',text:'Напиши 5-стъпкова email nurture sequence за [продукт/услуга]. Всеки email трябва да е фокусиран върху конкретна болка на клиента. Тон: приятелски и professional. Включи subject lines.',saves:24},
-  {id:'pr2',title:'Instagram caption generator',cat:'content',text:'Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи CTA. Максимум 150 думи.',saves:47},
-  {id:'pr3',title:'Meeting summary builder',cat:'productivity',text:'Ти си executive assistant. Ето notes от среща: [notes]. Напиши чист summary с: 1) Основни решения 2) Action items с отговорни и дедлайни 3) Следваща стъпка.',saves:31},
-  {id:'pr4',title:'Customer support response',cat:'business',text:'Ти си friendly customer support agent за [компания]. Клиент пише: "[съобщение]". Напиши empathetic отговор, предложи решение, и предложи follow-up. Тон: топъл и professional.',saves:18},
-  {id:'pr5',title:'Blog post outline creator',cat:'marketing',text:'Напиши детайлен outline за blog post на тема: [тема]. Включи: compelling hook, 5-7 main sections с подточки, key takeaways и CTA. Target audience: [аудитория].',saves:22},
-  {id:'pr6',title:'Make.com automation plan',cat:'automation',text:'Помогни ми да опиша automation workflow за Make.com. Имам [входящи данни] и искам да получа [резултат]. Какви modules трябва да използвам и в какъв ред?',saves:15},
-  {id:'pr7',title:'Cold email outreach',cat:'marketing',text:'Напиши personalized cold email за [prospect]. Те работят в [индустрия] и имат [проблем]. Нашето решение е [решение]. Email трябва да е кратък (150 думи), без buzzwords, с един clear CTA.',saves:29},
-  {id:'pr8',title:'Competitor analysis',cat:'business',text:'Направи анализ на [конкурент]. Включи: техните strengths и weaknesses, positioning, target audience, pricing strategy, и как можем да се диференцираме.',saves:12},
-  {id:'pr9',title:'Daily AI productivity plan',cat:'productivity',text:'Помогни ми да планирам деня си с AI. Имам следните задачи: [задачи]. Приоритизирай ги, предложи кои могат да се автоматизират с AI, и създай time-blocked schedule.',saves:38},
-  {id:'pr10',title:'TikTok script writer',cat:'content',text:'Напиши TikTok script за видео на тема [тема]. Включи: hook (първите 3 секунди), основно съдържание, и strong ending. Продължителност: [секунди]. Тон: [описание].',saves:33},
-  {id:'pr11',title:'Product description e-commerce',cat:'marketing',text:'Напиши compelling product description за [продукт]. Включи: главна headline, 3 key benefits, technical specs, и CTA. Target customer: [описание]. Tone: [tone].',saves:19},
-  {id:'pr12',title:'Meeting agenda creator',cat:'productivity',text:'Създай agenda за [вид среща] с [хора] за [продължителност]. Целта на срещата: [цел]. Включи timeboxing за всяка точка и кой е responsible.',saves:14}
+  {id:'pr1',title:'Email sequence automation',cat:'automation',text:'Напиши 5-стъпкова email nurture sequence за [продукт/услуга]. Всеки email трябва да е фокусиран върху конкретна болка на клиента. Тон: приятелски и professional. Включи subject lines.',saves:4},
+  {id:'pr2',title:'Instagram caption generator',cat:'content',text:'Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи CTA. Максимум 150 думи.',saves:7},
+  {id:'pr3',title:'Meeting summary builder',cat:'productivity',text:'Ти си executive assistant. Ето notes от среща: [notes]. Напиши чист summary с: 1) Основни решения 2) Action items с отговорни и дедлайни 3) Следваща стъпка.',saves:3},
+  {id:'pr4',title:'Customer support response',cat:'business',text:'Ти си friendly customer support agent за [компания]. Клиент пише: "[съобщение]". Напиши empathetic отговор, предложи решение, и предложи follow-up. Тон: топъл и professional.',saves:2},
+  {id:'pr5',title:'Blog post outline creator',cat:'marketing',text:'Напиши детайлен outline за blog post на тема: [тема]. Включи: compelling hook, 5-7 main sections с подточки, key takeaways и CTA. Target audience: [аудитория].',saves:3},
+  {id:'pr6',title:'Make.com automation plan',cat:'automation',text:'Помогни ми да опиша automation workflow за Make.com. Имам [входящи данни] и искам да получа [резултат]. Какви modules трябва да използвам и в какъв ред?',saves:2},
+  {id:'pr7',title:'Cold email outreach',cat:'marketing',text:'Напиши personalized cold email за [prospect]. Те работят в [индустрия] и имат [проблем]. Нашето решение е [решение]. Email трябва да е кратък (150 думи), без buzzwords, с един clear CTA.',saves:4},
+  {id:'pr8',title:'Competitor analysis',cat:'business',text:'Направи анализ на [конкурент]. Включи: техните strengths и weaknesses, positioning, target audience, pricing strategy, и как можем да се диференцираме.',saves:1},
+  {id:'pr9',title:'Daily AI productivity plan',cat:'productivity',text:'Помогни ми да планирам деня си с AI. Имам следните задачи: [задачи]. Приоритизирай ги, предложи кои могат да се автоматизират с AI, и създай time-blocked schedule.',saves:5},
+  {id:'pr10',title:'TikTok script writer',cat:'content',text:'Напиши TikTok script за видео на тема [тема]. Включи: hook (първите 3 секунди), основно съдържание, и strong ending. Продължителност: [секунди]. Тон: [описание].',saves:4},
+  {id:'pr11',title:'Product description e-commerce',cat:'marketing',text:'Напиши compelling product description за [продукт]. Включи: главна headline, 3 key benefits, technical specs, и CTA. Target customer: [описание]. Tone: [tone].',saves:2},
+  {id:'pr12',title:'Meeting agenda creator',cat:'productivity',text:'Създай agenda за [вид среща] с [хора] за [продължителност]. Целта на срещата: [цел]. Включи timeboxing за всяка точка и кой е responsible.',saves:1}
 ];
 
 export const LESSONS_MODS = [
@@ -35,7 +35,7 @@ export const LESSONS_MODS = [
     {id:'l1',title:'Въведение в AI инструментите',dur:'12 мин',h:'Въведение в AI инструментите',p1:'В този урок ще разгледаме основните AI инструменти — ChatGPT, Claude и Gemini. Ще разберем разликите между тях и кога да използваме кой.',p2:'ChatGPT е най-популярният и добър за general tasks. Claude е по-нюансиран и подходящ за дълги анализи и business задачи. Gemini се интегрира добре с Google Workspace.',p3:'Ключовото разбиране: различните AI инструменти имат различни strengths. Истинският power идва, когато знаеш кога да използваш кой.'},
     {id:'l2',title:'Prompt Engineering основи',dur:'18 мин',h:'Prompt Engineering основи',p1:'Prompt engineering е изкуството да комуникираш ефективно с AI. Добрият prompt е ясен, конкретен и дава context.',p2:'Структурата на добрия prompt: Роля + Задача + Context + Формат + Ограничения. Например: "Ти си expert copywriter. Напиши email за [клиент]. Тонът трябва да е professional. Максимум 200 думи."',p3:'Практическо упражнение: Вземи задача, която имаш тази седмица, и напиши prompt по тази структура. Сравни резултатите с и без структурата.'},
     {id:'l3',title:'AI Productivity System',dur:'22 мин',h:'AI Productivity System',p1:'Вместо да отваряш ChatGPT random, трябва да изградиш система. AI Productivity System е набор от готови prompts, workflows и навици.',p2:'Компонентите: 1) Prompt Library с твоите най-използвани prompts 2) Daily AI habits 3) Template библиотека 4) Output review процес.',p3:'Инструменти: Notion за организиране на prompts, ChatGPT за изпълнение, Perplexity за research. Ключово: всеки ден прави 3 неща с AI, дори малки.'},
-    {id:'l4',title:'ChatGPT vs Claude vs Gemini',dur:'15 мин',h:'ChatGPT, Claude и Gemini — кога какво да използваш',p1:'Всеки AI модел има своите strengths. Разбирането на тези разлики ти дава огромно предимство.',p2:'ChatGPT: най-добър за creative writing, coding, и general tasks. Claude: най-добър за дълги анализи, business writing, и nuanced задачи. Gemini: най-добър за Google integration и multimodal tasks.',p3:'Практика: Тази седмица използвай само един tool и научи limits-ите internal. Следващата седмица опитай друг за същите задачи. Разликата ще те изненада.'},
+    {id:'l4',title:'ChatGPT vs Claude vs Gemini',dur:'15 мин',h:'ChatGPT, Claude и Gemini — кога какво да използваш',p1:'Всеки AI модел има своите strengths. Разбирането на тези разлики ти дава огромно предимство.',p2:'ChatGPT: най-добър за creative writing, coding, и general tasks. Claude: най-добър за дълги анализи, business writing, и nuanced задачи. Gemini: най-добър за Google integration и multimodal tasks.',p3:'Практика: Тази седмица използвай само един tool и научи limits-ите му. Следващата седмица опитай друг за същите задачи. Разликата ще те изненада.'},
     {id:'l5',title:'AI Workflows 101',dur:'20 мин',h:'AI Workflows 101',p1:'Workflow е последоватателност от AI-assisted стъпки, която превръща input в output по предсказуем начин.',p2:'Пример за content workflow: Research (Perplexity) → Outline (Claude) → Draft (ChatGPT) → Edit (Claude) → Image (Midjourney) → Publish.',p3:'Защо workflows са важни: Повтаряемост. Качество. Скорост. Когато workflow-ът е готов, можеш да го делегираш или автоматизираш.'}
   ]},
   {title:'Ден 2 — Content & Automation',lessons:[
@@ -55,7 +55,7 @@ export const LESSONS_MODS = [
 ];
 
 export const EVENTS_DATA = [
-  {id:'e1',day:'13',mo:'Юни',title:'AI Workflow Q&A',desc:'Live сесия с нашия екип. Задавай въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
+  {id:'e1',day:'13',mo:'Юни',title:'AI Workflow Q&A',desc:'Live сесия с нашия екип. Задавайте въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
   {id:'e2',day:'15',mo:'Юни',title:'Live: Prompt Engineering с Claude',desc:'Ще напишем заедно system prompts за различни бизнес use cases.',time:'18:30ч',dur:'60 мин',platform:'Zoom',spots:25},
   {id:'e3',day:'17',mo:'Юни',title:'Make.com Automation Workshop',desc:'Практическо workshop — изграждаме реална automation от нула.',time:'11:00ч',dur:'120 мин',platform:'Zoom',spots:15},
   {id:'e4',day:'20',mo:'Юни',title:'AI за e-commerce: Office Hours',desc:'Специализирана сесия за e-commerce бизнеси. Customer support AI, order automation.',time:'17:00ч',dur:'90 мин',platform:'Zoom',spots:18},
@@ -64,27 +64,27 @@ export const EVENTS_DATA = [
 
 export const PRICING_PLANS = [
   {
-    id: 'starter',
-    name: 'Starter',
-    desc: 'Perfect for individuals exploring AI.',
+    id: 'free',
+    name: 'Free',
+    desc: 'За разглеждане, newsletter и основни ресурси.',
     monthly: 0,
     yearly: 0,
-    features: ['Access to Prompt Library', 'Community read-only', '3 Academy lessons', 'Email support']
+    features: ['Достъп до 3 урока', 'Четене в общността', 'Основни prompts', 'Имейл новини']
   },
   {
     id: 'pro',
     name: 'Pro',
-    desc: 'For professionals building with AI daily.',
-    monthly: 29,
-    yearly: 290,
-    features: ['Full Prompt Library', 'Community posting', 'All Academy lessons', 'Event discounts', 'Priority support']
+    desc: 'Community, workshops, prompt library, templates и challenges.',
+    monthly: 9,
+    yearly: 90,
+    features: ['Всички уроци в Академията', 'Публикуване в общността', 'Всички prompts', 'Workshops и шаблони', 'Седмични challenges', 'Приоритетна поддръжка']
   },
   {
-    id: 'team',
-    name: 'Team',
-    desc: 'For teams automating together.',
-    monthly: 79,
-    yearly: 790,
-    features: ['Everything in Pro', 'Up to 5 seats', 'Shared prompt workspace', 'Team analytics', 'Dedicated onboarding']
+    id: 'premium',
+    name: 'Premium',
+    desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
+    monthly: 24,
+    yearly: 240,
+    features: ['Всичко от Pro', 'Office hours на живо', 'Implementation reviews', 'Priority Q&A', 'Директен достъп до екипа', 'Персонализирани съвети']
   }
 ];

@@ -1,226 +1,556 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Users, GraduationCap, Calendar, Bookmark, ChevronRight, Clock } from 'lucide-react';
+import {
+  ArrowRight,
+  Sparkles,
+  Users,
+  GraduationCap,
+  Calendar,
+  Bookmark,
+  ChevronRight,
+  Play,
+  Copy,
+  Check,
+  Zap,
+  MessageSquare,
+  Trophy,
+  HelpCircle,
+  Lightbulb,
+  Layers,
+  Target,
+  Clock,
+  BookOpen,
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { Card, CardBody } from '../components/ui/Card';
-import { Avatar } from '../components/ui/Avatar';
-import { ProgressBar } from '../components/ui/ProgressBar';
-import { LESSONS_MODS, PROMPTS, EVENTS_DATA } from '../data';
+import { WorkspacePreview } from '../components/WorkspacePreview';
+import { LESSONS_MODS, PROMPTS, EVENTS_DATA, PRICING_PLANS } from '../data';
 
-export default function Home({ checkAuthThenGo, setPage, db }: any) {
+const LEARNING_PATHS = [
+  { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки' },
+  { id: 'productivity', label: 'AI за продуктивност', icon: Zap, desc: 'Автоматизирай рутинните задачи' },
+  { id: 'marketing', label: 'AI за маркетинг', icon: Target, desc: 'Кампании, анализи и копи' },
+  { id: 'business', label: 'AI за бизнес', icon: Layers, desc: 'Продажби, процеси и мащабиране' },
+  { id: 'content', label: 'AI за съдържание', icon: Sparkles, desc: 'Създавай повече с по-малко усилие' },
+  { id: 'freelancing', label: 'AI за freelancing', icon: Clock, desc: 'По-бързи доставки и по-високи rates' },
+  { id: 'career', label: 'AI за кариера', icon: GraduationCap, desc: 'Умения, които работодателите търсят' },
+];
+
+const FAQS = [
+  {
+    q: 'Какво точно получавам с членството?',
+    a: 'Достъп до структурирани уроци, библиотека с тествани prompts, практически workshops, седмични предизвикателства и общност от професионалисти, които споделят реален опит.',
+  },
+  {
+    q: 'Подходящо ли е за начинаещи?',
+    a: 'Да. Започваме от основите и изграждаме системно. Не са нужни технически познания — фокусът е върху практическо приложение в работата.',
+  },
+  {
+    q: 'Мога ли да отменя членството си?',
+    a: 'Разбира се. Няма договори със срок. Можете да спрете или смените плана по всяко време.',
+  },
+  {
+    q: 'Има ли live сесии?',
+    a: 'Да. Провеждаме редовни office hours и workshops, където можете да задавате въпроси на живо и да получавате обратна връзка.',
+  },
+  {
+    q: 'Колко време отнема обучението?',
+    a: 'Всеки урок е между 12 и 30 минути. Можете да учите в свое темпо — повечето членове виждат реални резултати в рамките на първите няколко седмици.',
+  },
+  {
+    q: 'Работи ли за български компании?',
+    a: 'Абсолютно. Всички примери, prompts и workflows са адаптирани за българския пазар и европейския бизнес контекст.',
+  },
+];
+
+export default function Home({ checkAuthThenGo, setPage }: any) {
   const { user: currentUser } = useAuth();
-  const recentPosts = db?.posts?.filter((p:any) => p.type !== 'announcement').slice(0, 2) || [];
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const featuredPrompts = PROMPTS.slice(0, 3);
   const academyLessons = LESSONS_MODS.reduce((acc, mod) => acc.concat(mod.lessons), [] as any[]).slice(0, 3);
   const nextEvent = EVENTS_DATA[0];
 
-  const formatTimeAgo = (ts: number) => {
-    const d = Date.now() - ts;
-    if (d < 60000) return 'Just now';
-    if (d < 3600000) return `${Math.floor(d/60000)}m ago`;
-    if (d < 86400000) return `${Math.floor(d/3600000)}h ago`;
-    return `${Math.floor(d/86400000)}d ago`;
+  const copyPrompt = (id: string, text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
   };
 
   return (
-    <div className="min-h-screen warm-gradient text-text-primary overflow-hidden">
-      
-      {/* HERO SECTION */}
-      <section className="relative px-4 md:px-6 pt-24 pb-28 md:pt-36 md:pb-44 max-w-7xl mx-auto flex flex-col items-center text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl"
-        >
-          <Badge variant="accent" className="mb-6">AI Practitioner Community</Badge>
-          
-          <h1 className="text-[44px] md:text-[72px] font-semibold leading-[1.05] tracking-tight text-ink-900 mb-6">
-            Build and learn<br className="hidden md:block"/> with AI.
-          </h1>
-          
-          <p className="text-[17px] md:text-[20px] text-text-secondary max-w-xl mx-auto leading-[1.65] mb-10">
-            A calm, focused space for professionals who want practical AI skills, tested prompts, and a community of builders.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-14">
-            <Button size="lg" onClick={() => checkAuthThenGo('register')} className="h-12 px-7 rounded-full">
-              Join the Community
-            </Button>
-            <Button variant="ghost" size="lg" onClick={() => setPage('prompts')} className="h-12 px-7 rounded-full">
-              Browse Prompts <ArrowRight size={16} />
-            </Button>
-          </div>
-          
-          <div className="flex items-center justify-center gap-6 text-[13px] text-text-tertiary">
-            <span className="flex items-center gap-1.5"><Users size={14} /> Growing community</span>
-            <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-            <span className="flex items-center gap-1.5"><Sparkles size={14} /> Curated prompts</span>
-            <span className="w-1 h-1 rounded-full bg-border-strong"></span>
-            <span className="flex items-center gap-1.5"><GraduationCap size={14} /> Hands-on lessons</span>
-          </div>
-        </motion.div>
+    <div className="min-h-screen text-[var(--text-primary)] overflow-hidden grain">
+
+      {/* HERO */}
+      <section className="relative art-gradient section-shell pt-14 pb-12 md:pt-24 md:pb-20 rounded-b-[40px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6"
+          >
+            <div className="section-label mb-5">
+              <span className="label-caps text-[var(--accent)]">Практична AI академия и общност</span>
+            </div>
+
+            <h1 className="display-xl text-[var(--ink-900)] mb-6">
+              Научи AI по начина, по който работи в реалността.
+            </h1>
+
+            <p className="text-[17px] text-[var(--text-secondary)] max-w-xl leading-[1.65] mb-8">
+              Уроци, prompts, workflows и live сесии за хора, които искат реални резултати — без шум, без празна теория и без технически жаргон.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <Button size="lg" className="luxury-button" onClick={() => checkAuthThenGo('register')}>
+                Започни безплатно
+              </Button>
+              <Button variant="ghost" size="lg" className="luxury-button" onClick={() => setPage('prompts')}>
+                Разгледай prompts <ArrowRight size={15} />
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 text-[12px] text-[var(--text-tertiary)]">
+              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
+                <Users size={12} /> Реална общност
+              </span>
+              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
+                <Sparkles size={12} /> Подбрани prompts
+              </span>
+              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
+                <GraduationCap size={12} /> Практически уроци
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="lg:col-span-5 lg:col-start-8"
+          >
+            <WorkspacePreview />
+          </motion.div>
+        </div>
       </section>
 
-      {/* START HERE SECTION */}
-      <section className="px-4 md:px-6 py-20 md:py-28 max-w-7xl mx-auto">
-        <div className="text-center mb-16 md:mb-20">
-          <h2 className="text-[28px] md:text-[40px] font-semibold text-ink-900 tracking-tight mb-4">Your learning path</h2>
-          <p className="text-[16px] md:text-[18px] text-text-secondary max-w-lg mx-auto">Three simple ways to start. Pick what fits your goals today.</p>
+      <div className="soft-divider section-shell" />
+
+      {/* ECOSYSTEM */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="mb-10 md:mb-12">
+          <span className="label-caps mb-3 block">Екосистема</span>
+          <h2 className="display-md text-[var(--ink-900)] max-w-lg">
+            Това не е просто курс. Това е цялостна система.
+          </h2>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            {icon: Sparkles, color: 'text-amber', bg: 'bg-amber-light', title: 'Explore Prompts', desc: 'Find battle-tested prompts to use in your daily workflow immediately.', action: 'Browse prompts', p: 'prompts'},
-            {icon: Users, color: 'text-emerald', bg: 'bg-emerald-light', title: 'Join Discussions', desc: 'Ask questions and share your wins with a private community of peers.', action: 'Join community', p: 'community'},
-            {icon: GraduationCap, color: 'text-accent', bg: 'bg-accent-light', title: 'Take a Lesson', desc: 'Level up your skills with structured courses on modern AI tools.', action: 'Start learning', p: 'lessons'}
-          ].map((step, i) => (
+            { icon: GraduationCap, title: 'Академия', desc: 'Структурирани уроци от нулата до напреднали workflow-ове.', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-light)]' },
+            { icon: Users, title: 'Общност', desc: 'Дискусии, weekly challenges и споделен опит от професионалисти.', color: 'text-[var(--emerald)]', bg: 'bg-[var(--emerald-light)]' },
+            { icon: Sparkles, title: 'Prompt Library', desc: 'Тествани prompts за бизнес, маркетинг и автоматизация.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
+            { icon: Calendar, title: 'Workshops', desc: 'Практически live сесии, където изграждаме реални системи.', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-light)]' },
+            { icon: Layers, title: 'Ресурси', desc: 'Шаблони, checklists и готови workflows за незабавно приложение.', color: 'text-[var(--emerald)]', bg: 'bg-[var(--emerald-light)]' },
+            { icon: Target, title: 'Подкрепа', desc: 'Office hours и implementation reviews, за да не останете сами.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
+          ].map((item, idx) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
+              key={item.title}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
             >
-              <div className="group relative flex flex-col items-center text-center p-8 md:p-10 h-full rounded-2xl border border-border/50 bg-bg/60 hover:bg-bg hover:border-border-strong hover:shadow-md transition-all duration-300">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border border-border ${step.bg} shadow-sm`}>
-                  <step.icon className={step.color} size={24} />
+              <div className="premium-card spotlight-hover p-6 h-full">
+                <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-4`}>
+                  <item.icon className={item.color} size={20} />
                 </div>
-                <h3 className="text-[18px] font-semibold text-ink-900 mb-3">{step.title}</h3>
-                <p className="text-[14px] text-text-secondary mb-8 flex-1 leading-relaxed max-w-[280px]">{step.desc}</p>
-                <button 
-                  className="text-[14px] font-medium text-accent flex items-center gap-1 hover:gap-2 transition-all"
-                  onClick={() => setPage(step.p)}
-                >
-                  {step.action} <ChevronRight size={14} />
-                </button>
+                <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1.5 tracking-tight">{item.title}</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* FEATURED PROMPTS SECTION */}
-      <section className="px-4 md:px-6 py-20 md:py-28 max-w-7xl mx-auto border-t border-border/50">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-[28px] md:text-[40px] font-semibold text-ink-900 tracking-tight mb-2">Top prompts</h2>
-            <p className="text-text-secondary text-[16px]">Ready to copy and adapt to your work.</p>
-          </div>
-          <Button variant="ghost" onClick={() => setPage('prompts')} className="hidden sm:inline-flex rounded-full">View all <ChevronRight size={14} /></Button>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featuredPrompts.map((p) => (
-            <Card key={p.id} hover className="flex flex-col cursor-pointer" onClick={() => setPage('prompts')}>
-              <CardBody className="py-6 flex flex-col h-full">
-                <div className="flex justify-between items-start mb-4">
-                  <Badge variant="default">{p.cat}</Badge>
-                </div>
-                <h3 className="text-[16px] font-semibold text-ink-900 mb-2 line-clamp-2 leading-tight">{p.title}</h3>
-                <p className="text-[13px] text-text-secondary line-clamp-3 leading-relaxed flex-1">{p.text}</p>
-              </CardBody>
-              <div className="px-6 pb-5 mt-auto flex justify-between items-center text-[12px] text-text-tertiary">
-                <span className="flex items-center gap-1.5"><Bookmark size={14} className="text-text-disabled" /> {p.saves} saves</span>
-              </div>
-            </Card>
-          ))}
-        </div>
-        <Button variant="secondary" className="w-full mt-6 sm:hidden rounded-full" onClick={() => setPage('prompts')}>View all prompts</Button>
-      </section>
-
-      {/* COMMUNITY ACTIVITY */}
-      <section className="px-4 md:px-6 py-20 md:py-28 max-w-7xl mx-auto border-t border-border/50">
-        <div className="flex flex-col lg:flex-row gap-12 items-start">
-          <div className="flex-1 w-full">
-            <h2 className="text-[28px] md:text-[40px] font-semibold text-ink-900 tracking-tight mb-8">Latest from the community</h2>
-            <div className="flex flex-col gap-4">
-              {recentPosts.map((post:any) => {
-                const author = db.users.find((u:any) => u.id === post.uid) || { initials: '?', fname: 'User', lname: '' };
-                return (
-                  <div key={post.id} className="p-5 border border-border/50 rounded-2xl bg-bg hover:bg-bg-subtle transition-colors cursor-pointer" onClick={() => setPage('community')}>
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar size="md" initials={author.initials} />
-                        <div>
-                          <div className="text-[14px] font-semibold text-ink-900">{author.fname} {author.lname}</div>
-                          <div className="text-[12px] text-text-tertiary">{formatTimeAgo(post.time)}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-[15px] text-text-secondary leading-relaxed line-clamp-2">{post.text}</p>
-                  </div>
-                );
-              })}
-              {recentPosts.length === 0 && (
-                <div className="p-8 border border-dashed border-border rounded-2xl text-center text-text-secondary text-[14px]">
-                  No posts yet. Be the first to share.
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <div className="w-full lg:w-[360px] flex flex-col gap-6">
-            <Card>
-              <CardBody className="p-6">
-                <h3 className="text-[16px] font-semibold text-ink-900 mb-2">Upcoming Event</h3>
-                {nextEvent ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center text-accent font-bold text-[14px]">
-                        {nextEvent.day}
-                      </div>
-                      <div>
-                        <div className="text-[14px] font-semibold text-ink-900">{nextEvent.title}</div>
-                        <div className="text-[12px] text-text-secondary flex items-center gap-1"><Calendar size={12} /> {nextEvent.day} {nextEvent.mo}, {nextEvent.time}</div>
-                      </div>
-                    </div>
-                    <Button size="sm" className="w-full rounded-full" onClick={() => setPage('events')}>View events</Button>
-                  </div>
-                ) : (
-                  <p className="text-[14px] text-text-secondary">No upcoming events.</p>
-                )}
-              </CardBody>
-            </Card>
-          </div>
-        </div>
-      </section>
+      <div className="soft-divider section-shell" />
 
       {/* ACADEMY PREVIEW */}
-      <section className="px-4 md:px-6 py-20 md:py-28 max-w-7xl mx-auto border-t border-border/50">
-        <div className="flex justify-between items-end mb-12">
+      <section className="section-shell py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <h2 className="text-[28px] md:text-[40px] font-semibold text-ink-900 tracking-tight mb-2">
-              {currentUser ? 'Continue learning' : 'Start your AI education'}
-            </h2>
-            <p className="text-text-secondary text-[16px]">Structured lessons you can apply today.</p>
+            <span className="label-caps mb-3 block">Академия</span>
+            <h2 className="display-md text-[var(--ink-900)]">Избери своя път</h2>
           </div>
-          <Button variant="ghost" onClick={() => setPage('lessons')} className="hidden sm:inline-flex rounded-full">View all <ChevronRight size={14} /></Button>
+          <Button variant="ghost" onClick={() => setPage('lessons')} className="self-start md:self-auto text-[14px]">
+            Виж всички уроци <ChevronRight size={14} />
+          </Button>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {academyLessons.map((lesson:any) => (
-            <Card key={lesson.id} hover className="flex flex-col cursor-pointer overflow-hidden" onClick={() => setPage('lessons')}>
-              <CardBody className="py-6 flex flex-col h-full">
-                <Badge variant="accent" className="mb-4 self-start">Fundamentals</Badge>
-                <h3 className="text-[17px] font-semibold text-ink-900 mb-3">{lesson.title}</h3>
-                <p className="text-[13px] text-text-secondary line-clamp-2 mb-6 flex-1">{lesson.p1}</p>
-                
-                <div className="flex justify-between items-center text-[12px] text-text-tertiary mb-5">
-                  <span className="flex items-center gap-1.5"><Clock size={14} /> {lesson.dur}</span>
-                  <span className="bg-bg-subtle px-2 py-0.5 rounded-md font-medium border border-border">Beginner</span>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+          {LEARNING_PATHS.slice(0, 4).map((path, idx) => (
+            <motion.div
+              key={path.id}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.06 }}
+            >
+              <div
+                className="premium-card p-5 cursor-pointer h-full group"
+                onClick={() => setPage('lessons')}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
+                    <path.icon size={18} />
+                  </div>
+                  <ChevronRight size={14} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] transition-colors" />
                 </div>
-                
-                {currentUser && <ProgressBar value={0} />}
-              </CardBody>
-              <div className="px-6 pb-4 bg-bg-subtle border-t border-border py-3 flex justify-end">
-                <span className="text-[13px] font-medium text-accent flex items-center gap-1">Start lesson <ChevronRight size={14}/></span>
+                <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1">{path.label}</h3>
+                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{path.desc}</p>
               </div>
-            </Card>
+            </motion.div>
           ))}
         </div>
+
+        <div className="flex flex-col gap-3">
+          {academyLessons.map((lesson: any, idx: number) => (
+            <motion.div
+              key={lesson.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.06 }}
+            >
+              <div
+                className="group flex items-center gap-4 p-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] hover:border-[var(--border-strong)] transition-all cursor-pointer"
+                onClick={() => setPage('lessons')}
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${idx === 0 ? 'bg-[var(--accent-light)] text-[var(--accent)]' : idx === 1 ? 'bg-[var(--amber-light)] text-[var(--amber)]' : 'bg-[var(--emerald-light)] text-[var(--emerald)]'}`}>
+                  <Play size={16} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[15px] font-semibold text-[var(--ink-900)] leading-snug truncate">
+                    {lesson.title}
+                  </h3>
+                  <div className="flex items-center gap-3 mt-0.5">
+                    <span className="text-[12px] text-[var(--text-tertiary)]">{lesson.dur}</span>
+                    <span className="text-[12px] text-[var(--text-tertiary)] bg-[var(--bg-soft)] px-2 py-0.5 rounded-md">Начинаещ</span>
+                  </div>
+                </div>
+                <ChevronRight size={16} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] transition-colors shrink-0" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* COMMUNITY PREVIEW */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div>
+            <span className="label-caps mb-3 block">Общност</span>
+            <h2 className="display-md text-[var(--ink-900)]">Не сте сами в това</h2>
+          </div>
+          <Button variant="ghost" onClick={() => setPage('community')} className="self-start md:self-auto text-[14px]">
+            Виж общността <ChevronRight size={14} />
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { icon: Target, title: 'Седмични предизвикателства', desc: 'Всяка седмица ново предизвикателство, което натрупва умения стъпка по стъпка.' },
+            { icon: MessageSquare, title: 'Дискусии и Q&A', desc: 'Задавай въпроси, получавай обратна връзка и учи от опита на другите.' },
+            { icon: Clock, title: 'Office Hours', desc: 'Редовни live сесии, където разглеждаме конкретни проблеми и решения.' },
+            { icon: Trophy, title: 'Member Wins', desc: 'Споделяй успехите си и виж как други прилагат AI в реални проекти.' },
+            { icon: HelpCircle, title: 'Implementation Feedback', desc: 'Покажи workflow-а си и получи конкретни предложения за подобрение.' },
+            { icon: Users, title: 'Мрежата', desc: 'Свържи се с хора от маркетинг, бизнес, дизайн и development в България.' },
+          ].map((item, idx) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+            >
+              <div className="premium-card p-5 h-full">
+                <div className="w-9 h-9 rounded-lg bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] mb-3">
+                  <item.icon size={17} />
+                </div>
+                <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1.5">{item.title}</h3>
+                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* PROMPTS PREVIEW */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div>
+            <span className="label-caps mb-3 block">Библиотека</span>
+            <h2 className="display-md text-[var(--ink-900)]">Готови prompts, които работят</h2>
+          </div>
+          <Button variant="ghost" onClick={() => setPage('prompts')} className="self-start md:self-auto text-[14px]">
+            Виж всички <ChevronRight size={14} />
+          </Button>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {featuredPrompts.map((p, idx) => (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: idx * 0.06 }}
+            >
+              <div className="group grid grid-cols-[56px_1fr_auto] gap-4 md:gap-5 rounded-3xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 transition hover:-translate-y-0.5 hover:border-[var(--brand)]/30 cursor-pointer dark:bg-white/[0.04]"
+                onClick={() => setPage('prompts')}
+              >
+                <div className="text-3xl font-semibold text-black/10 dark:text-white/10">
+                  {String(idx + 1).padStart(2, '0')}
+                </div>
+                <div>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="rounded-full bg-[var(--brand)]/10 px-3 py-1 text-xs font-medium text-[var(--brand)]">
+                      {p.cat}
+                    </span>
+                    <span className="text-xs text-[var(--text-tertiary)]">{p.saves} запазвания</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[var(--ink-900)]">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1 max-w-3xl text-sm leading-6 text-[var(--text-tertiary)]">
+                    {p.text}
+                  </p>
+                </div>
+                <div className="flex flex-col items-end gap-2 self-center">
+                  <button
+                    className="h-11 w-11 rounded-full border border-[var(--border)] transition group-hover:bg-[var(--ink-900)] group-hover:text-[var(--bg)] flex items-center justify-center shrink-0"
+                    onClick={(e) => { e.stopPropagation(); setPage('prompts'); }}
+                  >
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* EVENTS PREVIEW */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div>
+            <span className="label-caps mb-3 block">Събития</span>
+            <h2 className="display-md text-[var(--ink-900)]">Предстоящи workshops</h2>
+          </div>
+          <Button variant="ghost" onClick={() => setPage('events')} className="self-start md:self-auto text-[14px]">
+            Календар <ChevronRight size={14} />
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {EVENTS_DATA.slice(0, 3).map((e, idx) => (
+            <motion.div
+              key={e.id}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.06 }}
+            >
+              <div className="premium-card p-6 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] flex flex-col items-center justify-center text-[var(--accent)] border border-[var(--accent)]/10">
+                    <span className="text-[18px] font-bold leading-none">{e.day}</span>
+                    <span className="text-[9px] font-semibold uppercase tracking-wider mt-0.5">{e.mo}</span>
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">{e.title}</div>
+                    <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1 mt-0.5">
+                      <Clock size={11} /> {e.time} · {e.dur}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed mb-5 flex-1">
+                  {e.desc}
+                </p>
+                <Button size="sm" className="w-full" onClick={() => setPage('events')}>
+                  Научи повече
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* PRICING PREVIEW */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div>
+            <span className="label-caps mb-3 block">Цени</span>
+            <h2 className="display-md text-[var(--ink-900)]">Ясни планове, без изненади</h2>
+          </div>
+          <Button variant="ghost" onClick={() => setPage('pricing')} className="self-start md:self-auto text-[14px]">
+            Виж всички цени <ChevronRight size={14} />
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            {
+              name: 'Free',
+              price: '€0',
+              period: '/месец',
+              desc: 'За разглеждане, newsletter и основни ресурси.',
+              features: ['Достъп до 3 урока', 'Четене в общността', 'Основни prompts', 'Имейл новини'],
+              cta: 'Започни',
+              plan: 'free',
+            },
+            {
+              name: 'Pro',
+              price: '€9',
+              period: '/месец',
+              desc: 'Community, workshops, prompt library, templates и challenges.',
+              features: ['Пълен достъп до уроците', 'Публикуване в общността', 'Всички prompts', 'Workshops', 'Templates'],
+              cta: 'Избери Pro',
+              plan: 'pro-community',
+              highlight: true,
+            },
+            {
+              name: 'Premium',
+              price: '€24',
+              period: '/месец',
+              desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
+              features: ['Всичко от Pro', 'Office hours', 'Implementation reviews', 'Priority Q&A', 'Директен достъп до екипа'],
+              cta: 'Избери Premium',
+              plan: 'ai-builder',
+            },
+          ].map((plan, idx) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.08 }}
+            >
+              <div className={`h-full premium-card p-6 flex flex-col ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}>
+                {plan.highlight && (
+                  <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[var(--accent)] to-[var(--lavender)] rounded-t-[24px]" />
+                )}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-[12px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">{plan.name}</h3>
+                    {plan.highlight && <Badge variant="accent" className="text-[9px] rounded-full px-2 py-0.5">Популярен</Badge>}
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight">{plan.price}</span>
+                    <span className="text-[14px] text-[var(--text-tertiary)]">{plan.period}</span>
+                  </div>
+                  <p className="text-[13px] text-[var(--text-secondary)] mt-2 leading-relaxed">{plan.desc}</p>
+                </div>
+                <ul className="flex flex-col gap-2.5 mb-6 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-3 text-[13px] text-[var(--text-secondary)]">
+                      <Check size={14} className={`mt-0.5 shrink-0 ${plan.highlight ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'}`} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Button variant={plan.highlight ? 'primary' : 'secondary'} className="w-full h-10" onClick={() => setPage('pricing')}>
+                  {plan.cta}
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* FAQ */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="label-caps mb-3 block">Често задавани въпроси</span>
+            <h2 className="display-md text-[var(--ink-900)]">Всичко, което трябва да знаете</h2>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {FAQS.map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: idx * 0.05 }}
+              >
+                <div className="premium-card overflow-hidden">
+                  <button
+                    className="w-full text-left p-5 flex items-center justify-between gap-4"
+                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  >
+                    <span className="text-[15px] font-semibold text-[var(--ink-900)]">{faq.q}</span>
+                    <ChevronRight
+                      size={16}
+                      className={`text-[var(--text-tertiary)] shrink-0 transition-transform ${openFaq === idx ? 'rotate-90' : ''}`}
+                    />
+                  </button>
+                  {openFaq === idx && (
+                    <div className="px-5 pb-5 text-[14px] text-[var(--text-secondary)] leading-relaxed">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="soft-divider section-shell" />
+
+      {/* FINAL CTA */}
+      <section className="section-shell py-14 md:py-20 pb-24">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-white overflow-hidden p-10 md:p-16">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--accent)] rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+            <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
+              <h2 className="text-[28px] md:text-[40px] font-semibold mb-4 tracking-tight leading-tight">
+                Готови ли сте да започнете?
+              </h2>
+              <p className="text-[16px] text-white/60 mb-8 leading-relaxed max-w-lg">
+                Присъединете се към общността, която учи AI практически. Без шум, без празни обещания — само работещи инструменти.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-white text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
+                  Започни безплатно <ArrowRight size={16} />
+                </Button>
+                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-12 text-white hover:bg-white/10 text-[15px]">
+                  Виж цените
+                </Button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
     </div>
   );

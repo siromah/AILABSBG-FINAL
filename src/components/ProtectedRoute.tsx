@@ -10,7 +10,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return (
       <main className="auth-page">
         <section className="auth-card">
-          <p>Loading your account...</p>
+          <p>Зареждане на акаунта...</p>
         </section>
       </main>
     );

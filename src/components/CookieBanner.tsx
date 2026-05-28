@@ -5,9 +5,9 @@ import { Button } from './ui/Button';
 export default function CookieBanner() {
   const [show, setShow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  
+
   const [prefs, setPrefs] = useState({
-    essential: true, // Always true
+    essential: true,
     analytics: false,
     marketing: false
   });
@@ -54,41 +54,41 @@ export default function CookieBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9999] p-4 md:p-6 flex justify-center pointer-events-none animate-in slide-in-from-bottom-5 fade-in duration-300">
-      <div className="w-full max-w-3xl bg-bg border border-border shadow-md rounded-[20px] p-6 lg:p-8 pointer-events-auto">
+      <div className="w-full max-w-3xl bg-[var(--bg)] border border-[var(--border)] shadow-md rounded-[20px] p-6 lg:p-8 pointer-events-auto">
         {!showDetails ? (
           <div>
-            <h3 className="text-[18px] font-semibold text-ink-900 mb-2">Cookie Preferences</h3>
-            <p className="text-[14px] text-text-secondary mb-6 leading-relaxed">
-              We use cookies to ensure the platform works properly and for analytics to improve your experience. You can read more in our <Link to="/cookie-policy" className="text-accent hover:underline">Cookie Policy</Link>.
+            <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2">Предпочитания за бисквитки</h3>
+            <p className="text-[14px] text-[var(--text-secondary)] mb-6 leading-relaxed">
+              Използваме бисквитки, за да осигурим правилната работа на платформата и за анализи, които подобряват вашето преживяване. Може да прочетете повече в нашата <Link to="/cookie-policy" className="text-[var(--accent)] hover:underline">Политика за бисквитки</Link>.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <Button onClick={acceptAll} variant="primary">Accept All</Button>
-              <Button onClick={rejectOptional} variant="secondary">Essential Only</Button>
-              <Button onClick={() => setShowDetails(true)} variant="ghost" className="ml-auto">Settings</Button>
+              <Button onClick={acceptAll} variant="primary">Приеми всички</Button>
+              <Button onClick={rejectOptional} variant="secondary">Само необходими</Button>
+              <Button onClick={() => setShowDetails(true)} variant="ghost" className="ml-auto">Настройки</Button>
             </div>
           </div>
         ) : (
           <div>
-            <h3 className="text-[18px] font-semibold text-ink-900 mb-6">Cookie Settings</h3>
-            
+            <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-6">Настройки за бисквитки</h3>
+
             <div className="flex flex-col gap-5 mb-8">
-              <div className="flex justify-between items-center pb-4 border-b border-border">
+              <div className="flex justify-between items-center pb-4 border-b border-[var(--border)]">
                 <div>
-                  <div className="font-semibold text-[15px] text-ink-900">Essential Cookies</div>
-                  <div className="text-[13px] text-text-tertiary max-w-lg mt-1">Required for the site to function properly (sessions, themes). Cannot be disabled.</div>
+                  <div className="font-semibold text-[15px] text-[var(--ink-900)]">Необходими бисквитки</div>
+                  <div className="text-[13px] text-[var(--text-tertiary)] max-w-lg mt-1">Задължителни за работата на сайта (сесии, теми). Не могат да бъдат изключени.</div>
                 </div>
-                <div className="bg-bg-subtle px-3 py-1.5 rounded-lg text-[12px] font-semibold text-text-secondary border border-border">Always Active</div>
+                <div className="bg-[var(--bg-soft)] px-3 py-1.5 rounded-lg text-[12px] font-semibold text-[var(--text-secondary)] border border-[var(--border)]">Винаги активни</div>
               </div>
-              
-              <label className="flex justify-between items-center cursor-pointer pb-4 border-b border-border group">
+
+              <label className="flex justify-between items-center cursor-pointer pb-4 border-b border-[var(--border)] group">
                 <div>
-                  <div className="font-semibold text-[15px] text-ink-900">Analytics</div>
-                  <div className="text-[13px] text-text-tertiary max-w-lg mt-1">Helps us understand how you use the platform through anonymous data.</div>
+                  <div className="font-semibold text-[15px] text-[var(--ink-900)]">Аналитични</div>
+                  <div className="text-[13px] text-[var(--text-tertiary)] max-w-lg mt-1">Помагат ни да разберем как използвате платформата чрез анонимни данни.</div>
                 </div>
                 <div className="relative flex items-center justify-center">
                   <input
                     type="checkbox"
-                    className="peer appearance-none w-5 h-5 border-2 border-border-strong rounded bg-bg checked:bg-accent checked:border-accent transition-colors cursor-pointer"
+                    className="peer appearance-none w-5 h-5 border-2 border-[var(--border-strong)] rounded bg-[var(--bg)] checked:bg-[var(--accent)] checked:border-[var(--accent)] transition-colors cursor-pointer"
                     checked={prefs.analytics}
                     onChange={e => setPrefs({...prefs, analytics: e.target.checked})}
                   />
@@ -97,16 +97,16 @@ export default function CookieBanner() {
                   </svg>
                 </div>
               </label>
-              
+
               <label className="flex justify-between items-center cursor-pointer group">
                 <div>
-                  <div className="font-semibold text-[15px] text-ink-900">Marketing</div>
-                  <div className="text-[13px] text-text-tertiary max-w-lg mt-1">Used for personalized advertisements through third parties.</div>
+                  <div className="font-semibold text-[15px] text-[var(--ink-900)]">Маркетингови</div>
+                  <div className="text-[13px] text-[var(--text-tertiary)] max-w-lg mt-1">Използват се за персонализирани реклами чрез трети страни.</div>
                 </div>
                 <div className="relative flex items-center justify-center">
                   <input
                     type="checkbox"
-                    className="peer appearance-none w-5 h-5 border-2 border-border-strong rounded bg-bg checked:bg-accent checked:border-accent transition-colors cursor-pointer"
+                    className="peer appearance-none w-5 h-5 border-2 border-[var(--border-strong)] rounded bg-[var(--bg)] checked:bg-[var(--accent)] checked:border-[var(--accent)] transition-colors cursor-pointer"
                     checked={prefs.marketing}
                     onChange={e => setPrefs({...prefs, marketing: e.target.checked})}
                   />
@@ -116,10 +116,10 @@ export default function CookieBanner() {
                 </div>
               </label>
             </div>
-            
+
             <div className="flex flex-wrap gap-3">
-              <Button onClick={savePreferences} variant="primary">Save Preferences</Button>
-              <Button onClick={() => setShowDetails(false)} variant="ghost">Back</Button>
+              <Button onClick={savePreferences} variant="primary">Запази предпочитания</Button>
+              <Button onClick={() => setShowDetails(false)} variant="ghost">Назад</Button>
             </div>
           </div>
         )}

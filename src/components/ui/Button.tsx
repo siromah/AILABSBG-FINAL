@@ -18,22 +18,22 @@ export function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all rounded-md gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+  const baseClasses = 'inline-flex items-center justify-center font-semibold transition-all rounded-full gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] active:scale-[0.98]';
   
   const sizeClasses = {
-    sm: 'h-8 px-3 text-[13px]',
-    md: 'h-9 px-4 text-[14px]',
-    lg: 'h-11 px-6 text-[15px]'
+    sm: 'h-8 px-4 text-[13px]',
+    md: 'h-10 px-5 text-[14px]',
+    lg: 'h-12 px-7 text-[15px]'
   };
 
   const variantClasses = {
-    primary: 'bg-accent text-white hover:bg-accent-hover border-none',
-    secondary: 'bg-white text-text-primary border border-border hover:bg-bg-subtle',
-    ghost: 'bg-transparent text-text-secondary hover:bg-bg-subtle border-none',
-    danger: 'bg-rose-light text-rose border border-rose/30 hover:bg-rose/10'
+    primary: 'bg-[var(--ink-900)] text-white hover:bg-[var(--ink-700)] border-none shadow-sm',
+    secondary: 'bg-[var(--surface-strong)] text-[var(--text-primary)] border border-[var(--border)] hover:bg-[var(--bg-soft)] shadow-xs',
+    ghost: 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] border-none',
+    danger: 'bg-[var(--rose-light)] text-[var(--rose)] border border-[var(--rose)]/20 hover:bg-[var(--rose)]/10'
   };
 
-  const disabledClasses = (disabled || isLoading) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+  const disabledClasses = (disabled || isLoading) ? 'opacity-45 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-[1px]';
 
   return (
     <button 
