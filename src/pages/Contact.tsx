@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Send, User, MessageSquare, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -17,13 +17,21 @@ export default function Contact({ showToast }: any) {
     return Object.keys(e).length === 0;
   };
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setSent(true);
     setForm({ name: '', email: '', message: '' });
     showToast('Съобщението е изпратено успешно');
-    setTimeout(() => setSent(false), 5000);
+    timerRef.current = setTimeout(() => setSent(false), 5000);
   };
 
   return (
@@ -63,10 +71,11 @@ export default function Contact({ showToast }: any) {
               <form onSubmit={handleSubmit} className="premium-card p-6 md:p-10">
                 <div className="space-y-5">
                   <div>
-                    <label className="label-caps block mb-2">Вашето име</label>
+                    <label htmlFor="contact-name" className="label-caps block mb-2">Вашето име</label>
                     <div className="relative">
                       <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
                       <input
+                        id="contact-name"
                         type="text"
                         value={form.name}
                         onChange={e => setForm({ ...form, name: e.target.value })}
@@ -78,10 +87,11 @@ export default function Contact({ showToast }: any) {
                   </div>
 
                   <div>
-                    <label className="label-caps block mb-2">Имейл адрес</label>
+                    <label htmlFor="contact-email" className="label-caps block mb-2">Имейл адрес</label>
                     <div className="relative">
                       <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
                       <input
+                        id="contact-email"
                         type="email"
                         value={form.email}
                         onChange={e => setForm({ ...form, email: e.target.value })}
@@ -93,10 +103,11 @@ export default function Contact({ showToast }: any) {
                   </div>
 
                   <div>
-                    <label className="label-caps block mb-2">Съобщение</label>
+                    <label htmlFor="contact-message" className="label-caps block mb-2">Съобщение</label>
                     <div className="relative">
                       <MessageSquare size={16} className="absolute left-3.5 top-3.5 text-[var(--text-tertiary)]" />
                       <textarea
+                        id="contact-message"
                         value={form.message}
                         onChange={e => setForm({ ...form, message: e.target.value })}
                         placeholder="Опишете въпроса си..."

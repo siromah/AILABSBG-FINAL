@@ -149,7 +149,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
             {!currentUser ? (
               <div className="hidden md:flex gap-2 ml-1">
                 <button className="h-9 px-4 text-[13px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-soft)] rounded-full transition-colors border border-[var(--border)] bg-[var(--surface-strong)]" onClick={() => navigate('/login')}>Вход</button>
-                <button className="h-9 px-4 text-[13px] font-medium text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] rounded-full transition-colors" onClick={() => navigate('/register')}>Регистрация</button>
+                <button className="h-9 px-4 text-[13px] font-medium text-[var(--bg)] bg-[var(--accent)] hover:bg-[var(--accent-hover)] rounded-full transition-colors" onClick={() => navigate('/register')}>Започни безплатно</button>
               </div>
             ) : (
               <div className="relative hidden md:block ml-1">
@@ -172,13 +172,13 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                       <button onClick={() => go('profile')} className="w-full text-left px-3.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] flex items-center gap-2">
                         <User size={15} /> Профил
                       </button>
-                      <button onClick={() => go('profile')} className="w-full text-left px-3.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] flex items-center gap-2">
+                      <button onClick={() => go('prompts')} className="w-full text-left px-3.5 py-1.5 text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] flex items-center gap-2">
                         <Bookmark size={15} /> Запазени prompts
                       </button>
 
                       <div className="h-px bg-[var(--border)] my-1.5" />
 
-                      <button onClick={() => { signOut(); go('home'); showToast('Успешен изход'); }} className="w-full text-left px-3.5 py-1.5 text-[13px] text-[var(--rose)] hover:bg-[var(--rose-light)] flex items-center gap-2">
+                      <button onClick={async () => { await signOut(); go('home'); showToast('Успешен изход'); }} className="w-full text-left px-3.5 py-1.5 text-[13px] text-[var(--rose)] hover:bg-[var(--rose-light)] flex items-center gap-2">
                         <LogOut size={15} /> Изход
                       </button>
                     </motion.div>
@@ -240,7 +240,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                 {!currentUser ? (
                   <div className="flex flex-col gap-2">
                     <button className="h-10 text-[14px] font-medium border border-[var(--border)] rounded-xl hover:bg-[var(--bg-soft)]" onClick={() => { setMobMenu(false); navigate('/login'); }}>Вход</button>
-                    <button className="h-10 text-[14px] font-medium border border-transparent rounded-xl bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]" onClick={() => { setMobMenu(false); navigate('/register'); }}>Регистрация</button>
+                    <button className="h-10 text-[14px] font-medium border border-transparent rounded-xl bg-[var(--accent)] text-[var(--bg)] hover:bg-[var(--accent-hover)]" onClick={() => { setMobMenu(false); navigate('/register'); }}>Започни безплатно</button>
                   </div>
                 ) : (
                   <div className="flex flex-col">
@@ -252,7 +252,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                       </div>
                     </div>
                     <button className="flex items-center gap-3 px-3 py-2 rounded-xl text-[14px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]" onClick={() => go('profile')}><User size={17}/> Профил</button>
-                    <button className="flex items-center gap-3 px-3 py-2 rounded-xl text-[14px] text-[var(--rose)] hover:bg-[var(--rose-light)]" onClick={() => { signOut(); go('home'); }}><LogOut size={17}/> Изход</button>
+                    <button className="flex items-center gap-3 px-3 py-2 rounded-xl text-[14px] text-[var(--rose)] hover:bg-[var(--rose-light)]" onClick={async () => { await signOut(); go('home'); }}><LogOut size={17}/> Изход</button>
                   </div>
                 )}
               </div>

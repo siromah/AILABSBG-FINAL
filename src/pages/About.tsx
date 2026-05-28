@@ -172,15 +172,15 @@ export default function About({ openModal }: any) {
       {/* CTA */}
       <section className="section-shell py-14 md:py-20 pb-20">
         <motion.div initial={{opacity:0, scale:0.98}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{duration: 0.4}}>
-          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-white overflow-hidden p-10 md:p-14">
+          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-10 md:p-14">
              <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent)] rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
              <div className="absolute bottom-0 left-0 w-56 h-56 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
              <div className="relative z-10 flex flex-col items-start max-w-xl">
                <h2 className="text-[28px] md:text-[38px] font-semibold mb-4 tracking-tight leading-tight">Готови ли сте да изграждате с AI?</h2>
-               <p className="text-[16px] text-white/60 mb-8 leading-relaxed">
+               <p className="text-[16px] text-[var(--bg)]/60 mb-8 leading-relaxed">
                  Присъединете се към общност от професионалисти, които учат, тестват и споделят реални AI workflows.
                </p>
-               <Button size="lg" onClick={() => openModal('signup')} className="gap-2 px-7 h-12 bg-white text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
+               <Button size="lg" onClick={() => openModal('signup')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
                  Присъединете се <ArrowRight size={16} />
                </Button>
              </div>

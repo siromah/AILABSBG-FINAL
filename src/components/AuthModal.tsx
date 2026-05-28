@@ -54,7 +54,9 @@ export default function AuthModal({ modal, setModal, db, updateDb, setCurrentUse
           >
             <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: 'linear-gradient(90deg, var(--or), var(--or2))'}}></div>
             
-            <button className="modal-close" onClick={() => setModal(null)} style={{top: 20, right: 20, background: 'var(--s1)', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 50, border: '1px solid var(--bdr)'}}>✕</button>
+            <button className="modal-close" onClick={() => setModal(null)} style={{top: 20, right: 20, background: 'var(--s1)', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 50, border: '1px solid var(--bdr)'}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
             
             <AnimatePresence mode="wait">
               {modal === 'login' ? (

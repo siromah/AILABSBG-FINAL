@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap } from 'lucide-react';
+import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap, Lock, Star, Users } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
 import { Textarea } from '../components/ui/Input';
+import { EVENTS_DATA } from '../data';
+import { getUserPlan } from '../lib/access';
+import { UpgradeCard } from '../components/UpgradeCard';
 
 export default function Community({ db, updateDb, currentUser, openModal, showToast, setPage }: any) {
   const [feedFilter, setFeedFilter] = useState('all');
@@ -12,8 +15,10 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   const [compText, setCompText] = useState('');
   const [compType, setCompType] = useState('win');
 
+  const plan = getUserPlan(currentUser);
+
   const addNotif = (text: string, icon = 'bell') => {
-    const n = { id: 'n'+Date.now(), text, icon, time: Date.now(), read: false };
+    const n = { id: 'n' + Date.now(), text, icon, time: Date.now(), read: false };
     updateDb('notifs', [n, ...db.notifs].slice(0, 50));
   };
 
@@ -36,7 +41,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   };
 
   const toggleLike = (pid: string) => {
-    if(!currentUser) { openModal('login'); return; }
+    if (!currentUser) { openModal('login'); return; }
     const posts = [...db.posts];
     const i = posts.findIndex(p => p.id === pid);
     if (i !== -1) {
@@ -48,7 +53,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   };
 
   const toggleSave = (pid: string) => {
-    if(!currentUser) { openModal('login'); return; }
+    if (!currentUser) { openModal('login'); return; }
     const posts = [...db.posts];
     const i = posts.findIndex(p => p.id === pid);
     if (i !== -1) {
@@ -61,40 +66,40 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   };
 
   const addComment = (pid: string, val: string) => {
-    if(!currentUser) { openModal('login'); return; }
-    if(!val.trim()) return;
+    if (!currentUser) { openModal('login'); return; }
+    if (!val.trim()) return;
     const posts = [...db.posts];
     const i = posts.findIndex(p => p.id === pid);
     if (i !== -1) {
-      if(!posts[i].comments) posts[i].comments = [];
-      posts[i].comments.push({ id: 'c'+Date.now(), uid: currentUser.id, text: val.trim(), time: Date.now() });
+      if (!posts[i].comments) posts[i].comments = [];
+      posts[i].comments.push({ id: 'c' + Date.now(), uid: currentUser.id, text: val.trim(), time: Date.now() });
       updateDb('posts', posts);
       addNotif(`${currentUser.fname} коментира твоя пост`, 'message');
     }
   };
 
   const delPost = (pid: string) => {
-    if(!confirm('Изтриване на тази публикация?')) return;
-    updateDb('posts', db.posts.filter((p:any) => p.id !== pid));
+    if (!confirm('Изтриване на тази публикация?')) return;
+    updateDb('posts', db.posts.filter((p: any) => p.id !== pid));
     showToast('Изтрито');
   };
 
   const fTime = (ts: number) => {
     const d = Date.now() - ts;
     if (d < 60000) return 'току-що';
-    if (d < 3600000) return `преди ${Math.floor(d/60000)} мин`;
-    if (d < 86400000) return `преди ${Math.floor(d/3600000)} ч`;
-    return `преди ${Math.floor(d/86400000)} д`;
+    if (d < 3600000) return `преди ${Math.floor(d / 60000)} мин`;
+    if (d < 86400000) return `преди ${Math.floor(d / 3600000)} ч`;
+    return `преди ${Math.floor(d / 86400000)} д`;
   };
 
   const getTypeInfo = (type: string) => {
-    const m:any = {win:{label:'Успех',variant:'success'},question:{label:'Въпрос',variant:'info'},workflow:{label:'Workflow',variant:'warning'},'prompt-share':{label:'Prompt',variant:'accent'},announcement:{label:'Съобщение',variant:'default'}};
-    return m[type] || {label:type,variant:'neutral'};
+    const m: any = { win: { label: 'Успех', variant: 'success' }, question: { label: 'Въпрос', variant: 'info' }, workflow: { label: 'Workflow', variant: 'warning' }, 'prompt-share': { label: 'Prompt', variant: 'accent' }, announcement: { label: 'Съобщение', variant: 'default' } };
+    return m[type] || { label: type, variant: 'neutral' };
   };
 
   let postsToRender = db.posts;
-  if (feedFilter !== 'all') postsToRender = postsToRender.filter((p:any) => p.type === feedFilter);
-  postsToRender.sort((a:any, b:any) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.time - a.time);
+  if (feedFilter !== 'all') postsToRender = postsToRender.filter((p: any) => p.type === feedFilter);
+  postsToRender.sort((a: any, b: any) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.time - a.time);
 
   const escH = (t: string) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -119,7 +124,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <div className="flex flex-col gap-1.5">
                   <Button variant="secondary" className="w-full justify-center text-[12px] h-9" onClick={() => setPage('profile')}>Профил</Button>
                   {currentUser.isAdmin && (
-                    <Button variant="ghost" className="w-full justify-center text-rose text-[12px] h-9" onClick={() => setPage('admin')}><Settings size={13}/> Админ</Button>
+                    <Button variant="ghost" className="w-full justify-center text-rose text-[12px] h-9" onClick={() => setPage('admin')}><Settings size={13} /> Админ</Button>
                   )}
                 </div>
               </div>
@@ -163,10 +168,10 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
               <div className="label-caps mb-2 px-1">Филтри</div>
               <div className="flex flex-col gap-0.5">
                 {[
-                  {id: 'win', label: 'Успехи', icon: Trophy},
-                  {id: 'question', label: 'Въпроси', icon: HelpCircle},
-                  {id: 'workflow', label: 'Workflows', icon: Zap},
-                  {id: 'prompt-share', label: 'Prompts', icon: Lightbulb}
+                  { id: 'win', label: 'Успехи', icon: Trophy },
+                  { id: 'question', label: 'Въпроси', icon: HelpCircle },
+                  { id: 'workflow', label: 'Workflows', icon: Zap },
+                  { id: 'prompt-share', label: 'Prompts', icon: Lightbulb }
                 ].map(f => (
                   <button
                     key={f.id}
@@ -174,6 +179,29 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                     className={`flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left text-[13px] transition-colors ${feedFilter === f.id ? 'bg-[var(--bg-soft)] text-[var(--ink-900)] font-semibold' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]/60 hover:text-[var(--ink-900)]'}`}
                   >
                     <f.icon size={15} /> {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Pro канали */}
+            <div>
+              <div className="label-caps mb-2 px-1">Pro канали</div>
+              <div className="flex flex-col gap-0.5">
+                {[
+                  { id: 'qa', label: 'Q&A сесии', lock: 'Pro' },
+                  { id: 'office', label: 'Office hours', lock: 'Pro' },
+                  { id: 'reviews', label: 'Implementation reviews', lock: 'Premium' },
+                  { id: 'pro-disc', label: 'Pro дискусии', lock: 'Pro' }
+                ].map(ch => (
+                  <button
+                    key={ch.id}
+                    onClick={() => showToast('Този канал изисква ' + ch.lock + ' план', true)}
+                    className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]/60 hover:text-[var(--ink-900)] transition-colors"
+                  >
+                    <Lock size={14} className="text-[var(--text-tertiary)]" />
+                    {ch.label}
+                    <span className="ml-auto text-[10px] font-medium text-[var(--text-tertiary)]">{ch.lock}</span>
                   </button>
                 ))}
               </div>
@@ -198,6 +226,21 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
               <Badge variant={feedFilter === 'prompt-share' ? 'default' : 'outline'} className="cursor-pointer snap-start shrink-0 rounded-full px-3 py-1 text-[12px]" onClick={() => setFeedFilter('prompt-share')}>Prompts</Badge>
             </div>
 
+            {/* Weekly Rhythm */}
+            <div className="premium-card p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Badge variant="accent" className="rounded-full text-[10px] uppercase tracking-wider">Публично</Badge>
+                <span className="text-[11px] text-[var(--text-tertiary)]">Тази седмица</span>
+              </div>
+              <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Prompt Engineering</h3>
+              <p className="text-[14px] text-[var(--text-secondary)] mb-3">
+                Challenge: Напиши 5 system prompts за различни бизнес use cases.
+              </p>
+              <div className="flex items-center gap-2 text-[12px] text-[var(--text-tertiary)]">
+                <Star size={12} /> 12 участника вече са споделили
+              </div>
+            </div>
+
             {/* Composer */}
             {currentUser ? (
               <div className="premium-card p-4 sm:p-5">
@@ -212,10 +255,10 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                         Споделете workflow, въпрос или успех...
                       </button>
                     ) : (
-                      <motion.div initial={{opacity: 0, y: -8}} animate={{opacity: 1, y: 0}}>
+                      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
                         <Textarea
                           value={compText}
-                          onChange={(e:any)=>setCompText(e.target.value)}
+                          onChange={(e: any) => setCompText(e.target.value)}
                           placeholder="Напишете нещо полезно..."
                           autoFocus
                           className="min-h-[100px] mb-3 text-[14px] rounded-2xl bg-[var(--bg-soft)] border-[var(--border)]"
@@ -223,10 +266,10 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
 
                         <div className="flex flex-wrap gap-2 mb-4">
                           {[
-                            {id: 'win', label: 'Успех'},
-                            {id: 'question', label: 'Въпрос'},
-                            {id: 'workflow', label: 'Workflow'},
-                            {id: 'prompt-share', label: 'Prompt'}
+                            { id: 'win', label: 'Успех' },
+                            { id: 'question', label: 'Въпрос' },
+                            { id: 'workflow', label: 'Workflow' },
+                            { id: 'prompt-share', label: 'Prompt' }
                           ].map(t => (
                             <Badge
                               key={t.id}
@@ -241,7 +284,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
 
                         <div className="flex justify-end items-center gap-2 pt-3 border-t border-[var(--border)]">
                           <Button variant="ghost" onClick={() => setCompExpanded(false)} className="h-8 text-[13px]">Отказ</Button>
-                          <Button onClick={submitPost} disabled={!compText.trim()} className="h-8 text-[13px]"><Send size={14}/> Публикувай</Button>
+                          <Button onClick={submitPost} disabled={!compText.trim()} className="h-8 text-[13px]"><Send size={14} /> Публикувай</Button>
                         </div>
                       </motion.div>
                     )}
@@ -265,17 +308,17 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <div className="premium-card py-14 text-center">
                   <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Няма намерени публикации</h3>
                   <p className="text-[var(--text-secondary)] mb-4 text-[14px]">Бъдете първият, който споделя.</p>
-                  <Button variant="secondary" className="h-9 text-[13px]" onClick={() => {setFeedFilter('all'); setCompExpanded(true);}}>Публикувай</Button>
+                  <Button variant="secondary" className="h-9 text-[13px]" onClick={() => { setFeedFilter('all'); setCompExpanded(true); }}>Публикувай</Button>
                 </div>
               ) : (
                 <AnimatePresence>
-                  {postsToRender.map((p:any) => (
+                  {postsToRender.map((p: any) => (
                     <motion.div
                       key={p.id}
-                      initial={{opacity: 0, y: 16}}
-                      animate={{opacity: 1, y: 0}}
-                      exit={{opacity: 0, scale: 0.97}}
-                      transition={{duration: 0.2}}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      transition={{ duration: 0.2 }}
                     >
                       <PostCard
                         p={p} db={db} currentUser={currentUser} openModal={openModal}
@@ -287,6 +330,29 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 </AnimatePresence>
               )}
             </div>
+
+            {/* Locked Community Areas */}
+            <div className="mt-8">
+              <div className="label-caps mb-4">Pro общност</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  { title: 'Q&A с екипа', desc: 'Седмични live сесии с нашия екип. Задавай въпроси и получавай отговори в реално време.' },
+                  { title: 'Office Hours', desc: 'Индивидуални консултации за твоя бизнес и AI стратегия.' },
+                  { title: 'Implementation Reviews', desc: 'Преглед на твоите AI workflows и системи от експерти.' }
+                ].map(area => (
+                  <div key={area.title} className="premium-card p-5 relative overflow-hidden">
+                    <h4 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1">{area.title}</h4>
+                    <p className="text-[13px] text-[var(--text-secondary)] mb-4 leading-relaxed">{area.desc}</p>
+                    <UpgradeCard
+                      title="Pro изисква се"
+                      description="Включено в Pro и Premium плановете."
+                      onUpgrade={() => setPage('pricing')}
+                      className="!px-4 !py-3 !rounded-xl"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -296,21 +362,42 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <Trophy size={14} className="text-[var(--amber)]" /> Последни успехи
               </div>
               <div className="flex flex-col gap-2.5">
-                {db.posts.filter((p:any) => p.type === 'win').slice(0,3).map((p:any) => {
-                  const a = db.users.find((u:any) => u.id === p.uid) || {fname:'?'};
+                {db.posts.filter((p: any) => p.type === 'win').slice(0, 3).map((p: any) => {
+                  const a = db.users.find((u: any) => u.id === p.uid) || { fname: '?' };
                   return (
                     <div key={p.id} className="flex gap-2.5 p-2.5 bg-[var(--bg-soft)] border border-[var(--border)] rounded-xl items-start">
                       <Avatar size="sm" initials={a.initials || a.fname.charAt(0)} />
                       <div className="text-[12px] text-[var(--text-secondary)] leading-snug">
                         <span className="font-semibold text-[var(--ink-900)]">{a.fname}</span>{' '}
-                        {p.text.substring(0,45)}{p.text.length > 45 ? '...' : ''}
+                        {p.text.substring(0, 45)}{p.text.length > 45 ? '...' : ''}
                       </div>
                     </div>
                   );
                 })}
-                {db.posts.filter((p:any) => p.type === 'win').length === 0 && (
+                {db.posts.filter((p: any) => p.type === 'win').length === 0 && (
                   <p className="text-[12px] text-[var(--text-tertiary)]">Все още няма споделени успехи.</p>
                 )}
+              </div>
+            </div>
+
+            {/* Upcoming events */}
+            <div className="premium-card p-5">
+              <div className="flex items-center gap-2 mb-3 text-[12px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
+                <Calendar size={14} className="text-[var(--accent)]" /> Предстоящи събития
+              </div>
+              <div className="flex flex-col gap-3">
+                {EVENTS_DATA.slice(0, 2).map(e => (
+                  <div key={e.id} className="flex gap-3 p-3 bg-[var(--bg-soft)] border border-[var(--border)] rounded-xl items-start cursor-pointer hover:border-[var(--border-strong)] transition-colors" onClick={() => setPage('events')}>
+                    <div className="flex flex-col items-center justify-center w-10 h-10 rounded-lg bg-[var(--accent-light)] text-[var(--accent-text)] shrink-0">
+                      <span className="text-[10px] font-bold leading-none">{e.mo}</span>
+                      <span className="text-[14px] font-bold leading-none">{e.day}</span>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-semibold text-[var(--ink-900)] leading-snug truncate">{e.title}</div>
+                      <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{e.time} · {e.platform}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -324,7 +411,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
 
-  const a = db.users.find((u:any) => u.id === p.uid) || {initials:'?',color:'var(--s2)',tc:'var(--txt2)',fname:'Потребител',lname:''};
+  const a = db.users.find((u: any) => u.id === p.uid) || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', fname: 'Потребител', lname: '' };
   const liked = currentUser && p.likes.includes(currentUser.id);
   const saved = currentUser && p.saved && p.saved.includes(currentUser.id);
   const isOwn = currentUser && p.uid === currentUser.id;
@@ -349,10 +436,10 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                 {fTime(p.time)}
                 <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]"></span>
                 <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md border ${
-                    ti.variant === 'success' ? 'bg-[var(--emerald-light)] text-[var(--emerald)] border-[var(--emerald)]/20' :
+                  ti.variant === 'success' ? 'bg-[var(--emerald-light)] text-[var(--emerald)] border-[var(--emerald)]/20' :
                     ti.variant === 'info' ? 'bg-sky-50 text-sky-600 border-sky-100' :
-                    ti.variant === 'warning' ? 'bg-[var(--amber-light)] text-[var(--amber)] border-[var(--amber)]/20' :
-                    'bg-[var(--bg-soft)] text-[var(--text-secondary)] border-[var(--border)]'
+                      ti.variant === 'warning' ? 'bg-[var(--amber-light)] text-[var(--amber)] border-[var(--amber)]/20' :
+                        'bg-[var(--bg-soft)] text-[var(--text-secondary)] border-[var(--border)]'
                 }`}>
                   {ti.label}
                 </span>
@@ -376,11 +463,11 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
           )}
         </div>
 
-        <div className="text-[14px] text-[var(--ink-900)] leading-[1.65] mb-4 whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{__html: escH(p.text)}} />
+        <div className="text-[14px] text-[var(--ink-900)] leading-[1.65] mb-4 whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: escH(p.text) }} />
 
         {p.tags && p.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
-            {p.tags.map((t:string) => (
+            {p.tags.map((t: string) => (
               <Badge key={t} variant="outline" className="text-[11px] rounded-full">{t}</Badge>
             ))}
           </div>
@@ -398,7 +485,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
             onClick={() => setShowComments(!showComments)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-semibold border transition-colors ${showComments ? 'bg-[var(--bg-soft)] text-[var(--ink-900)] border-[var(--border)]' : 'bg-[var(--bg-soft)] text-[var(--text-secondary)] border-transparent hover:bg-[var(--border)] hover:text-[var(--ink-900)]'}`}
           >
-            <MessageSquare size={14} /> {(p.comments||[]).length}
+            <MessageSquare size={14} /> {(p.comments || []).length}
           </button>
 
           <div className="flex-1"></div>
@@ -415,7 +502,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
         <AnimatePresence>
           {showComments && (
             <motion.div
-              initial={{opacity: 0, height: 0}} animate={{opacity: 1, height: 'auto'}} exit={{opacity: 0, height: 0}} transition={{duration: 0.2}}
+              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
               <div className="mt-5 pt-5 border-t border-[var(--border)]">
@@ -423,8 +510,8 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                   <div className="text-[12px] text-[var(--text-tertiary)] text-center py-4">Все още няма коментари. Започнете разговора.</div>
                 ) : (
                   <div className="flex flex-col gap-3">
-                    {p.comments.map((c:any) => {
-                      const ca = db.users.find((u:any) => u.id === c.uid) || {initials:'?',color:'var(--s2)',tc:'var(--txt2)',fname:'?',lname:''};
+                    {p.comments.map((c: any) => {
+                      const ca = db.users.find((u: any) => u.id === c.uid) || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', fname: '?', lname: '' };
                       return (
                         <div key={c.id} className="flex gap-2.5">
                           <Avatar size="sm" initials={ca.initials} />
@@ -433,7 +520,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                               <span className="text-[12px] font-semibold text-[var(--ink-900)]">{ca.fname} {ca.lname}</span>
                               <span className="text-[10px] text-[var(--text-tertiary)]">{fTime(c.time)}</span>
                             </div>
-                            <div className="text-[13px] leading-snug text-[var(--text-primary)] whitespace-pre-wrap" dangerouslySetInnerHTML={{__html: escH(c.text)}} />
+                            <div className="text-[13px] leading-snug text-[var(--text-primary)] whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: escH(c.text) }} />
                           </div>
                         </div>
                       );
@@ -449,8 +536,8 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                         className="flex-1 w-full bg-[var(--bg-soft)] border border-[var(--border)] rounded-full px-4 py-2 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors shadow-sm"
                         placeholder="Напишете коментар..."
                         value={commentText}
-                        onChange={e=>setCommentText(e.target.value)}
-                        onKeyDown={e => { if(e.key === 'Enter') { addComment(p.id, commentText); setCommentText(''); } }}
+                        onChange={e => setCommentText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') { addComment(p.id, commentText); setCommentText(''); } }}
                       />
                       <Button onClick={() => { addComment(p.id, commentText); setCommentText(''); }} className="rounded-full px-3.5 h-9 shrink-0" disabled={!commentText.trim()}>
                         <Send size={14} />

@@ -27,7 +27,7 @@ export function Button({
   };
 
   const variantClasses = {
-    primary: 'bg-[var(--ink-900)] text-white hover:bg-[var(--ink-700)] border-none shadow-sm',
+    primary: 'bg-[var(--ink-900)] text-[var(--bg)] hover:bg-[var(--ink-700)] border-none shadow-sm',
     secondary: 'bg-[var(--surface-strong)] text-[var(--text-primary)] border border-[var(--border)] hover:bg-[var(--bg-soft)] shadow-xs',
     ghost: 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] border-none',
     danger: 'bg-[var(--rose-light)] text-[var(--rose)] border border-[var(--rose)]/20 hover:bg-[var(--rose)]/10'

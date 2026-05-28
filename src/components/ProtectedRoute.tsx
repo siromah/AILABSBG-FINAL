@@ -8,10 +8,8 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <main className="auth-page">
-        <section className="auth-card">
-          <p>Зареждане на акаунта...</p>
-        </section>
+      <main className="min-h-[calc(100vh-80px)] flex items-center justify-center">
+        <div className="text-[15px] text-[var(--text-secondary)]">Зареждане на акаунта...</div>
       </main>
     );
   }

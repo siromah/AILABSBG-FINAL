@@ -412,31 +412,31 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {[
             {
               name: 'Free',
-              price: '€0',
+              price: '0 лв.',
               period: '/месец',
               desc: 'За разглеждане, newsletter и основни ресурси.',
-              features: ['Достъп до 3 урока', 'Четене в общността', 'Основни prompts', 'Имейл новини'],
+              features: ['Достъп до ограничени уроци', 'Ограничена prompt library', 'Community preview', 'Избрани workshop превюта'],
               cta: 'Започни',
               plan: 'free',
             },
             {
               name: 'Pro',
-              price: '€9',
+              price: '49 лв.',
               period: '/месец',
               desc: 'Community, workshops, prompt library, templates и challenges.',
-              features: ['Пълен достъп до уроците', 'Публикуване в общността', 'Всички prompts', 'Workshops', 'Templates'],
+              features: ['Пълна академия', 'Пълна prompt library', 'Пълна общност', 'Workshops', 'Challenges', 'Шаблони'],
               cta: 'Избери Pro',
-              plan: 'pro-community',
+              plan: 'pro',
               highlight: true,
             },
             {
               name: 'Premium',
-              price: '€24',
+              price: '129 лв.',
               period: '/месец',
               desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
-              features: ['Всичко от Pro', 'Office hours', 'Implementation reviews', 'Priority Q&A', 'Директен достъп до екипа'],
+              features: ['Всичко от Pro', 'Office hours', 'Implementation reviews', 'Priority Q&A', 'Персонализирани съвети'],
               cta: 'Избери Premium',
-              plan: 'ai-builder',
+              plan: 'premium',
             },
           ].map((plan, idx) => (
             <motion.div
@@ -530,21 +530,21 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-white overflow-hidden p-10 md:p-16">
+          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-10 md:p-16">
             <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--accent)] rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
             <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
               <h2 className="text-[28px] md:text-[40px] font-semibold mb-4 tracking-tight leading-tight">
                 Готови ли сте да започнете?
               </h2>
-              <p className="text-[16px] text-white/60 mb-8 leading-relaxed max-w-lg">
+              <p className="text-[16px] text-[var(--bg)]/60 mb-8 leading-relaxed max-w-lg">
                 Присъединете се към общността, която учи AI практически. Без шум, без празни обещания — само работещи инструменти.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-white text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
+                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
                   Започни безплатно <ArrowRight size={16} />
                 </Button>
-                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-12 text-white hover:bg-white/10 text-[15px]">
+                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-12 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[15px]">
                   Виж цените
                 </Button>
               </div>

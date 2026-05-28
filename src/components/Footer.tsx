@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="border-t border-[var(--border)] mt-auto relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[var(--accent)]/[0.03] rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
 
-      <div className="section-shell py-14 md:py-18 relative z-10">
+      <div className="section-shell py-14 md:py-16 relative z-10">
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 justify-between">
 
           <div className="md:max-w-sm">
@@ -66,7 +66,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-[var(--text-tertiary)]">
           <span>&copy; {new Date().getFullYear()} AILABSBG. Всички права запазени.</span>
-          <span>Цените са в евро. Платформата е в процес на разработка.</span>
+          <span>Цените са в лева. Платформата е в процес на разработка.</span>
         </div>
       </div>
     </footer>

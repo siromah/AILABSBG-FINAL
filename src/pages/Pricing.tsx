@@ -12,25 +12,25 @@ const PLANS = [
     monthly: 0,
     yearly: 0,
     features: [
-      'Достъп до 3 урока',
-      'Четене в общността',
-      'Основни prompts',
-      'Имейл новини',
+      'Достъп до ограничени уроци',
+      'Ограничена prompt library',
+      'Community preview',
+      'Избрани workshop превюта',
     ],
   },
   {
     id: 'pro',
     name: 'Pro',
     desc: 'Community, workshops, prompt library, templates и challenges.',
-    monthly: 9,
-    yearly: 90,
+    monthly: 49,
+    yearly: 490,
     features: [
-      'Всички уроци в Академията',
-      'Публикуване в общността',
-      'Пълен достъп до Prompt Library',
-      'Workshops и шаблони',
-      'Седмични challenges',
-      'Приоритетна поддръжка',
+      'Пълна академия',
+      'Пълна prompt library',
+      'Пълна общност',
+      'Workshops',
+      'Challenges',
+      'Шаблони',
     ],
     highlight: true,
   },
@@ -38,14 +38,13 @@ const PLANS = [
     id: 'premium',
     name: 'Premium',
     desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
-    monthly: 24,
-    yearly: 240,
+    monthly: 129,
+    yearly: 1290,
     features: [
       'Всичко от Pro',
-      'Office hours на живо',
+      'Office hours',
       'Implementation reviews',
       'Priority Q&A',
-      'Директен достъп до екипа',
       'Персонализирани съвети',
     ],
   },
@@ -86,19 +85,19 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
             </div>
             <div>
               <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed mb-4">
-                Изберете план, който пасва на вашия workflow. Всички цени са в евро. Без скрити такси.
+                Изберете план, който пасва на вашия workflow. Всички цени са в лева. Без скрити такси.
               </p>
 
               <div className="inline-flex items-center gap-1 bg-[var(--surface-strong)] border border-[var(--border)] rounded-full p-1">
                 <button
                   onClick={() => setYearly(false)}
-                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${!yearly ? 'bg-[var(--ink-900)] text-white' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${!yearly ? 'bg-[var(--ink-900)] text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                 >
                   Месечно
                 </button>
                 <button
                   onClick={() => setYearly(true)}
-                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${yearly ? 'bg-[var(--ink-900)] text-white' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${yearly ? 'bg-[var(--ink-900)] text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                 >
                   Годишно
                 </button>
@@ -132,7 +131,7 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
                   </div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-[38px] font-semibold text-[var(--ink-900)] tracking-tight">
-                      €{yearly ? plan.yearly : plan.monthly}
+                      {yearly ? plan.yearly : plan.monthly} лв.
                     </span>
                     <span className="text-[14px] text-[var(--text-tertiary)]">{yearly ? '/година' : '/месец'}</span>
                   </div>

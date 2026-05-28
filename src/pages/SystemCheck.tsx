@@ -12,7 +12,7 @@ export default function SystemCheck() {
     { name: 'Мрежова свързаност', status: 'pending', message: 'Проверка...' },
     { name: 'Регистрирани маршрути', status: 'pending', message: 'Проверка...' },
     { name: 'Езиков интерфейс', status: 'pending', message: 'Проверка...' },
-    { name: 'Валута (евро)', status: 'pending', message: 'Проверка...' },
+    { name: 'Валута (лева)', status: 'pending', message: 'Проверка...' },
     { name: 'Отсъствие на емоджита', status: 'pending', message: 'Проверка...' },
     { name: 'Намалена подвижност', status: 'pending', message: 'Проверка...' },
     { name: 'CTA бутони', status: 'pending', message: 'Проверка...' },
@@ -78,11 +78,19 @@ export default function SystemCheck() {
       update(9, prefersReducedMotion ? 'pass' : 'pass', prefersReducedMotion ? 'Потребителят предпочита намалена подвижност' : 'Стандартна подвижност (on)');
 
       // Check CTA buttons have onClick or href
+      // Note: React synthetic event handlers aren't visible in the DOM,
+      // so we only flag buttons that are explicitly disabled or anchors with empty/href-less links.
       const ctas = Array.from(document.querySelectorAll('button, a'));
       const brokenCTAs = ctas.filter(el => {
         const tag = el.tagName.toLowerCase();
-        if (tag === 'button') return !(el as HTMLButtonElement).onclick && !el.getAttribute('onClick') && !el.closest('form');
-        if (tag === 'a') return !el.getAttribute('href') || el.getAttribute('href') === '#';
+        if (tag === 'button') {
+          const isDisabled = el.hasAttribute('disabled');
+          return isDisabled;
+        }
+        if (tag === 'a') {
+          const href = el.getAttribute('href');
+          return !href || href === '#' || href.startsWith('javascript:');
+        }
         return false;
       });
       update(10, brokenCTAs.length === 0 ? 'pass' : 'warn', brokenCTAs.length === 0 ? 'Всички CTA са функционални' : `${brokenCTAs.length} CTA елемента може да са нефункционални`);

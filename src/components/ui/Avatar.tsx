@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -10,6 +10,8 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Avatar({ size = 'md', src, initials, showIndicator = false, className = '', ...props }: AvatarProps) {
+  const [imgError, setImgError] = useState(false);
+
   const sizeClasses = {
     sm: 'w-[28px] h-[28px] text-[11px]',
     md: 'w-[36px] h-[36px] text-[13px]',
@@ -24,26 +26,26 @@ export function Avatar({ size = 'md', src, initials, showIndicator = false, clas
     xl: 'w-4 h-4'
   };
 
+  const showImg = src && !imgError;
+
   return (
     <div className={`relative inline-flex flex-shrink-0 ${sizeClasses[size]} ${className}`} {...props}>
-      {src ? (
-        <img 
-          src={src} 
-          alt="Avatar" 
+      {showImg ? (
+        <img
+          src={src}
+          alt="Avatar"
           className="w-full h-full rounded-full object-cover border border-border"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }}
+          onError={() => setImgError(true)}
         />
       ) : (
         <div className="w-full h-full rounded-full bg-ink-100 text-ink-500 font-semibold flex items-center justify-center border border-border">
           {initials || '?'}
         </div>
       )}
-      
+
       {showIndicator && (
-        <div 
-          className={`absolute bottom-0 right-0 rounded-full bg-emerald border-2 border-white ${indicatorSize[size]}`} 
+        <div
+          className={`absolute bottom-0 right-0 rounded-full bg-emerald border-2 border-white ${indicatorSize[size]}`}
         />
       )}
     </div>

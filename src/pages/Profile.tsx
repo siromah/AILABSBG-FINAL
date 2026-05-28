@@ -108,7 +108,7 @@ export function Profile({ db, setPage }: any) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-[15px] font-semibold text-[var(--ink-900)] leading-snug truncate">{nextLesson.title}</h3>
-                    <p className="text-[12px] text-[var(--text-secondary)] mt-0.5">{nextLesson.dur} • {nextLesson.mod}</p>
+                    <p className="text-[12px] text-[var(--text-secondary)] mt-0.5">{nextLesson.dur}</p>
                   </div>
                 </div>
               )}

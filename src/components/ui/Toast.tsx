@@ -24,10 +24,10 @@ export function Toast({ id, message, variant = 'info', duration = 4000, onDismis
   }, [duration, id, onDismiss]);
 
   const variantStyles = {
-    success: 'bg-white border-emerald/20 text-emerald-text shadow-sm',
-    error: 'bg-white border-rose/20 text-rose-text shadow-sm',
-    info: 'bg-white border-accent/20 text-accent-text shadow-sm',
-    warning: 'bg-white border-amber/20 text-amber-text shadow-sm'
+    success: 'bg-[var(--surface-strong)] border-emerald/20 text-emerald-text shadow-sm',
+    error: 'bg-[var(--surface-strong)] border-rose/20 text-rose-text shadow-sm',
+    info: 'bg-[var(--surface-strong)] border-accent/20 text-accent-text shadow-sm',
+    warning: 'bg-[var(--surface-strong)] border-amber/20 text-amber-text shadow-sm'
   };
 
   const progressColors = {

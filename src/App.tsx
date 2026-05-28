@@ -3,10 +3,40 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense, type ReactNode } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Nav from './components/Nav';
+import ToastContainer from './components/ToastContainer';
+import AIAssistant from './components/AIAssistant';
+import Footer from './components/Footer';
+import CookieBanner from './components/CookieBanner';
+import CommandMenu from './components/CommandMenu';
+import { Spinner } from './components/ui/Spinner';
+import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
+import { Button } from './components/ui/Button';
 
-function PageTransition({ children }: { children: React.ReactNode }) {
+const Home = lazy(() => import('./pages/Home'));
+const Community = lazy(() => import('./pages/Community'));
+const Prompts = lazy(() => import('./pages/Prompts'));
+const Lessons = lazy(() => import('./pages/Lessons'));
+const Events = lazy(() => import('./pages/Events'));
+const Profile = lazy(() => import('./pages/Profile').then(m => ({ default: m.Profile })));
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
+const Register = lazy(() => import('./pages/Register').then(m => ({ default: m.Register })));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ default: m.ForgotPassword })));
+const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })));
+const Admin = lazy(() => import('./pages/Admin'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const SystemCheck = lazy(() => import('./pages/SystemCheck'));
+const PrivacyPolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.PrivacyPolicy })));
+const CookiePolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.CookiePolicy })));
+const TermsOfUse = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.TermsOfUse })));
+
+function PageTransition({ children }: { children: ReactNode }) {
   const location = useLocation();
   return (
     <div key={location.pathname} className="page-transition">
@@ -14,29 +44,6 @@ function PageTransition({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-import Home from './pages/Home';
-import Community from './pages/Community';
-import Prompts from './pages/Prompts';
-import Lessons from './pages/Lessons';
-import Events from './pages/Events';
-import { Profile } from './pages/Profile';
-import { Login } from './pages/Login';
-import { Register } from './pages/Register';
-import { ForgotPassword } from './pages/ForgotPassword';
-import { ResetPassword } from './pages/ResetPassword';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Admin from './pages/Admin';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Pricing from './pages/Pricing';
-import SystemCheck from './pages/SystemCheck';
-import Nav from './components/Nav';
-import ToastContainer from './components/ToastContainer';
-import AIAssistant from './components/AIAssistant';
-import Footer from './components/Footer';
-import CookieBanner from './components/CookieBanner';
-import CommandMenu from './components/CommandMenu';
 
 function ScrollProgress() {
   const [progress, setProgress] = useState(0);
@@ -75,9 +82,6 @@ function SpotlightEffect() {
   }, []);
   return null;
 }
-import { PrivacyPolicy, CookiePolicy, TermsOfUse } from './pages/LegalPages';
-import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
-import { Button } from './components/ui/Button';
 
 function AppContent() {
   const navigate = useNavigate();
@@ -96,7 +100,8 @@ function AppContent() {
     role: 'Member',
     color: 'var(--blue)',
     tc: 'var(--bg-soft)',
-    isAdmin: false
+    isAdmin: user.user_metadata?.role === 'admin' || user.email === 'admin@ailabsbg.com',
+    plan: user.user_metadata?.plan || 'free'
   } : null;
 
   const [toasts, setToasts] = useState<any[]>([]);
@@ -145,20 +150,23 @@ function AppContent() {
     navigate(`/${p === 'home' ? '' : p}`);
   };
 
-  const RequireAuth = ({ children }: any) => {
-    if (!currentUser) {
-      return (
-        <div className="section-shell py-20 text-center">
-          <div className="premium-card p-10 max-w-md mx-auto">
-            <h2 className="text-[18px] font-semibold text-[var(--ink-900)] mb-3">Разделът изисква профил</h2>
-            <p className="text-[14px] text-[var(--text-secondary)] mb-6">Влезте, за да видите тази страница.</p>
-            <Button variant="primary" onClick={() => navigate('/login')}>Вход</Button>
-          </div>
+function RequireAuth({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="section-shell py-20 text-center">
+        <div className="premium-card p-10 max-w-md mx-auto">
+          <h2 className="text-[18px] font-semibold text-[var(--ink-900)] mb-3">Разделът изисква профил</h2>
+          <p className="text-[14px] text-[var(--text-secondary)] mb-6">Влезте, за да видите тази страница.</p>
+          <Button variant="primary" onClick={() => navigate('/login')}>Вход</Button>
         </div>
-      );
-    }
-    return children;
-  };
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
 
   const handleModal = (m: string) => {
     navigate(`/${m === 'signup' ? 'register' : m}`);
@@ -170,38 +178,44 @@ function AppContent() {
     <div className="flex flex-col min-h-screen">
       <ScrollProgress />
       <SpotlightEffect />
-      <ToastContainer toasts={toasts} />
+      <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(prev => prev.filter(x => x.id !== id))} />
       <CookieBanner />
       <CommandMenu />
 
       <Nav {...props} />
 
       <div className="flex-1">
-        <Routes>
-          <Route path="/" element={<PageTransition><Home {...props} /></PageTransition>} />
-          <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
-          <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
-          <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
-          <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
-          <Route path="/community" element={<PageTransition><Community {...props} /></PageTransition>} />
-          <Route path="/prompts" element={<PageTransition><Prompts {...props} /></PageTransition>} />
-          <Route path="/lessons" element={<PageTransition><Lessons {...props} /></PageTransition>} />
-          <Route path="/events" element={<PageTransition><Events {...props} /></PageTransition>} />
-          <Route path="/about" element={<PageTransition><About {...props} /></PageTransition>} />
-          <Route path="/contact" element={<PageTransition><Contact {...props} /></PageTransition>} />
-          <Route path="/pricing" element={<PageTransition><Pricing {...props} /></PageTransition>} />
-          <Route path="/system-check" element={<PageTransition><SystemCheck /></PageTransition>} />
-          <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
-          <Route path="/terms" element={<PageTransition><TermsOfUse /></PageTransition>} />
-          <Route path="/cookie-policy" element={<PageTransition><CookiePolicy /></PageTransition>} />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <PageTransition><Profile {...props} /></PageTransition>
-            </ProtectedRoute>
-          } />
-          <Route path="/admin" element={<PageTransition>{currentUser?.isAdmin ? <Admin {...props} /> : <Home {...props} />}</PageTransition>} />
-          <Route path="*" element={<PageTransition><Home {...props} /></PageTransition>} />
-        </Routes>
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <Spinner size="lg" className="text-[var(--accent)]" />
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<PageTransition><Home {...props} /></PageTransition>} />
+            <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+            <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+            <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
+            <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+            <Route path="/community" element={<PageTransition><Community {...props} /></PageTransition>} />
+            <Route path="/prompts" element={<PageTransition><Prompts {...props} /></PageTransition>} />
+            <Route path="/lessons" element={<PageTransition><Lessons {...props} /></PageTransition>} />
+            <Route path="/events" element={<PageTransition><Events {...props} /></PageTransition>} />
+            <Route path="/about" element={<PageTransition><About {...props} /></PageTransition>} />
+            <Route path="/contact" element={<PageTransition><Contact {...props} /></PageTransition>} />
+            <Route path="/pricing" element={<PageTransition><Pricing {...props} /></PageTransition>} />
+            <Route path="/system-check" element={<PageTransition><SystemCheck /></PageTransition>} />
+            <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+            <Route path="/terms" element={<PageTransition><TermsOfUse /></PageTransition>} />
+            <Route path="/cookie-policy" element={<PageTransition><CookiePolicy /></PageTransition>} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <PageTransition><Profile {...props} /></PageTransition>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={<PageTransition>{currentUser?.isAdmin ? <Admin {...props} /> : <Home {...props} />}</PageTransition>} />
+            <Route path="*" element={<PageTransition><Home {...props} /></PageTransition>} />
+          </Routes>
+        </Suspense>
       </div>
 
       <AIAssistant currentPage={page} setPage={setPage} />
