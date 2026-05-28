@@ -80,58 +80,76 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
   };
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)] overflow-hidden grain">
+    <div className="min-h-screen text-[var(--text-primary)] overflow-hidden">
 
-      {/* HERO */}
-      <section className="relative art-gradient section-shell pt-14 pb-12 md:pt-24 md:pb-20 rounded-b-[40px]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-start">
+      {/* HERO — Dramatic, asymmetric, alive */}
+      <section className="relative section-shell pt-20 pb-20 md:pt-32 md:pb-28">
+        {/* Animated background blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-6"
-          >
-            <div className="section-label mb-5">
-              <span className="label-caps text-[var(--accent)]">Практична AI академия и общност</span>
-            </div>
+            animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-20 -right-20 w-[600px] h-[600px] rounded-full bg-[var(--accent)]/[0.04] blur-[100px]"
+          />
+          <motion.div
+            animate={{ x: [0, -20, 0], y: [0, 30, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute top-40 -left-40 w-[500px] h-[500px] rounded-full bg-[var(--lavender)]/[0.03] blur-[90px]"
+          />
+        </div>
 
-            <h1 className="display-xl text-[var(--ink-900)] mb-6 bg-gradient-to-br from-[var(--ink-900)] to-[var(--ink-600)] bg-clip-text text-transparent">
-              Научи AI по начина, по който работи в реалността.
+        <div className="relative max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[13px] font-medium mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
+              Практична AI академия и общност
+            </span>
+
+            <h1 className="text-[clamp(40px,6vw,80px)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--ink-900)] mb-8">
+              Научи AI по начина,<br />
+              <span className="text-[var(--accent)]">по който работи</span><br />
+              в реалността.
             </h1>
 
-            <p className="text-[17px] text-[var(--text-secondary)] max-w-xl leading-[1.65] mb-8">
-              Уроци, prompts, workflows и live сесии за хора, които искат реални резултати — без шум, без празна теория и без технически жаргон.
+            <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] max-w-xl leading-[1.6] mb-10">
+              Уроци, prompts, workflows и live сесии за хора, които искат реални резултати — без шум и без празна теория.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 mb-8">
-              <Button size="lg" className="luxury-button" onClick={() => checkAuthThenGo('register')}>
-                Започни безплатно
-              </Button>
-              <Button variant="ghost" size="lg" className="luxury-button" onClick={() => setPage('prompts')}>
-                Виж prompt-ите <ArrowRight size={15} />
-              </Button>
+            <div className="flex flex-wrap items-center gap-4 mb-12">
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Button size="lg" onClick={() => checkAuthThenGo('register')}>
+                  Започни безплатно
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Button variant="ghost" size="lg" onClick={() => setPage('prompts')}>
+                  Виж prompt-ите <ArrowRight size={16} />
+                </Button>
+              </motion.div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 text-[12px] text-[var(--text-tertiary)]">
-              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
-                <Users size={12} /> Реална общност
-              </span>
-              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
-                <Sparkles size={12} /> Подбрани prompts
-              </span>
-              <span className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5">
-                <GraduationCap size={12} /> Практически уроци
-              </span>
+            <div className="flex flex-wrap items-center gap-4 text-[13px] text-[var(--text-tertiary)]">
+              {[
+                { icon: Users, text: 'Реална общност' },
+                { icon: Sparkles, text: 'Подбрани prompts' },
+                { icon: GraduationCap, text: 'Практически уроци' },
+              ].map((item, i) => (
+                <motion.span
+                  key={item.text}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                  className="flex items-center gap-2"
+                >
+                  <item.icon size={14} className="text-[var(--accent)]" />
+                  {item.text}
+                </motion.span>
+              ))}
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-5 lg:col-start-8"
-          >
-            <WorkspacePreview />
           </motion.div>
         </div>
       </section>
@@ -140,12 +158,18 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
       {/* ECOSYSTEM */}
       <section className="section-shell py-16 md:py-24">
-        <div className="mb-10 md:mb-12">
+        <motion.div 
+          className="mb-10 md:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <span className="label-caps mb-3 block">Екосистема</span>
-          <h2 className="display-md text-[var(--ink-900)] max-w-lg">
-            Това не е просто курс. Това е цялостна система.
+          <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] max-w-xl">
+            Това не е просто курс.<br />Това е цялостна система.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
@@ -158,18 +182,21 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((item, idx) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
             >
-              <div className="premium-card spotlight-hover p-6 h-full group">
+              <motion.div 
+                className="premium-card p-6 h-full group"
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              >
                 <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}>
                   <item.icon className={item.color} size={20} />
                 </div>
                 <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1.5 tracking-tight">{item.title}</h3>
                 <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -178,29 +205,36 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* ACADEMY PREVIEW */}
-      <section className="section-shell py-12 md:py-16">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <section className="section-shell py-16 md:py-24">
+        <motion.div 
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <div>
             <span className="label-caps mb-3 block">Академия</span>
-            <h2 className="display-md text-[var(--ink-900)]">Избери своя път</h2>
+            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Избери своя път</h2>
           </div>
           <Button variant="ghost" onClick={() => setPage('lessons')} className="self-start md:self-auto text-[14px]">
             Виж всички уроци <ChevronRight size={14} />
           </Button>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
           {LEARNING_PATHS.slice(0, 4).map((path, idx) => (
             <motion.div
               key={path.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.06 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
             >
-              <div
+              <motion.div
                 className="premium-card p-5 cursor-pointer h-full group"
                 onClick={() => setPage('lessons')}
+                whileHover={{ y: -4 }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="w-9 h-9 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
@@ -210,7 +244,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 </div>
                 <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1">{path.label}</h3>
                 <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{path.desc}</p>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -219,14 +253,15 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {academyLessons.map((lesson: any, idx: number) => (
             <motion.div
               key={lesson.id}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.06 }}
+              transition={{ duration: 0.4, delay: idx * 0.08 }}
             >
-              <div
+              <motion.div
                 className="group flex items-center gap-4 p-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] hover:border-[var(--border-strong)] transition-all cursor-pointer"
                 onClick={() => setPage('lessons')}
+                whileHover={{ x: 4 }}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${idx === 0 ? 'bg-[var(--accent-light)] text-[var(--accent)]' : idx === 1 ? 'bg-[var(--amber-light)] text-[var(--amber)]' : 'bg-[var(--emerald-light)] text-[var(--emerald)]'}`}>
                   <Play size={16} />
@@ -237,11 +272,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   </h3>
                   <div className="flex items-center gap-3 mt-0.5">
                     <span className="text-[12px] text-[var(--text-tertiary)]">{lesson.dur}</span>
-                    <span className="text-[12px] text-[var(--text-tertiary)] bg-[var(--bg-soft)] px-2 py-0.5 rounded-md">Начинаещ</span>
+                    <span className="text-[12px] text-[var(--text-tertiary)] bg-[var(--bg-soft)] px-2 py-0.5 rounded-md">Начинаеш</span>
                   </div>
                 </div>
                 <ChevronRight size={16} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] transition-colors shrink-0" />
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -251,15 +286,21 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
       {/* COMMUNITY PREVIEW */}
       <section className="section-shell py-16 md:py-24">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <motion.div 
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <div>
             <span className="label-caps mb-3 block">Общност</span>
-            <h2 className="display-md text-[var(--ink-900)]">Не си сам в това</h2>
+            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Не си сам в това</h2>
           </div>
           <Button variant="ghost" onClick={() => setPage('community')} className="self-start md:self-auto text-[14px]">
             Виж общността <ChevronRight size={14} />
           </Button>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
@@ -272,18 +313,21 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((item, idx) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
             >
-              <div className="premium-card p-5 h-full">
+              <motion.div 
+                className="premium-card p-5 h-full"
+                whileHover={{ y: -4 }}
+              >
                 <div className="w-9 h-9 rounded-lg bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] mb-3">
                   <item.icon size={17} />
                 </div>
                 <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1.5">{item.title}</h3>
                 <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -349,27 +393,36 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* EVENTS PREVIEW */}
-      <section className="section-shell py-14 md:py-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <section className="section-shell py-16 md:py-24">
+        <motion.div 
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <div>
             <span className="label-caps mb-3 block">Събития</span>
-            <h2 className="display-md text-[var(--ink-900)]">Предстоящи workshops</h2>
+            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Предстоящи workshops</h2>
           </div>
           <Button variant="ghost" onClick={() => setPage('events')} className="self-start md:self-auto text-[14px]">
             Календар <ChevronRight size={14} />
           </Button>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {EVENTS_DATA.slice(0, 3).map((e, idx) => (
             <motion.div
               key={e.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.06 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
             >
-              <div className="premium-card p-6 h-full flex flex-col">
+              <motion.div 
+                className="premium-card p-6 h-full flex flex-col"
+                whileHover={{ y: -4 }}
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] flex flex-col items-center justify-center text-[var(--accent)] border border-[var(--accent)]/10">
                     <span className="text-[18px] font-bold leading-none">{e.day}</span>
@@ -388,7 +441,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 <Button size="sm" className="w-full" onClick={() => setPage('events')}>
                   Научи повече
                 </Button>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -397,16 +450,22 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* PRICING PREVIEW */}
-      <section className="section-shell py-12 md:py-16">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <section className="section-shell py-16 md:py-24">
+        <motion.div 
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <div>
             <span className="label-caps mb-3 block">Цени</span>
-            <h2 className="display-md text-[var(--ink-900)]">Ясни планове, без изненади</h2>
+            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Ясни планове, без изненади</h2>
           </div>
           <Button variant="ghost" onClick={() => setPage('pricing')} className="self-start md:self-auto text-[14px]">
             Виж всички цени <ChevronRight size={14} />
           </Button>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
@@ -441,12 +500,15 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((plan, idx) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
             >
-              <div className={`relative h-full premium-card p-6 flex flex-col overflow-hidden ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}>
+              <motion.div 
+                className={`relative h-full premium-card p-6 flex flex-col overflow-hidden ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              >
                 {plan.highlight && (
                   <>
                     <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[var(--accent)] to-[var(--lavender)] rounded-t-[24px]" />
@@ -460,7 +522,14 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     <h3 className="text-[12px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">{plan.name}</h3>
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight">{plan.price}</span>
+                    <motion.span 
+                      className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight"
+                      key={plan.price}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      {plan.price}
+                    </motion.span>
                     <span className="text-[14px] text-[var(--text-tertiary)]">{plan.period}</span>
                   </div>
                   <p className="text-[13px] text-[var(--text-secondary)] mt-2 leading-relaxed">{plan.desc}</p>
@@ -476,7 +545,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 <Button variant={plan.highlight ? 'primary' : 'secondary'} className="w-full h-10" onClick={() => setPage('pricing')}>
                   {plan.cta}
                 </Button>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -487,10 +556,16 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* FAQ */}
       <section className="section-shell py-16 md:py-24">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <span className="label-caps mb-3 block">Често задавани въпроси</span>
-            <h2 className="display-md text-[var(--ink-900)]">Всичко, което трябва да знаеш</h2>
-          </div>
+            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Всичко, което трябва да знаеш</h2>
+          </motion.div>
 
           <div className="flex flex-col gap-3">
             {FAQS.map((faq, idx) => (
@@ -537,28 +612,34 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* FINAL CTA */}
-      <section className="section-shell py-14 md:py-20 pb-24">
+      <section className="section-shell py-16 md:py-24 pb-24">
         <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7 }}
         >
-          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-10 md:p-16">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--accent)] rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-12 md:p-20">
+            <motion.div 
+              className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent)] rounded-full opacity-10 blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.12, 0.08] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
             <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
-              <h2 className="text-[28px] md:text-[40px] font-semibold mb-4 tracking-tight leading-tight">
-                Готов ли си да започнеш?
+              <h2 className="text-[32px] md:text-[48px] font-semibold mb-5 tracking-[-0.02em] leading-[1.1]">
+                Готов ли си да<br />започнеш?
               </h2>
-              <p className="text-[16px] text-[var(--bg)]/60 mb-8 leading-relaxed max-w-lg">
-                Присъедини се към общността, която учи AI практически. Без шум, без празни обещания — само работещи инструменти.
+              <p className="text-[17px] text-[var(--bg)]/60 mb-10 leading-relaxed max-w-lg">
+                Присъедини се към общността, която учи AI практически. Без шум, без празни обещания.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px] shadow-lg hover:shadow-xl active:shadow-md active:translate-y-[1px] transition-all">
-                  Започни безплатно <ArrowRight size={16} />
-                </Button>
-                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-12 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[15px]">
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                  <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-8 h-13 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[16px] shadow-xl hover:shadow-2xl transition-all">
+                    Започни безплатно <ArrowRight size={18} />
+                  </Button>
+                </motion.div>
+                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-13 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[16px]">
                   Виж цените
                 </Button>
               </div>
