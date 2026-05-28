@@ -95,12 +95,12 @@ const TESTIMONIALS = [
 const TOOLS = ['ChatGPT', 'Claude', 'Midjourney', 'Make.com', 'Notion AI', 'Perplexity', 'ElevenLabs', 'Runway'];
 
 const COURSE_IMAGES = [
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80',
-  'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80',
-  'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
+  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+  'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80',
+  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
 ];
 
-const EVENT_IMAGE = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80';
+const EVENT_IMAGE = 'https://images.unsplash.com/photo-1544531585-9847b68c8c86?w=800&q=80';
 
 function MagneticButton({ children, className = '', onClick }: any) {
   const ref = useRef<HTMLButtonElement>(null);
@@ -153,7 +153,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         {/* Background image with overlay */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1920&q=80"
             alt=""
             className="w-full h-full object-cover opacity-[0.15] dark:opacity-[0.08]"
           />
@@ -261,7 +261,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80"
                     alt="Learning"
                     className="w-full h-full object-cover"
                   />
@@ -275,7 +275,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&q=80"
+                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&q=80"
                     alt="Working"
                     className="w-full h-full object-cover"
                   />
@@ -900,7 +900,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               <div className="relative w-full aspect-square max-w-[400px] mx-auto">
                 <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80"
                     alt="Coaching session"
                     className="w-full h-full object-cover"
                   />
@@ -1076,7 +1076,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             {/* Background image */}
             <div className="absolute inset-0">
               <img
-                src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&q=80"
+                src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80"
                 alt=""
                 className="w-full h-full object-cover opacity-[0.15] dark:opacity-[0.1]"
               />
