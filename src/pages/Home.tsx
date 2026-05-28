@@ -182,7 +182,19 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 transition={{ delay: 0.3 }}
               >
                 <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-                AI Академия · България
+                Първата AI Академия в България
+              </motion.div>
+
+              <motion.div
+                className="hidden md:flex items-center gap-2 mb-6 text-[12px] text-[var(--text-tertiary)]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Star size={12} className="text-[var(--accent)] fill-[var(--accent)]" />
+                <span>Единствената с 1-на-1 AI Coaching в България</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                <span>500+ членове</span>
               </motion.div>
 
               <h1 className="text-[clamp(56px,10vw,120px)] font-semibold leading-[0.9] tracking-[-0.04em] text-[var(--ink-900)] mb-8">
@@ -357,6 +369,58 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             </motion.div>
           ))}
         </div>
+      </section>
+
+      {/* FREE HOOK — What you get for free */}
+      <section className="section-shell pb-24 md:pb-32">
+        <motion.div
+          className="rounded-[24px] border border-[var(--border)] bg-[var(--bg-soft)] p-8 md:p-12 lg:p-16 overflow-hidden relative"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Decorative */}
+          <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[var(--accent)]/5 blur-[80px] pointer-events-none" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div>
+              <Badge variant="accent" className="mb-4 text-[11px] tracking-wide">Free Forever</Badge>
+              <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-4">
+                Започни безплатно.<br />
+                <span className="text-[var(--accent)]">Остани заради резултатите.</span>
+              </h2>
+              <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
+                Не е нужна кредитна карта. Получаваш достъп до безплатни уроци, prompts и общността веднага.
+              </p>
+              <MagneticButton onClick={() => checkAuthThenGo('register')}>
+                <Button size="lg">Създай безплатен профил</Button>
+              </MagneticButton>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { icon: BookOpen, title: '3 безплатни урока', desc: 'Пълни уроци от академията без ограничения.' },
+                { icon: Zap, title: '10+ готови prompts', desc: 'Тествани prompts за email, social media и продуктивност.' },
+                { icon: Users, title: 'Community preview', desc: 'Виж какво споделят другите членове.' },
+                { icon: Calendar, title: 'Workshop preview', desc: 'Гледай записи от избрани събития.' },
+              ].map((item, idx) => (
+                <motion.div
+                  key={item.title}
+                  className="p-5 rounded-[16px] border border-[var(--border)] bg-[var(--bg)] group hover:border-[var(--accent)]/30 transition-colors"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                >
+                  <item.icon size={20} className="text-[var(--accent)] mb-3" strokeWidth={1.5} />
+                  <h4 className="text-[14px] font-semibold text-[var(--ink-900)] mb-1">{item.title}</h4>
+                  <p className="text-[12px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* HOW IT WORKS */}
@@ -772,6 +836,97 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
+      {/* 1-ON-1 COACHING */}
+      <section className="section-shell pb-24 md:pb-32">
+        <motion.div
+          className="relative rounded-[24px] overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&q=80"
+              alt="1-on-1 coaching"
+              className="w-full h-full object-cover opacity-[0.12] dark:opacity-[0.08]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/95 to-[var(--bg)]/80" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-8 md:p-12 lg:p-16 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[12px] font-medium mb-4">
+                <Users size={12} />
+                Единствените в България
+              </div>
+              <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-4">
+                1-на-1 AI Coaching
+              </h2>
+              <p className="text-[17px] text-[var(--text-secondary)] leading-[1.7] mb-6">
+                Персонализирани сесии с нашите AI експерти. Ще анализираме твоя workflow, ще ти помогнем да избереш правилните инструменти и ще изградим заедно система, която работи за теб.
+              </p>
+              <ul className="flex flex-col gap-3 mb-8">
+                {[
+                  'Персонален AI roadmap',
+                  'Live screen-sharing сесии',
+                  'Имплементация в реално време',
+                  'Follow-up и подкрепа',
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-[14px] text-[var(--text-secondary)]">
+                    <Check size={16} className="text-[var(--accent)] shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <MagneticButton onClick={() => setPage('pricing')}>
+                <Button size="lg">Запиши се за разговор</Button>
+              </MagneticButton>
+            </motion.div>
+
+            <motion.div
+              className="relative hidden lg:block"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="relative w-full aspect-square max-w-[400px] mx-auto">
+                <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80"
+                    alt="Coaching session"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                </div>
+                <motion.div
+                  className="absolute -bottom-4 -left-4 glass-card rounded-2xl p-4 shadow-lg"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white">
+                      <Star size={18} fill="currentColor" />
+                    </div>
+                    <div>
+                      <div className="text-[13px] font-semibold text-[var(--ink-900)]">4.9/5 рейтинг</div>
+                      <div className="text-[11px] text-[var(--text-tertiary)]">от членове с coaching</div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
       {/* PRICING */}
       <section className="section-shell pb-24 md:pb-32">
         <div className="text-center mb-12">
@@ -806,8 +961,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               name: 'Premium',
               price: '129 лв.',
               period: '/месец',
-              desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
-              features: ['Всичко от Pro', 'Office hours', 'Implementation reviews', 'Priority Q&A', 'Персонализирани съвети'],
+              desc: 'Pro + 1-на-1 AI Coaching, office hours и priority support.',
+              features: ['Всичко от Pro', '1-на-1 AI Coaching', 'Office hours', 'Implementation reviews', 'Priority Q&A'],
               cta: 'Избери Premium',
               plan: 'premium',
             },
