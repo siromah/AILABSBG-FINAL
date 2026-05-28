@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 import CookieBanner from './components/CookieBanner';
 import CommandMenu from './components/CommandMenu';
 import CursorGlow from './components/CursorGlow';
+import ParticleBackground from './components/ParticleBackground';
 import { Spinner } from './components/ui/Spinner';
 import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
 import { Button } from './components/ui/Button';
@@ -191,6 +192,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
       <ScrollProgress />
       <SpotlightEffect />
       <CursorGlow />
+      <ParticleBackground />
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(prev => prev.filter(x => x.id !== id))} />
       <CookieBanner />
       <CommandMenu />
