@@ -22,8 +22,8 @@ const PLANS = [
     id: 'pro',
     name: 'Pro',
     desc: 'Community, workshops, prompt library, templates и challenges.',
-    monthly: 49,
-    yearly: 490,
+    monthly: 25,
+    yearly: 250,
     features: [
       'Пълна академия',
       'Пълна prompt library',
@@ -37,15 +37,15 @@ const PLANS = [
   {
     id: 'premium',
     name: 'Premium',
-    desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
-    monthly: 129,
-    yearly: 1290,
+    desc: 'Pro плюс 1-на-1 AI Coaching, office hours и priority Q&A.',
+    monthly: 65,
+    yearly: 650,
     features: [
       'Всичко от Pro',
+      '1-на-1 AI Coaching',
       'Office hours',
       'Implementation reviews',
       'Priority Q&A',
-      'Персонализирани съвети',
     ],
   },
 ];
@@ -85,7 +85,7 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
             </div>
             <div>
               <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed mb-4">
-                Изберете план, който пасва на вашия workflow. Всички цени са в лева. Без скрити такси.
+                Изберете план, който пасва на вашия workflow. Всички цени са в евро. Без скрити такси.
               </p>
 
               <div className="inline-flex items-center gap-1 bg-[var(--surface-strong)] border border-[var(--border)] rounded-full p-1 relative">
@@ -155,7 +155,7 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
                       transition={{ duration: 0.25 }}
                       className="text-[38px] font-semibold text-[var(--ink-900)] tracking-tight"
                     >
-                      {yearly ? plan.yearly : plan.monthly} лв.
+                      {yearly ? plan.yearly : plan.monthly} €
                     </motion.span>
                     <span className="text-[14px] text-[var(--text-tertiary)]">{yearly ? '/година' : '/месец'}</span>
                   </div>

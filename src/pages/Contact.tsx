@@ -155,7 +155,7 @@ export default function Contact({ showToast }: any) {
             <div className="rounded-3xl overflow-hidden h-40 relative border border-[var(--border)]">
               <div className="absolute inset-0 bg-[var(--accent)]/5" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[28px] font-semibold text-[var(--ink-900)]/10 tracking-tight">AILABSBG</span>
+                <span className="text-[28px] font-semibold text-[var(--ink-900)]/10 tracking-tight">Craative</span>
               </div>
             </div>
           </div>

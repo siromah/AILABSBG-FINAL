@@ -12,7 +12,7 @@ export default function SystemCheck() {
     { name: 'Мрежова свързаност', status: 'pending', message: 'Проверка...' },
     { name: 'Регистрирани маршрути', status: 'pending', message: 'Проверка...' },
     { name: 'Езиков интерфейс', status: 'pending', message: 'Проверка...' },
-    { name: 'Валута (лева)', status: 'pending', message: 'Проверка...' },
+    { name: 'Валута (евро)', status: 'pending', message: 'Проверка...' },
     { name: 'Отсъствие на емоджита', status: 'pending', message: 'Проверка...' },
     { name: 'Намалена подвижност', status: 'pending', message: 'Проверка...' },
     { name: 'CTA бутони', status: 'pending', message: 'Проверка...' },
@@ -64,9 +64,9 @@ export default function SystemCheck() {
       const hasBulgarian = /[а-яА-Яъь]/.test(bodyText);
       update(6, hasBulgarian ? 'pass' : 'fail', hasBulgarian ? 'Намерен е български текст в DOM' : 'Липсва български текст в DOM');
 
-      // Check for BGN
-      const hasBGN = /\bBGN\b|\bлв\.?\b/i.test(bodyText);
-      update(7, 'pass', hasBGN ? 'Валутата е в лева (BGN)' : 'Валутата не е посочена в DOM');
+      // Check for EUR
+      const hasEUR = /\bEUR\b|\b€\b/i.test(bodyText);
+      update(7, 'pass', hasEUR ? 'Валутата е в евро (EUR)' : 'Валутата не е посочена в DOM');
 
       // Check for emojis
       const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;

@@ -2,7 +2,7 @@ export const INIT_USERS = [
   {id:'u1',fname:'Мария',lname:'Георгиева',email:'maria@demo.com',pass:'demo123',role:'freelancer',bio:'Freelancer в digital marketing. Използвам AI всеки ден.',color:'#fff3ee',tc:'#b84a15',initials:'МГ',isAdmin:false,joined:'2024-01-15',tools:['ChatGPT','Claude','Canva AI'],plan:'free'},
   {id:'u2',fname:'Стефан',lname:'Димитров',email:'stefan@demo.com',pass:'demo123',role:'business',bio:'E-commerce founder. Автоматизирам всичко с Make.com.',color:'#eef4ff',tc:'#1f5aad',initials:'СД',isAdmin:false,joined:'2024-02-10',tools:['ChatGPT','Make.com','Perplexity'],plan:'free'},
   {id:'u3',fname:'Виктория',lname:'Николова',email:'victoria@demo.com',pass:'demo123',role:'creator',bio:'Content creator. AI content системи.',color:'#eefbf4',tc:'#157a4d',initials:'ВН',isAdmin:false,joined:'2024-03-05',tools:['Claude','Midjourney','ElevenLabs'],plan:'free'},
-  {id:'admin',fname:'Админ',lname:'AILABSBG',email:'admin@ailabsbg.com',pass:'admin123',role:'admin',bio:'Основател на AILABSBG.',color:'#fff3ee',tc:'#b84a15',initials:'АИ',isAdmin:true,joined:'2024-01-01',tools:['Claude','ChatGPT','Midjourney','Make.com'],plan:'premium'}
+  {id:'admin',fname:'Админ',lname:'Craative',email:'admin@ailabsbg.com',pass:'admin123',role:'admin',bio:'Основател на Craative.',color:'#fff3ee',tc:'#b84a15',initials:'АИ',isAdmin:true,joined:'2024-01-01',tools:['Claude','ChatGPT','Midjourney','Make.com'],plan:'premium'}
 ];
 
 export const INIT_POSTS = [
@@ -75,16 +75,16 @@ export const PRICING_PLANS = [
     id: 'pro',
     name: 'Pro',
     desc: 'Community, workshops, prompt library, templates и challenges.',
-    monthly: 49,
-    yearly: 490,
+    monthly: 25,
+    yearly: 250,
     features: ['Пълна академия','Пълна prompt library','Community достъп','Workshops','Challenges','Шаблони']
   },
   {
     id: 'premium',
     name: 'Premium',
-    desc: 'Pro плюс office hours, implementation reviews и priority Q&A.',
-    monthly: 129,
-    yearly: 1290,
-    features: ['Всичко от Pro','Office hours','Implementation reviews','Priority Q&A','Персонализирани съвети']
+    desc: 'Pro плюс 1-на-1 AI Coaching, office hours и priority Q&A.',
+    monthly: 65,
+    yearly: 650,
+    features: ['Всичко от Pro','1-на-1 AI Coaching','Office hours','Implementation reviews','Priority Q&A']
   }
 ];

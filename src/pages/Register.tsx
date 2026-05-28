@@ -80,7 +80,7 @@ export function Register() {
       <div className="w-full max-w-[440px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm rounded-3xl p-8 md:p-10">
         <div className="text-center mb-10">
           <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Създай акаунт</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Присъедини се към AILABSBG, за да отключиш всички функции.</p>
+          <p className="text-[15px] text-[var(--text-secondary)]">Присъедини се към Craative, за да отключиш всички функции.</p>
         </div>
 
         {!isConfigured && (

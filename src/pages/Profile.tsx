@@ -18,7 +18,7 @@ export function Profile({ db, setPage }: any) {
   const fullName =
     typeof user?.user_metadata?.full_name === 'string'
       ? user.user_metadata.full_name
-      : 'AILABSBG Member';
+      : 'Craative Member';
 
   const initials = (fullName[0] || '?').toUpperCase();
 

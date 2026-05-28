@@ -67,7 +67,7 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
           message: trimmed,
           history: messages,
           currentPage: currentPage || window.location.pathname.replace('/', '') || 'home',
-          siteContext: 'AILABSBG Platform - AI School & Community'
+          siteContext: 'Craative Platform - AI School & Community'
         })
       });
 
@@ -128,7 +128,7 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
                 </div>
                 <div>
                   <div className="font-semibold text-[15px] leading-tight text-[var(--ink-900)]">AI Navigator</div>
-                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">AILABSBG Assistant</div>
+                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">Craative Assistant</div>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -153,7 +153,7 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
                     </div>
                     <div className="font-semibold text-[18px] text-[var(--ink-900)] mb-2">Здравейте!</div>
                     <div className="text-[14px] text-[var(--text-secondary)] px-4 max-w-[280px]">
-                      Аз съм вашият AI асистент в AILABSBG. Как мога да ви помогна днес?
+                      Аз съм вашият AI асистент в Craative. Как мога да ви помогна днес?
                     </div>
                   </div>
 

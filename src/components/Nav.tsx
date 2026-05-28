@@ -70,10 +70,10 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
           {/* LEFT: Logo */}
           <div className="flex items-center gap-6 h-full">
             <div className="cursor-pointer flex items-center gap-2.5" onClick={() => go('home')}>
-              <div className="w-8 h-8 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-xl flex flex-col justify-center items-center shadow-sm">
-                <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
+              <div className="w-8 h-8 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] rounded-xl flex items-center justify-center shadow-sm">
+                <div className="w-3 h-3 bg-white/90 rounded-[4px]" />
               </div>
-              <span className="font-semibold text-[17px] tracking-tight text-[var(--ink-900)]">AILABS</span>
+              <span className="font-semibold text-[18px] tracking-[-0.02em] text-[var(--ink-900)]">Craative</span>
             </div>
 
             {/* CENTER (Desktop): Nav Links */}
@@ -214,7 +214,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                   <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-lg flex justify-center items-center">
                     <div className="w-2.5 h-2.5 bg-white/90 rounded-[2px]" />
                   </div>
-                  <span className="font-semibold text-[15px] text-[var(--ink-900)]">AILABS</span>
+                  <span className="font-semibold text-[15px] text-[var(--ink-900)]">Craative</span>
                 </div>
                 <button onClick={() => setMobMenu(false)} className="p-1.5 text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] rounded-md"><X size={18}/></button>
               </div>

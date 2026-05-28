@@ -66,7 +66,7 @@ export default function AuthModal({ modal, setModal, db, updateDb, setCurrentUse
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--or)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                     </div>
                   <h2 className="modal-title" style={{fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px', marginBottom: 8}}>Добре дошъл обратно!</h2>
-                  <p className="modal-sub" style={{fontSize: 16, color: 'var(--txt2)'}}>Влез в твоя AILABSBG акаунт</p>
+                  <p className="modal-sub" style={{fontSize: 16, color: 'var(--txt2)'}}>Влез в твоя Craative акаунт</p>
                 </div>
                 
                 <div style={{display: 'flex', flexDirection: 'column', gap: 20}}>

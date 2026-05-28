@@ -14,7 +14,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-xl flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
-              <span className="font-semibold text-[17px] text-[var(--ink-900)] tracking-tight">AILABS</span>
+              <span className="font-semibold text-[17px] text-[var(--ink-900)] tracking-tight">Craative</span>
             </div>
             <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-5">
               Практична AI академия и общност за хора, които искат да използват AI в работа, бизнес и кариера — без шум, без празна теория и без технически жаргон.
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-[var(--text-tertiary)]">
-          <span>&copy; {new Date().getFullYear()} AILABSBG. Всички права запазени.</span>
+          <span>&copy; {new Date().getFullYear()} Craative. Всички права запазени.</span>
           <span>Цените са в лева. Платформата е в процес на разработка.</span>
         </div>
       </div>

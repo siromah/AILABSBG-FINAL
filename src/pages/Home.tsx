@@ -940,7 +940,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {[
             {
               name: 'Free',
-              price: '0 лв.',
+              price: '0 €',
               period: '/месец',
               desc: 'За разглеждане, newsletter и основни ресурси.',
               features: ['Достъп до ограничени уроци', 'Ограничена prompt library', 'Community preview', 'Избрани workshop превюта'],
@@ -949,7 +949,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             },
             {
               name: 'Pro',
-              price: '49 лв.',
+              price: '25 €',
               period: '/месец',
               desc: 'Community, workshops, prompt library, templates и challenges.',
               features: ['Пълна академия', 'Пълна prompt library', 'Пълна общност', 'Workshops', 'Challenges', 'Шаблони'],
@@ -959,7 +959,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             },
             {
               name: 'Premium',
-              price: '129 лв.',
+              price: '65 €',
               period: '/месец',
               desc: 'Pro + 1-на-1 AI Coaching, office hours и priority support.',
               features: ['Всичко от Pro', '1-на-1 AI Coaching', 'Office hours', 'Implementation reviews', 'Priority Q&A'],
