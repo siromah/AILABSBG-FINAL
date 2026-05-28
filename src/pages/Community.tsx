@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap, Lock, Star, Users } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -9,6 +9,17 @@ import { EVENTS_DATA } from '../data';
 import { getUserPlan } from '../lib/access';
 import { UpgradeCard } from '../components/UpgradeCard';
 
+function useAutoResize() {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  const adjust = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  };
+  return { ref, adjust };
+}
+
 export default function Community({ db, updateDb, currentUser, openModal, showToast, setPage }: any) {
   const [feedFilter, setFeedFilter] = useState('all');
   const [compExpanded, setCompExpanded] = useState(false);
@@ -16,6 +27,11 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   const [compType, setCompType] = useState('win');
 
   const plan = getUserPlan(currentUser);
+  const composerTextarea = useAutoResize();
+
+  useEffect(() => {
+    composerTextarea.adjust();
+  }, [compText]);
 
   const addNotif = (text: string, icon = 'bell') => {
     const n = { id: 'n' + Date.now(), text, icon, time: Date.now(), read: false };
@@ -196,7 +212,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 ].map(ch => (
                   <button
                     key={ch.id}
-                    onClick={() => showToast('Този канал изисква ' + ch.lock + ' план', true)}
+                    onClick={() => showToast('Този канал е част от ' + ch.lock + ' плана', true)}
                     className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]/60 hover:text-[var(--ink-900)] transition-colors"
                   >
                     <Lock size={14} className="text-[var(--text-tertiary)]" />
@@ -257,11 +273,13 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                     ) : (
                       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
                         <Textarea
+                          ref={composerTextarea.ref}
                           value={compText}
-                          onChange={(e: any) => setCompText(e.target.value)}
+                          onChange={(e: any) => { setCompText(e.target.value); composerTextarea.adjust(); }}
                           placeholder="Напишете нещо полезно..."
                           autoFocus
-                          className="min-h-[100px] mb-3 text-[14px] rounded-2xl bg-[var(--bg-soft)] border-[var(--border)]"
+                          rows={1}
+                          className="min-h-[60px] mb-3 text-[14px] rounded-2xl bg-[var(--bg-soft)] border-[var(--border)] overflow-hidden resize-none"
                         />
 
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -306,8 +324,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
             <div className="flex flex-col gap-4">
               {postsToRender.length === 0 ? (
                 <div className="premium-card py-14 text-center">
-                  <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Няма намерени публикации</h3>
-                  <p className="text-[var(--text-secondary)] mb-4 text-[14px]">Бъдете първият, който споделя.</p>
+                  <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Все още тихо тук...</h3>
+                  <p className="text-[var(--text-secondary)] mb-4 text-[14px]">Бъдете първият, който разбива мълчанието.</p>
                   <Button variant="secondary" className="h-9 text-[13px]" onClick={() => { setFeedFilter('all'); setCompExpanded(true); }}>Публикувай</Button>
                 </div>
               ) : (
@@ -344,8 +362,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                     <h4 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1">{area.title}</h4>
                     <p className="text-[13px] text-[var(--text-secondary)] mb-4 leading-relaxed">{area.desc}</p>
                     <UpgradeCard
-                      title="Pro изисква се"
-                      description="Включено в Pro и Premium плановете."
+                      title="Отключи пълни възможности"
+                      description="Включено в Pro и Premium плановете. Получи достъп до всички канали и сесии."
                       onUpgrade={() => setPage('pricing')}
                       className="!px-4 !py-3 !rounded-xl"
                     />
@@ -365,7 +383,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 {db.posts.filter((p: any) => p.type === 'win').slice(0, 3).map((p: any) => {
                   const a = db.users.find((u: any) => u.id === p.uid) || { fname: '?' };
                   return (
-                    <div key={p.id} className="flex gap-2.5 p-2.5 bg-[var(--bg-soft)] border border-[var(--border)] rounded-xl items-start">
+                    <div key={p.id} className="flex gap-2.5 p-2.5 bg-[var(--bg-soft)] border border-[var(--border)] rounded-xl items-start transition-all hover:border-[var(--border-strong)] hover:-translate-y-0.5">
                       <Avatar size="sm" initials={a.initials || a.fname.charAt(0)} />
                       <div className="text-[12px] text-[var(--text-secondary)] leading-snug">
                         <span className="font-semibold text-[var(--ink-900)]">{a.fname}</span>{' '}
@@ -410,6 +428,18 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
 function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addComment, delPost, fTime, getTypeInfo, escH }: any) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
+  const commentRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustComment = () => {
+    const el = commentRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  };
+
+  useEffect(() => {
+    adjustComment();
+  }, [commentText]);
 
   const a = db.users.find((u: any) => u.id === p.uid) || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', fname: 'Потребител', lname: '' };
   const liked = currentUser && p.likes.includes(currentUser.id);
@@ -419,7 +449,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
   const ti = getTypeInfo(p.type);
 
   return (
-    <div className="premium-card hover:border-[var(--border-strong)]">
+    <div className="premium-card hover:border-[var(--border-strong)] transition-all duration-300">
       <div className="p-4 sm:p-5 relative">
         {p.pinned && (
           <div className="absolute top-0 right-5 bg-[var(--amber-light)] text-[var(--amber)] px-2.5 py-0.5 text-[10px] font-bold rounded-b-lg border-x border-b border-[var(--amber)]/20 uppercase tracking-widest">
@@ -530,16 +560,18 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
 
                 {currentUser ? (
                   <div className="flex gap-2.5 mt-4">
-                    <Avatar size="sm" initials={currentUser.initials} className="hidden sm:flex" />
+                    <Avatar size="sm" initials={currentUser.initials} className="hidden sm:flex shrink-0" />
                     <div className="flex-1 flex gap-2">
-                      <input
-                        className="flex-1 w-full bg-[var(--bg-soft)] border border-[var(--border)] rounded-full px-4 py-2 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors shadow-sm"
+                      <textarea
+                        ref={commentRef}
+                        rows={1}
+                        className="flex-1 w-full bg-[var(--bg-soft)] border border-[var(--border)] rounded-2xl px-4 py-2.5 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors shadow-sm resize-none overflow-hidden min-h-[40px]"
                         placeholder="Напишете коментар..."
                         value={commentText}
-                        onChange={e => setCommentText(e.target.value)}
-                        onKeyDown={e => { if (e.key === 'Enter') { addComment(p.id, commentText); setCommentText(''); } }}
+                        onChange={e => { setCommentText(e.target.value); adjustComment(); }}
+                        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addComment(p.id, commentText); setCommentText(''); } }}
                       />
-                      <Button onClick={() => { addComment(p.id, commentText); setCommentText(''); }} className="rounded-full px-3.5 h-9 shrink-0" disabled={!commentText.trim()}>
+                      <Button onClick={() => { addComment(p.id, commentText); setCommentText(''); }} className="rounded-full px-3.5 h-9 shrink-0 self-end" disabled={!commentText.trim()}>
                         <Send size={14} />
                       </Button>
                     </div>

@@ -55,9 +55,9 @@ export const LESSONS_MODS = [
 ];
 
 export const EVENTS_DATA = [
-  {id:'e1',day:'13',mo:'Юни',title:'AI Workflow Q&A',desc:'Live сесия с нашия екип. Задавайте въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
+  {id:'e1',day:'13',mo:'Юни',title:'AI Workflow Q&A',desc:'Live сесия с екипа ни. Задавай въпроси за workflows, automation и AI tools.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:20},
   {id:'e2',day:'15',mo:'Юни',title:'Live: Prompt Engineering с Claude',desc:'Ще напишем заедно system prompts за различни бизнес use cases.',time:'18:30ч',dur:'60 мин',platform:'Zoom',spots:25},
-  {id:'e3',day:'17',mo:'Юни',title:'Make.com Automation Workshop',desc:'Практическо workshop — изграждаме реална automation от нула.',time:'11:00ч',dur:'120 мин',platform:'Zoom',spots:15},
+  {id:'e3',day:'17',mo:'Юни',title:'Make.com Automation Workshop',desc:'Практически workshop — изграждаме реална automation от нула.',time:'11:00ч',dur:'120 мин',platform:'Zoom',spots:15},
   {id:'e4',day:'20',mo:'Юни',title:'AI за e-commerce: Office Hours',desc:'Специализирана сесия за e-commerce бизнеси. Customer support AI, order automation.',time:'17:00ч',dur:'90 мин',platform:'Zoom',spots:18},
   {id:'e5',day:'22',mo:'Юни',title:'Content AI Masterclass',desc:'Как да изградиш пълна AI content система за social media.',time:'19:00ч',dur:'90 мин',platform:'Zoom',spots:30}
 ];

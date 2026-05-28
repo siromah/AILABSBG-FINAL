@@ -8,9 +8,9 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, helperText, error, className = '', ...props }, ref) => {
-    const errorClasses = error 
-      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_3px_var(--color-rose-light)]' 
-      : 'border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-light)]';
+    const errorClasses = error
+      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_2px_var(--color-rose-light)]'
+      : 'border-border focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-light)]';
 
     return (
       <div className="flex flex-col w-full">
@@ -40,9 +40,9 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, helperText, error, className = '', ...props }, ref) => {
-    const errorClasses = error 
-      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_3px_var(--color-rose-light)]' 
-      : 'border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-light)]';
+    const errorClasses = error
+      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_2px_var(--color-rose-light)]'
+      : 'border-border focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-light)]';
 
     return (
       <div className="flex flex-col w-full">
@@ -72,9 +72,9 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, helperText, error, className = '', children, ...props }, ref) => {
-    const errorClasses = error 
-      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_3px_var(--color-rose-light)]' 
-      : 'border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-light)]';
+    const errorClasses = error
+      ? 'border-rose focus:border-rose focus:shadow-[0_0_0_2px_var(--color-rose-light)]'
+      : 'border-border focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-light)]';
 
     return (
       <div className="flex flex-col w-full">

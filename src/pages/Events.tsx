@@ -23,7 +23,7 @@ export default function Events({ currentUser, openModal, showToast }: any) {
     if (!currentUser) { openModal('login'); return; }
     if (joined.includes(id)) return;
     setJoined([...joined, id]);
-    showToast('Успешна регистрация. Проверете имейла си.');
+    showToast('Успешна регистрация. Провери имейла си.');
   };
 
   return (
@@ -45,7 +45,7 @@ export default function Events({ currentUser, openModal, showToast }: any) {
             </div>
             <div>
               <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed max-w-sm">
-                Практически AI workshops, live сесии и консултации с нашия екип. Без теория — само работа.
+                Практически AI workshops, live сесии и консултации с екипа ни. Без теория — само работа.
               </p>
               <div className="flex items-center gap-3 mt-3 text-[13px] text-[var(--text-tertiary)]">
                 <span>{EVENTS_DATA.length} предстоящи</span>
@@ -60,7 +60,7 @@ export default function Events({ currentUser, openModal, showToast }: any) {
           {EVENTS_DATA.length === 0 ? (
             <div className="premium-card py-14 text-center col-span-full">
               <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-1">Няма предстоящи събития</h3>
-              <p className="text-[14px] text-[var(--text-secondary)]">Проверете отново скоро.</p>
+              <p className="text-[14px] text-[var(--text-secondary)]">Провери отново скоро.</p>
             </div>
           ) : EVENTS_DATA.map((e:any, idx:number) => {
             const isJoined = joined.includes(e.id);

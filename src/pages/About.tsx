@@ -84,7 +84,7 @@ export default function About({ openModal }: any) {
               </div>
               <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2 tracking-tight">Предприемачи</h3>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                Оптимизирайте операциите, мащабирайте съдържанието и изграждайте автоматизации, които освобождават време за стратегия.
+                Оптимизирай операциите, мащабирай съдържанието и изграждай автоматизации, които освобождават време за стратегия.
               </p>
             </div>
           </motion.div>
@@ -96,7 +96,7 @@ export default function About({ openModal }: any) {
               </div>
               <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2 tracking-tight">Маркетолози и криейтъри</h3>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                Генерирайте по-силни идеи, анализирайте данни и ускорявайте кампаниите си с AI workflows.
+                Генерирай по-силни идеи, анализирай данни и ускорявай кампаниите си с AI workflows.
               </p>
             </div>
           </motion.div>
@@ -108,7 +108,7 @@ export default function About({ openModal }: any) {
               </div>
               <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2 tracking-tight">Екипи</h3>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                Изграждайте споделени бази знания и вътрешни AI инструменти, които увеличават продуктивността на целия екип.
+                Изграждай споделени бази знания и вътрешни AI инструменти, които увеличават продуктивността на целия екип.
               </p>
             </div>
           </motion.div>
@@ -149,7 +149,7 @@ export default function About({ openModal }: any) {
                   <Clock size={17} />
                 </div>
                 <div>
-                  <h4 className="text-[16px] font-semibold text-[var(--ink-900)] mb-1">Реално време за резултат</h4>
+                  <h4 className="text-[16px] font-semibold text-[var(--ink-900)] mb-1">Резултати в реално време</h4>
                   <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">Фокусираме се върху умения, които дават измерима полза в рамките на седмици, не месеци.</p>
                 </div>
               </div>
@@ -176,12 +176,12 @@ export default function About({ openModal }: any) {
              <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent)] rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
              <div className="absolute bottom-0 left-0 w-56 h-56 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
              <div className="relative z-10 flex flex-col items-start max-w-xl">
-               <h2 className="text-[28px] md:text-[38px] font-semibold mb-4 tracking-tight leading-tight">Готови ли сте да изграждате с AI?</h2>
+               <h2 className="text-[28px] md:text-[38px] font-semibold mb-4 tracking-tight leading-tight">Готов ли си да изграждаш с AI?</h2>
                <p className="text-[16px] text-[var(--bg)]/60 mb-8 leading-relaxed">
-                 Присъединете се към общност от професионалисти, които учат, тестват и споделят реални AI workflows.
+                 Присъедини се към общност от професионалисти, които учат, тестват и споделят реални AI workflows.
                </p>
                <Button size="lg" onClick={() => openModal('signup')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
-                 Присъединете се <ArrowRight size={16} />
+                 Присъедини се <ArrowRight size={16} />
                </Button>
              </div>
           </div>

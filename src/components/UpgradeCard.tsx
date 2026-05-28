@@ -10,7 +10,7 @@ interface UpgradeCardProps {
 
 export function UpgradeCard({
   title = 'Отключи пълния достъп',
-  description = 'Включено в Pro плана.',
+  description = 'Включено е в Pro плана.',
   onUpgrade,
   className = '',
 }: UpgradeCardProps) {

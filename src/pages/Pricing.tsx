@@ -88,16 +88,22 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
                 Изберете план, който пасва на вашия workflow. Всички цени са в лева. Без скрити такси.
               </p>
 
-              <div className="inline-flex items-center gap-1 bg-[var(--surface-strong)] border border-[var(--border)] rounded-full p-1">
+              <div className="inline-flex items-center gap-1 bg-[var(--surface-strong)] border border-[var(--border)] rounded-full p-1 relative">
+                <motion.div
+                  layout
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="absolute top-1 bottom-1 rounded-full bg-[var(--ink-900)]"
+                  style={{ width: 'calc(50% - 4px)', left: yearly ? 'calc(50% + 2px)' : '4px' }}
+                />
                 <button
                   onClick={() => setYearly(false)}
-                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${!yearly ? 'bg-[var(--ink-900)] text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                  className={`relative z-10 px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${!yearly ? 'text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                 >
                   Месечно
                 </button>
                 <button
                   onClick={() => setYearly(true)}
-                  className={`px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${yearly ? 'bg-[var(--ink-900)] text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                  className={`relative z-10 px-5 py-2 rounded-full text-[13px] font-medium transition-colors ${yearly ? 'text-[var(--bg)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                 >
                   Годишно
                 </button>
@@ -118,7 +124,19 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
               className="relative"
             >
               {plan.highlight && (
-                <div className="absolute -inset-px bg-gradient-to-b from-[var(--accent)]/10 to-transparent rounded-[24px] blur-sm pointer-events-none" />
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: [0, 0.6, 0.3], scale: 1 }}
+                    transition={{ duration: 1.5, ease: 'easeOut' }}
+                    className="absolute -inset-1 bg-gradient-to-b from-[var(--accent)]/10 to-transparent rounded-[26px] blur-sm pointer-events-none"
+                  />
+                  <motion.div
+                    animate={{ opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    className="absolute -inset-px bg-gradient-to-b from-[var(--accent)]/8 to-transparent rounded-[24px] blur-sm pointer-events-none"
+                  />
+                </>
               )}
               <div className={`relative h-full premium-card p-6 flex flex-col ${plan.highlight ? 'border-[var(--accent)]/20' : ''}`}>
                 {plan.highlight && (
@@ -130,21 +148,43 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
                     {plan.highlight && <Badge variant="accent" className="text-[9px] rounded-full px-2 py-0.5">Популярен</Badge>}
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-[38px] font-semibold text-[var(--ink-900)] tracking-tight">
+                    <motion.span
+                      key={yearly ? 'y' : 'm'}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="text-[38px] font-semibold text-[var(--ink-900)] tracking-tight"
+                    >
                       {yearly ? plan.yearly : plan.monthly} лв.
-                    </span>
+                    </motion.span>
                     <span className="text-[14px] text-[var(--text-tertiary)]">{yearly ? '/година' : '/месец'}</span>
                   </div>
                   <p className="text-[14px] text-[var(--text-secondary)] mt-2 leading-relaxed">{plan.desc}</p>
                 </div>
-                <ul className="flex flex-col gap-2.5 mb-6 flex-1">
+                <motion.ul
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.06, delayChildren: idx * 0.1 + 0.2 } }
+                  }}
+                  className="flex flex-col gap-2.5 mb-6 flex-1"
+                >
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-[13px] text-[var(--text-secondary)]">
+                    <motion.li
+                      key={f}
+                      variants={{
+                        hidden: { opacity: 0, x: -8 },
+                        visible: { opacity: 1, x: 0 }
+                      }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex items-start gap-3 text-[13px] text-[var(--text-secondary)]"
+                    >
                       <Check size={14} className={`mt-0.5 shrink-0 ${plan.highlight ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'}`} />
                       {f}
-                    </li>
+                    </motion.li>
                   ))}
-                </ul>
+                </motion.ul>
                 <Button
                   variant={plan.highlight ? 'primary' : 'secondary'}
                   className="w-full h-10"

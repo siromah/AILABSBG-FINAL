@@ -76,7 +76,7 @@ export function Profile({ db, setPage }: any) {
           </div>
           <div className="luxury-card spotlight-hover p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{doneCount}</div>
-            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Урока</div>
+            <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Уроци</div>
           </div>
           <div className="luxury-card spotlight-hover p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{savedLen}</div>
@@ -165,7 +165,7 @@ export function Profile({ db, setPage }: any) {
               </div>
               <div className="flex flex-col gap-2">
                 <button onClick={() => setPage('prompts')} className="flex items-center justify-between p-3 rounded-xl text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] transition-colors">
-                  <span className="flex items-center gap-2"><LayoutTemplate size={14} /> Разгледай prompts</span>
+                  <span className="flex items-center gap-2"><LayoutTemplate size={14} /> Виж prompt-ите</span>
                   <ChevronRight size={14} />
                 </button>
                 <button onClick={() => setPage('community')} className="flex items-center justify-between p-3 rounded-xl text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] transition-colors">
@@ -173,7 +173,7 @@ export function Profile({ db, setPage }: any) {
                   <ChevronRight size={14} />
                 </button>
                 <button onClick={() => setPage('events')} className="flex items-center justify-between p-3 rounded-xl text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] transition-colors">
-                  <span className="flex items-center gap-2"><Calendar size={14} /> Календар събития</span>
+                  <span className="flex items-center gap-2"><Calendar size={14} /> Календар със събития</span>
                   <ChevronRight size={14} />
                 </button>
               </div>
@@ -213,9 +213,9 @@ export function Profile({ db, setPage }: any) {
 
         {savedLen === 0 && (
           <div className="luxury-card py-14 text-center">
-            <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Нямате запазени prompts</h3>
-            <p className="text-[13px] text-[var(--text-secondary)] mb-6 max-w-md mx-auto">Разгледайте библиотеката и запазете тези, които ви подхождат.</p>
-            <Button onClick={() => setPage('prompts')} className="h-9 text-[13px] luxury-button">Разгледай prompts</Button>
+            <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Нямаш запазени prompts</h3>
+            <p className="text-[13px] text-[var(--text-secondary)] mb-6 max-w-md mx-auto">Разгледай библиотеката и запази тези, които ти подхождат.</p>
+            <Button onClick={() => setPage('prompts')} className="h-9 text-[13px] luxury-button">Виж prompt-ите</Button>
           </div>
         )}
       </div>

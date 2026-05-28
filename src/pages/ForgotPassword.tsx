@@ -28,7 +28,7 @@ export function ForgotPassword() {
     }
 
     if (!isEmail(email)) {
-      setError('Моля, въведете валиден имейл адрес.');
+      setError('Въведи валиден имейл адрес.');
       return;
     }
 
@@ -41,7 +41,7 @@ export function ForgotPassword() {
       return;
     }
 
-    setMessage('Моля, проверете имейла си за линк за възстановяване на паролата.');
+    setMessage('Провери имейла си за линк за възстановяване на паролата.');
   }
 
   return (
@@ -52,7 +52,7 @@ export function ForgotPassword() {
             <KeyRound size={24} />
           </div>
           <h1 className="text-[28px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Възстановяване на парола</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Въведете имейла си и ще ви изпратим линк за възстановяване.</p>
+          <p className="text-[15px] text-[var(--text-secondary)]">Въведи имейла си и ще ти изпратим линк за възстановяване.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -73,7 +73,7 @@ export function ForgotPassword() {
 
           <div className="pt-2">
             <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
-              {loading ? 'Изпращане...' : 'Изпрати линк'}
+              {loading ? 'Изпращаме...' : 'Изпрати линк'}
             </Button>
           </div>
         </form>

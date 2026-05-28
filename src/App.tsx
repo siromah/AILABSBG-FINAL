@@ -36,6 +36,14 @@ const PrivacyPolicy = lazy(() => import('./pages/LegalPages').then(m => ({ defau
 const CookiePolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.CookiePolicy })));
 const TermsOfUse = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.TermsOfUse })));
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function PageTransition({ children }: { children: ReactNode }) {
   const location = useLocation();
   return (
@@ -91,11 +99,12 @@ function AppContent() {
 
   const { user } = useAuth();
 
+  const nameParts = user?.user_metadata?.full_name?.split(' ') || [];
   const currentUser = user ? {
     id: user.id,
     email: user.email,
-    fname: user.user_metadata?.full_name?.split(' ')[0] || 'Member',
-    lname: user.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+    fname: nameParts[0] || 'Member',
+    lname: nameParts.slice(1).join(' ') || '',
     initials: (user.user_metadata?.full_name?.[0] || 'A').toUpperCase(),
     role: 'Member',
     color: 'var(--blue)',
@@ -169,13 +178,15 @@ function RequireAuth({ children }: { children: ReactNode }) {
 }
 
   const handleModal = (m: string) => {
-    navigate(`/${m === 'signup' ? 'register' : m}`);
+    const path = m === 'signup' ? 'register' : m;
+    navigate(`/${path}`, { state: path === 'login' ? { from: location.pathname } : undefined });
   };
 
   const props = { page, setPage, showToast, checkAuthThenGo, currentUser, setCurrentUser: () => {}, openModal: handleModal, db, updateDb };
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <ScrollProgress />
       <SpotlightEffect />
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(prev => prev.filter(x => x.id !== id))} />

@@ -87,7 +87,7 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
               value={search}
               onChange={(e: any) => setSearch(e.target.value)}
               placeholder="Търсене в prompts..."
-              className="pl-10 h-11 rounded-full text-[14px] border-[var(--border)] bg-[var(--surface-strong)]"
+              className="pl-10 h-11 rounded-full text-[14px] border-[var(--border)] bg-[var(--surface-strong)] focus:shadow-[0_0_0_4px_rgba(91,77,219,0.1)] transition-shadow"
             />
           </div>
 
@@ -106,9 +106,9 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
             <button
               key={c}
               onClick={() => setCat(c)}
-              className={`snap-start shrink-0 px-4 h-10 rounded-full text-[13px] font-medium transition-all border ${
+              className={`snap-start shrink-0 px-4 h-10 rounded-full text-[13px] font-medium transition-all border active:scale-[0.96] ${
                 cat === c
-                  ? 'bg-[var(--ink-900)] text-[var(--bg)] border-[var(--ink-900)]'
+                  ? 'bg-[var(--ink-900)] text-[var(--bg)] border-[var(--ink-900)] shadow-sm'
                   : 'bg-transparent text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--border-strong)] hover:text-[var(--ink-900)]'
               }`}
             >
@@ -156,13 +156,14 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
                           <Bookmark size={14} className={isSaved ? "fill-[var(--emerald)]" : ""} />
                         </button>
                         {accessible && (
-                          <button
-                            className="h-9 w-9 rounded-full border border-[var(--border)] transition flex items-center justify-center shrink-0 hover:bg-[var(--ink-900)] hover:text-[var(--bg)]"
+                          <motion.button
+                            whileTap={{ scale: 0.9 }}
+                            className={`h-9 w-9 rounded-full border border-[var(--border)] transition flex items-center justify-center shrink-0 ${isCopied ? 'bg-[var(--emerald-light)] text-[var(--emerald)] border-[var(--emerald)]/20' : 'hover:bg-[var(--ink-900)] hover:text-[var(--bg)]'}`}
                             onClick={() => copy(p.id, p.text)}
                             title="Копирай"
                           >
                             {isCopied ? <Check size={14} /> : <Copy size={14} />}
-                          </button>
+                          </motion.button>
                         )}
                       </div>
                     </div>
@@ -175,7 +176,7 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
                       </p>
                     ) : (
                       <div className="relative mb-4 flex-1">
-                        <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed blur-sm select-none">
+                        <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed blur-[2px] select-none">
                           {p.text}
                         </p>
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -192,7 +193,7 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
                       {accessible ? (
                         <button
                           onClick={() => copy(p.id, p.text)}
-                          className="text-[13px] font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] flex items-center gap-1 transition-colors"
+                          className={`text-[13px] font-medium flex items-center gap-1 transition-colors ${isCopied ? 'text-[var(--emerald)]' : 'text-[var(--accent)] hover:text-[var(--accent-hover)]'}`}
                         >
                           {isCopied ? 'Копирано' : 'Копирай'} <ArrowRight size={13} />
                         </button>
@@ -203,8 +204,8 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
                     {!accessible && (
                       <div className="mt-4">
                         <UpgradeCard
-                          title="Отключи пълния prompt"
-                          description="Включено в Pro"
+                          title="Виж пълния потенциал"
+                          description="Този prompt е част от Pro библиотеката — над 50 тествани шаблона, готови за употреба."
                           onUpgrade={() => setPage('pricing')}
                         />
                       </div>

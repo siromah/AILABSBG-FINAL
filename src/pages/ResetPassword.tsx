@@ -59,7 +59,7 @@ export function ResetPassword() {
             <Lock size={24} />
           </div>
           <h1 className="text-[28px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Нова парола</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Моля, въведете новата си парола по-долу.</p>
+          <p className="text-[15px] text-[var(--text-secondary)]">Въведи новата си парола по-долу.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -68,7 +68,7 @@ export function ResetPassword() {
             <Input
               type="password"
               value={password}
-              placeholder="Въведете нова парола"
+              placeholder="Въведи нова парола"
               autoComplete="new-password"
               onChange={(event:any) => setPassword(event.target.value)}
               className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
@@ -80,7 +80,7 @@ export function ResetPassword() {
             <Input
               type="password"
               value={confirmPassword}
-              placeholder="Потвърдете паролата"
+              placeholder="Потвърди паролата"
               autoComplete="new-password"
               onChange={(event:any) => setConfirmPassword(event.target.value)}
               className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
@@ -92,7 +92,7 @@ export function ResetPassword() {
 
           <div className="pt-2">
             <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
-              {loading ? 'Обновяване...' : 'Обнови паролата'}
+              {loading ? 'Обновявам...' : 'Обнови паролата'}
             </Button>
           </div>
         </form>

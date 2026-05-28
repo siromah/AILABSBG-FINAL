@@ -122,8 +122,8 @@
 
   /* --- Shadow --- */
   --shadow-xs: 0 1px 2px rgba(17,17,19,0.04);
-  --shadow-sm: 0 2px 12px rgba(17,17,19,0.05), 0 1px 2px rgba(17,17,19,0.03);
-  --shadow-md: 0 20px 70px rgba(0,0,0,0.06), 0 4px 12px rgba(17,17,19,0.04);
+  --shadow-sm: 0 4px 30px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01);
+  --shadow-md: 0 24px 60px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
 
   /* --- Fonts --- */
   --font-sans:    system-ui, -apple-system, 'Segoe UI', 'DM Sans', sans-serif;
@@ -195,8 +195,8 @@
   --border-strong: rgba(255,255,255,0.16);
 
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.25);
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.22), 0 1px 2px rgba(0,0,0,0.15);
-  --shadow-md: 0 20px 70px rgba(0,0,0,0.18), 0 4px 12px rgba(0,0,0,0.20);
+  --shadow-sm: 0 4px 30px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 24px 60px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.18);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -229,14 +229,14 @@ input, textarea, select { font-family: inherit; }
 .glass-panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+  backdrop-filter: blur(20px) saturate(135%);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.03);
 }
 .dark .glass-panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
 }
 
 /* ============================================
@@ -246,15 +246,30 @@ input, textarea, select { font-family: inherit; }
   background: var(--surface-strong);
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
-  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  position: relative;
+  overflow: hidden;
+  transition: transform 280ms var(--ease), border-color 280ms var(--ease), box-shadow 280ms var(--ease);
+}
+.premium-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  pointer-events: none;
+}
+.dark .premium-card::before {
+  display: none;
 }
 .premium-card:hover {
-  transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--brand) 20%, var(--border));
-  box-shadow: 0 16px 48px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--border));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.04);
 }
 .dark .premium-card:hover {
-  box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
 }
 
 /* ============================================
@@ -304,30 +319,12 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* ============================================
-   GRAIN TEXTURE OVERLAY
-   ============================================ */
-.grain::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.008;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-}
-.dark .grain::before {
-  opacity: 0.015;
-}
-
-/* ============================================
    GLASS LAYERS
    ============================================ */
 .glass {
   background: var(--surface);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
   border-bottom: 1px solid var(--border);
 }
 .dark .glass {
@@ -337,28 +334,28 @@ input, textarea, select { font-family: inherit; }
 
 .glass-strong {
   background: var(--surface-strong);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
   border: 1px solid var(--border);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 8px 24px rgba(17,17,19,0.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.20), 0 8px 24px rgba(17,17,19,0.03);
 }
 .dark .glass-strong {
   background: var(--surface-strong);
   border: 1px solid var(--border);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 24px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.16);
 }
 
 .glass-card {
   background: var(--surface);
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
   border: 1px solid var(--border);
-  box-shadow: 0 4px 24px rgba(17,17,19,0.04), inset 0 1px 0 rgba(255,255,255,0.25);
+  box-shadow: 0 4px 24px rgba(17,17,19,0.03), inset 0 1px 0 rgba(255,255,255,0.20);
 }
 .dark .glass-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 /* ============================================
@@ -532,7 +529,7 @@ input, textarea, select { font-family: inherit; }
    PAGE TRANSITION
    ============================================ */
 .page-transition {
-  animation: pageEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes pageEnter {
   from {
@@ -600,8 +597,8 @@ input, textarea, select { font-family: inherit; }
    SCROLLBAR ENHANCEMENT
    ============================================ */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

@@ -10,8 +10,8 @@ export default function Contact({ showToast }: any) {
 
   const validate = () => {
     const e: typeof errors = {};
-    if (!form.name.trim() || form.name.trim().length < 2) e.name = 'Моля, въведете име';
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Моля, въведете валиден имейл';
+    if (!form.name.trim() || form.name.trim().length < 2) e.name = 'Въведи име';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Въведи валиден имейл';
     if (!form.message.trim() || form.message.trim().length < 10) e.message = 'Съобщението трябва да е поне 10 символа';
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -43,12 +43,12 @@ export default function Contact({ showToast }: any) {
           <div className="lg:col-span-7">
             <span className="label-caps mb-3 block">Контакт</span>
             <h1 className="display-lg text-[var(--ink-900)]">
-              Свържете се с нас
+              Свържи се с нас
             </h1>
           </div>
           <div className="lg:col-span-5">
             <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed">
-              Имате въпроси относно обученията, курсовете или бизнес колаборация? Изпратете ни съобщение и ще ви отговорим до 24 часа.
+              Имаш въпроси за обученията, курсовете или бизнес колаборация? Пиши ни и ще ти отговорим до 24 часа.
             </p>
           </div>
         </div>
@@ -62,16 +62,16 @@ export default function Contact({ showToast }: any) {
                   <CheckCircle size={28} className="text-[var(--emerald)]" />
                 </div>
                 <h2 className="text-[20px] font-semibold text-[var(--ink-900)] mb-2">Съобщението е изпратено</h2>
-                <p className="text-[var(--text-secondary)] max-w-sm leading-relaxed text-[14px]">Благодарим ви. Ще се свържем с вас до 24 часа.</p>
+                <p className="text-[var(--text-secondary)] max-w-sm leading-relaxed text-[14px]">Благодарим ти. Ще се свържем с теб до 24 часа.</p>
                 <Button variant="secondary" className="mt-6" onClick={() => setSent(false)}>
-                  Новo съобщение <ArrowRight size={14} />
+                  Ново съобщение <ArrowRight size={14} />
                 </Button>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="premium-card p-6 md:p-10">
                 <div className="space-y-5">
                   <div>
-                    <label htmlFor="contact-name" className="label-caps block mb-2">Вашето име</label>
+                    <label htmlFor="contact-name" className="label-caps block mb-2">Твоето име</label>
                     <div className="relative">
                       <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
                       <input
@@ -110,7 +110,7 @@ export default function Contact({ showToast }: any) {
                         id="contact-message"
                         value={form.message}
                         onChange={e => setForm({ ...form, message: e.target.value })}
-                        placeholder="Опишете въпроса си..."
+                        placeholder="Опиши въпроса си..."
                         rows={5}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border bg-[var(--bg-soft)] text-[var(--ink-900)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-1 transition-all resize-none ${errors.message ? 'border-[var(--rose)] focus:ring-[var(--rose)]' : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]'}`}
                       />
@@ -136,7 +136,7 @@ export default function Contact({ showToast }: any) {
                 <h3 className="text-[16px] font-semibold text-[var(--ink-900)] tracking-tight">Време за отговор</h3>
               </div>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                Отговаряме в рамките на <strong className="text-[var(--ink-900)]">1–2 работни дни</strong> на всички съобщения. Предпочитаме детайлен отговор пред бърз.
+                Отговаряме в рамките на <strong className="text-[var(--ink-900)]">1–2 работни дни</strong>. Предпочитаме детайлен отговор пред бърз.
               </p>
             </div>
 

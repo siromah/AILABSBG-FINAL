@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock } from 'lucide-react';
+import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock, Loader2 } from 'lucide-react';
 import { LESSONS_MODS } from '../data';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -29,6 +29,9 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
   const [attachUrl, setAttachUrl] = useState('');
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [xp, setXp] = useState(getXP());
+  const [videoLoading, setVideoLoading] = useState(true);
+  const [celebrateId, setCelebrateId] = useState<string | null>(null);
+  const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const plan = getUserPlan(currentUser);
 
@@ -42,6 +45,12 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
   useEffect(() => {
     localStorage.setItem('ailabs_lessonNotes', JSON.stringify(notes));
   }, [notes]);
+
+  useEffect(() => {
+    setVideoLoading(true);
+    const t = setTimeout(() => setVideoLoading(false), 600);
+    return () => clearTimeout(t);
+  }, [currentLesson.id]);
 
   const prog = db.lessonProg || {};
   const total = allLessons.length;
@@ -74,11 +83,13 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
       setXp(newXP);
       const newProg = setLessonDone(id, true);
       updateDb('lessonProg', newProg);
+      setCelebrateId(id);
+      setTimeout(() => setCelebrateId(null), 800);
       showToast(`+${xpAmount} XP — Урокът е завършен`);
     } else {
       const newProg = setLessonDone(id, false);
       updateDb('lessonProg', newProg);
-      showToast('Маркиран като незавършен');
+      showToast('Отбелязан като незавършен');
     }
   };
 
@@ -118,7 +129,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
             AI инженеринг за предприемачи
           </h1>
           <p className="text-[16px] text-[var(--text-secondary)] max-w-xl leading-relaxed">
-            Научете се да автоматизирате workflows и да изграждате AI системи от нулата — с ясни стъпки и практически упражнения.
+            Научи се да автоматизираш workflows и да изграждаш AI системи от нулата — с ясни стъпки и практически упражнения.
           </p>
         </div>
 
@@ -148,7 +159,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
               </div>
               <ProgressBar value={Math.round((doneCount / total) * 100)} />
               <div className="text-[12px] text-[var(--text-tertiary)] mt-2">
-                {doneCount === total ? 'Курсът е завършен. Отлична работа.' : 'Продължавайте, вървите добре.'}
+                {doneCount === total ? 'Курсът е завършен. Отлична работа.' : 'Продължавай, вървиш добре.'}
               </div>
             </div>
 
@@ -175,7 +186,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                           onClick={() => handleLessonClick(l)}
                           className={`
                             group flex items-start gap-2.5 py-2.5 pr-2 rounded-xl text-left transition-colors
-                            ${active ? 'bg-[var(--bg-soft)]' : 'hover:bg-[var(--bg-soft)]/50'}
+                            ${active ? 'bg-[var(--bg-soft)] border-l-2 border-[var(--accent)] -ml-[1px] pl-[7px]' : 'hover:bg-[var(--bg-soft)]/50 pl-0 border-l-2 border-transparent -ml-[1px]'}
                           `}
                         >
                           <div className="mt-0.5 shrink-0">
@@ -220,6 +231,26 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                 transition={{ duration: 0.25 }}
                 className="w-full aspect-video bg-[#111113] rounded-[24px] overflow-hidden relative shadow-lg border border-[var(--border)]"
               >
+                <AnimatePresence>
+                  {videoLoading && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#111113] gap-3"
+                    >
+                      <div className="relative">
+                        <Loader2 size={28} className="text-[var(--accent)] animate-spin" />
+                        <div className="absolute inset-0 blur-lg opacity-40">
+                          <Loader2 size={28} className="text-[var(--accent)] animate-spin" />
+                        </div>
+                      </div>
+                      <span className="text-[13px] text-white/50">Зареждане...</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {videoInfo.type === 'youtube' && (
                   <iframe
                     src={videoInfo.src}
@@ -227,6 +258,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     title="Видео урок"
+                    onLoad={() => setVideoLoading(false)}
                   />
                 )}
                 {videoInfo.type === 'vimeo' && (
@@ -236,10 +268,11 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
                     title="Видео урок"
+                    onLoad={() => setVideoLoading(false)}
                   />
                 )}
                 {videoInfo.type === 'mp4' && (
-                  <video src={videoInfo.src} className="w-full h-full" controls />
+                  <video src={videoInfo.src} className="w-full h-full" controls onLoadedData={() => setVideoLoading(false)} />
                 )}
                 {videoInfo.type === 'unknown' && (
                   <div className="w-full h-full flex flex-col items-center justify-center text-white gap-3">
@@ -263,9 +296,9 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
 
                 {!isAccessible && (
                   <LockedOverlay
-                    title="Този урок е заключен"
-                    description="Включено в Pro плана. Отключи пълен достъп до всички уроци."
-                    ctaText="Отключи с Pro"
+                    title="Този урок е част от Pro"
+                    description="Включен е в Pro плана. Вземи достъп до всички уроци."
+                    ctaText="Виж Pro плановете"
                     onUpgrade={() => setPage('pricing')}
                   />
                 )}
@@ -286,23 +319,28 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                     </h2>
                   </div>
                   {isAccessible && (
-                    <Button
-                      variant={isDone ? 'secondary' : 'primary'}
-                      onClick={() => markLesson(currentLesson.id)}
-                      className="shrink-0"
+                    <motion.div
+                      animate={celebrateId === currentLesson.id ? { scale: [1, 1.08, 1] } : {}}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
                     >
-                      {isDone ? (
-                        <><CheckCircle2 size={15} /> Завършен</>
-                      ) : (
-                        'Маркирай като завършен'
-                      )}
-                    </Button>
+                      <Button
+                        variant={isDone ? 'secondary' : 'primary'}
+                        onClick={() => markLesson(currentLesson.id)}
+                        className="shrink-0"
+                      >
+                        {isDone ? (
+                          <><CheckCircle2 size={15} /> Завършен</>
+                        ) : (
+                          'Завърши урока'
+                        )}
+                      </Button>
+                    </motion.div>
                   )}
                 </div>
 
                 {!isAccessible ? (
                   <div className="relative">
-                    <div className="text-[15px] text-[var(--text-secondary)] leading-[1.75] space-y-5">
+                    <div className="text-[15px] text-[var(--text-secondary)] leading-[1.85] space-y-6 max-w-prose">
                       <p>{currentLesson.p1}</p>
                       <p>{currentLesson.p2}</p>
                       <p>{currentLesson.p3}</p>
@@ -311,13 +349,13 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                     <div className="relative z-10 flex justify-center pt-4 pb-2">
                       <UpgradeCard
                         title="Отключи пълния урок"
-                        description="Включено в Pro плана. Получи достъп до всички уроци и материали."
+                        description="Включен е в Pro плана. Вземи достъп до всички уроци и материали."
                         onUpgrade={() => setPage('pricing')}
                       />
                     </div>
                   </div>
                 ) : (
-                  <div className="text-[15px] text-[var(--text-secondary)] leading-[1.75] space-y-5">
+                  <div className="text-[15px] text-[var(--text-secondary)] leading-[1.85] space-y-6 max-w-prose">
                     <p>{currentLesson.p1}</p>
                     <p>{currentLesson.p2}</p>
                     <p>{currentLesson.p3}</p>
@@ -328,13 +366,14 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                 {isAccessible && (
                   <div className="mt-10 pt-6 border-t border-[var(--border)]">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-[14px] font-semibold text-[var(--ink-900)]">Моите бележки</h3>
-                      <span className="text-[11px] text-[var(--text-tertiary)]">Запазва се автоматично</span>
+                      <h3 className="text-[14px] font-semibold text-[var(--ink-900)]">Бележки</h3>
+                      <span className="text-[11px] text-[var(--text-tertiary)]">Запазват се автоматично</span>
                     </div>
                     <textarea
+                      ref={notesRef}
                       aria-label="Бележки за урока"
-                      className="w-full bg-[var(--bg-soft)] border border-[var(--border)] rounded-2xl p-4 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors min-h-[120px] resize-y custom-scrollbar"
-                      placeholder="Напишете вашите бележки..."
+                      className="w-full bg-[#faf9f6] dark:bg-[#131318] border border-[var(--border)] hover:border-[var(--border-strong)] rounded-2xl p-4 text-[13px] text-[var(--ink-900)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors min-h-[120px] resize-y custom-scrollbar"
+                      placeholder="Напиши бележките си тук..."
                       value={notes[currentLesson.id] || ''}
                       onChange={(e) => setNotes(prev => ({ ...prev, [currentLesson.id]: e.target.value }))}
                     />
@@ -362,8 +401,8 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                   {next && !nextAccessible && (
                     <div className="mt-4">
                       <UpgradeCard
-                        title="Следващият урок е заключен"
-                        description="Отключи пълен достъп до всички уроци с Pro плана."
+                        title="Следващият урок е част от Pro"
+                        description="Вземи пълен достъп до всички уроци с Pro плана."
                         onUpgrade={() => setPage('pricing')}
                       />
                     </div>

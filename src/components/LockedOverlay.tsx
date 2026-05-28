@@ -10,9 +10,9 @@ interface LockedOverlayProps {
 }
 
 export function LockedOverlay({
-  title = 'Заключено съдържание',
-  description = 'Това съдържание е достъпно само за Pro членове.',
-  ctaText = 'Отключи с Pro',
+  title = 'Съдържанието е част от Pro',
+  description = 'Това съдържание е включено в Pro плана.',
+  ctaText = 'Виж Pro плановете',
   onUpgrade,
   className = '',
 }: LockedOverlayProps) {

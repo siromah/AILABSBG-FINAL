@@ -82,6 +82,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                 <NavLink
                   key={item.id}
                   to={item.route}
+                  end={item.route === '/'}
                   className={({ isActive }) => `text-[13px] h-9 px-3.5 rounded-full flex items-center transition-all ${isActive ? activeClass : inactiveClass}`}
                 >
                   {item.label}
@@ -99,7 +100,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
             <button
               className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--bg-soft)] transition-colors"
               onClick={() => navigate('/prompts')}
-              aria-label="Търсене в prompts"
+              aria-label="Търси в prompt-ите"
             >
               <Search size={17} />
             </button>
@@ -223,6 +224,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                   <NavLink
                     key={item.id}
                     to={item.route}
+                    end={item.route === '/'}
                     onClick={() => setMobMenu(false)}
                     className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]'}`}
                   >

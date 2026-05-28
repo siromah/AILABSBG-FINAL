@@ -29,17 +29,17 @@ export function Register() {
     setMessage('');
 
     if (!isConfigured) {
-      setError('Регистрацията не е конфигурирана все още.');
+      setError('Регистрацията все още не е конфигурирана.');
       return;
     }
 
     if (fullName.trim().length < 2) {
-      setError('Моля, въведете вашето име.');
+      setError('Въведи името си.');
       return;
     }
 
     if (!isEmail(email)) {
-      setError('Моля, въведете валиден имейл адрес.');
+      setError('Въведи валиден имейл адрес.');
       return;
     }
 
@@ -54,7 +54,7 @@ export function Register() {
     }
 
     if (!acceptedTerms) {
-      setError('Трябва да приемете Условията и Политиката за поверителност.');
+      setError('Трябва да приемеш Условията и Политиката за поверителност.');
       return;
     }
 
@@ -68,7 +68,7 @@ export function Register() {
     }
 
     if (result.needsEmailConfirmation) {
-      setMessage('Моля, проверете имейла си, за да потвърдите акаунта.');
+      setMessage('Провери имейла си, за да потвърдиш акаунта.');
       return;
     }
 
@@ -79,8 +79,8 @@ export function Register() {
     <main className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-[440px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm rounded-3xl p-8 md:p-10">
         <div className="text-center mb-10">
-          <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Създайте акаунт</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Присъединете се към AILABSBG, за да отключите всички функции.</p>
+          <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Създай акаунт</h1>
+          <p className="text-[15px] text-[var(--text-secondary)]">Присъедини се към AILABSBG, за да отключиш всички функции.</p>
         </div>
 
         {!isConfigured && (
@@ -96,7 +96,7 @@ export function Register() {
               type="text"
               value={fullName}
               autoComplete="name"
-              placeholder="Вашето име"
+              placeholder="Твоето име"
               onChange={(event:any) => setFullName(event.target.value)}
               className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
             />
@@ -120,7 +120,7 @@ export function Register() {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
-                placeholder="Създайте парола"
+                placeholder="Създай парола"
                 autoComplete="new-password"
                 onChange={(event:any) => setPassword(event.target.value)}
                 className="h-12 border-[var(--border)] bg-[var(--bg-soft)] pr-12 rounded-xl"
@@ -141,7 +141,7 @@ export function Register() {
             <Input
               type={showPassword ? 'text' : 'password'}
               value={confirmPassword}
-              placeholder="Потвърдете паролата"
+              placeholder="Потвърди паролата"
               autoComplete="new-password"
               onChange={(event:any) => setConfirmPassword(event.target.value)}
               className="h-12 border-[var(--border)] bg-[var(--bg-soft)] rounded-xl"
@@ -170,13 +170,13 @@ export function Register() {
 
           <div className="pt-2">
             <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
-              {loading ? 'Създаване на акаунт...' : 'Създайте акаунт'}
+              {loading ? 'Създавам акаунт...' : 'Създай акаунт'}
             </Button>
           </div>
         </form>
 
         <div className="mt-8 text-center text-[14px] text-[var(--text-secondary)]">
-          Вече имате акаунт?{' '}
+          Вече имаш акаунт?{' '}
           <Link to="/login" className="font-semibold text-[var(--ink-900)] hover:text-[var(--accent)] transition-colors">
             Вход
           </Link>

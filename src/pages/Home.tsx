@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowRight,
   Sparkles,
@@ -48,15 +48,15 @@ const FAQS = [
   },
   {
     q: 'Мога ли да отменя членството си?',
-    a: 'Разбира се. Няма договори със срок. Можете да спрете или смените плана по всяко време.',
+    a: 'Разбира се. Няма договори със срок. Можеш да спреш или смениш плана по всяко време.',
   },
   {
     q: 'Има ли live сесии?',
-    a: 'Да. Провеждаме редовни office hours и workshops, където можете да задавате въпроси на живо и да получавате обратна връзка.',
+    a: 'Да. Провеждаме редовни office hours и workshops, където можеш да задаваш въпроси на живо и да получаваш обратна връзка.',
   },
   {
     q: 'Колко време отнема обучението?',
-    a: 'Всеки урок е между 12 и 30 минути. Можете да учите в свое темпо — повечето членове виждат реални резултати в рамките на първите няколко седмици.',
+    a: 'Всеки урок е между 12 и 30 минути. Можеш да учиш в свое темпо — повечето членове виждат реални резултати в рамките на първите няколко седмици.',
   },
   {
     q: 'Работи ли за български компании?',
@@ -95,7 +95,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               <span className="label-caps text-[var(--accent)]">Практична AI академия и общност</span>
             </div>
 
-            <h1 className="display-xl text-[var(--ink-900)] mb-6">
+            <h1 className="display-xl text-[var(--ink-900)] mb-6 bg-gradient-to-br from-[var(--ink-900)] to-[var(--ink-600)] bg-clip-text text-transparent">
               Научи AI по начина, по който работи в реалността.
             </h1>
 
@@ -108,7 +108,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 Започни безплатно
               </Button>
               <Button variant="ghost" size="lg" className="luxury-button" onClick={() => setPage('prompts')}>
-                Разгледай prompts <ArrowRight size={15} />
+                Виж prompt-ите <ArrowRight size={15} />
               </Button>
             </div>
 
@@ -139,7 +139,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* ECOSYSTEM */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-16 md:py-24">
         <div className="mb-10 md:mb-12">
           <span className="label-caps mb-3 block">Екосистема</span>
           <h2 className="display-md text-[var(--ink-900)] max-w-lg">
@@ -154,7 +154,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             { icon: Sparkles, title: 'Prompt Library', desc: 'Тествани prompts за бизнес, маркетинг и автоматизация.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
             { icon: Calendar, title: 'Workshops', desc: 'Практически live сесии, където изграждаме реални системи.', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-light)]' },
             { icon: Layers, title: 'Ресурси', desc: 'Шаблони, checklists и готови workflows за незабавно приложение.', color: 'text-[var(--emerald)]', bg: 'bg-[var(--emerald-light)]' },
-            { icon: Target, title: 'Подкрепа', desc: 'Office hours и implementation reviews, за да не останете сами.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
+            { icon: Target, title: 'Подкрепа', desc: 'Office hours и implementation reviews, за да не си сам.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
           ].map((item, idx) => (
             <motion.div
               key={item.title}
@@ -163,8 +163,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.05 }}
             >
-              <div className="premium-card spotlight-hover p-6 h-full">
-                <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-4`}>
+              <div className="premium-card spotlight-hover p-6 h-full group">
+                <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}>
                   <item.icon className={item.color} size={20} />
                 </div>
                 <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1.5 tracking-tight">{item.title}</h3>
@@ -178,7 +178,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* ACADEMY PREVIEW */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <span className="label-caps mb-3 block">Академия</span>
@@ -250,11 +250,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* COMMUNITY PREVIEW */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-16 md:py-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <span className="label-caps mb-3 block">Общност</span>
-            <h2 className="display-md text-[var(--ink-900)]">Не сте сами в това</h2>
+            <h2 className="display-md text-[var(--ink-900)]">Не си сам в това</h2>
           </div>
           <Button variant="ghost" onClick={() => setPage('community')} className="self-start md:self-auto text-[14px]">
             Виж общността <ChevronRight size={14} />
@@ -292,7 +292,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* PROMPTS PREVIEW */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-12 md:py-20">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <span className="label-caps mb-3 block">Библиотека</span>
@@ -397,7 +397,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* PRICING PREVIEW */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
             <span className="label-caps mb-3 block">Цени</span>
@@ -446,14 +446,18 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.08 }}
             >
-              <div className={`h-full premium-card p-6 flex flex-col ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}>
+              <div className={`relative h-full premium-card p-6 flex flex-col overflow-hidden ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}>
                 {plan.highlight && (
-                  <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[var(--accent)] to-[var(--lavender)] rounded-t-[24px]" />
+                  <>
+                    <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[var(--accent)] to-[var(--lavender)] rounded-t-[24px]" />
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="accent" className="text-[10px] rounded-full px-2.5 py-0.5 font-semibold tracking-wide shadow-sm">Популярен</Badge>
+                    </div>
+                  </>
                 )}
-                <div className="mb-6">
+                <div className={`mb-6 ${plan.highlight ? 'pt-2' : ''}`}>
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-[12px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">{plan.name}</h3>
-                    {plan.highlight && <Badge variant="accent" className="text-[9px] rounded-full px-2 py-0.5">Популярен</Badge>}
                   </div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight">{plan.price}</span>
@@ -481,11 +485,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <div className="soft-divider section-shell" />
 
       {/* FAQ */}
-      <section className="section-shell py-14 md:py-20">
+      <section className="section-shell py-16 md:py-24">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <span className="label-caps mb-3 block">Често задавани въпроси</span>
-            <h2 className="display-md text-[var(--ink-900)]">Всичко, което трябва да знаете</h2>
+            <h2 className="display-md text-[var(--ink-900)]">Всичко, което трябва да знаеш</h2>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -505,14 +509,24 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     <span className="text-[15px] font-semibold text-[var(--ink-900)]">{faq.q}</span>
                     <ChevronRight
                       size={16}
-                      className={`text-[var(--text-tertiary)] shrink-0 transition-transform ${openFaq === idx ? 'rotate-90' : ''}`}
+                      className={`text-[var(--text-tertiary)] shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-90' : ''}`}
                     />
                   </button>
-                  {openFaq === idx && (
-                    <div className="px-5 pb-5 text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                      {faq.a}
-                    </div>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {openFaq === idx && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-5 text-[14px] text-[var(--text-secondary)] leading-relaxed">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             ))}
@@ -535,13 +549,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
             <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
               <h2 className="text-[28px] md:text-[40px] font-semibold mb-4 tracking-tight leading-tight">
-                Готови ли сте да започнете?
+                Готов ли си да започнеш?
               </h2>
               <p className="text-[16px] text-[var(--bg)]/60 mb-8 leading-relaxed max-w-lg">
-                Присъединете се към общността, която учи AI практически. Без шум, без празни обещания — само работещи инструменти.
+                Присъедини се към общността, която учи AI практически. Без шум, без празни обещания — само работещи инструменти.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
+                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-7 h-12 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px] shadow-lg hover:shadow-xl active:shadow-md active:translate-y-[1px] transition-all">
                   Започни безплатно <ArrowRight size={16} />
                 </Button>
                 <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-12 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[15px]">

@@ -32,17 +32,17 @@ export function Login() {
     setError('');
 
     if (!isConfigured) {
-      setError('Входът не е конфигуриран все още.');
+      setError('Входът все още не е конфигуриран.');
       return;
     }
 
     if (!isEmail(email)) {
-      setError('Моля, въведете валиден имейл адрес.');
+      setError('Въведи валиден имейл адрес.');
       return;
     }
 
     if (!password) {
-      setError('Моля, въведете паролата си.');
+      setError('Въведи паролата си.');
       return;
     }
 
@@ -62,13 +62,13 @@ export function Login() {
     <main className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
       <div className="w-full max-w-[440px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm rounded-3xl p-8 md:p-10">
         <div className="text-center mb-10">
-          <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Добре дошли отново</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Влезте, за да продължите към AILABSBG.</p>
+          <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Отново си тук</h1>
+          <p className="text-[15px] text-[var(--text-secondary)]">Влез, за да продължиш към AILABSBG.</p>
         </div>
 
         {!isConfigured && (
           <div className="bg-[var(--amber-light)] text-[var(--amber-text)] px-4 py-3 rounded-xl text-[14px] mb-6 border border-[var(--amber)]/20">
-            Входът не е конфигуриран. Добавете VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.
+            Входът не е конфигуриран. Добави VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.
           </div>
         )}
 
@@ -97,7 +97,7 @@ export function Login() {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
-                placeholder="Въведете паролата си"
+                placeholder="Въведи паролата си"
                 autoComplete="current-password"
                 onChange={(event:any) => setPassword(event.target.value)}
                 aria-invalid={Boolean(error)}
@@ -118,15 +118,15 @@ export function Login() {
 
           <div className="pt-2">
             <Button type="submit" className="w-full h-12 text-[15px]" disabled={loading || !isConfigured}>
-              {loading ? 'Влизане...' : 'Вход'}
+              {loading ? 'Влизам...' : 'Вход'}
             </Button>
           </div>
         </form>
 
         <div className="mt-8 text-center text-[14px] text-[var(--text-secondary)]">
-          Нямате акаунт?{' '}
+          Нямаш акаунт?{' '}
           <Link to="/register" className="font-semibold text-[var(--ink-900)] hover:text-[var(--accent)] transition-colors">
-            Създайте акаунт
+            Създай акаунт
           </Link>
         </div>
       </div>
