@@ -6,35 +6,32 @@ import {
   Users,
   GraduationCap,
   Calendar,
-  Bookmark,
   ChevronRight,
   Play,
-  Copy,
   Check,
   Zap,
   MessageSquare,
   Trophy,
   HelpCircle,
-  Lightbulb,
   Layers,
   Target,
   Clock,
   BookOpen,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { WorkspacePreview } from '../components/WorkspacePreview';
-import { LESSONS_MODS, PROMPTS, EVENTS_DATA, PRICING_PLANS } from '../data';
+import { LESSONS_MODS, PROMPTS, EVENTS_DATA } from '../data';
 
 const LEARNING_PATHS = [
-  { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки' },
-  { id: 'productivity', label: 'AI за продуктивност', icon: Zap, desc: 'Автоматизирай рутинните задачи' },
-  { id: 'marketing', label: 'AI за маркетинг', icon: Target, desc: 'Кампании, анализи и копи' },
-  { id: 'business', label: 'AI за бизнес', icon: Layers, desc: 'Продажби, процеси и мащабиране' },
-  { id: 'content', label: 'AI за съдържание', icon: Sparkles, desc: 'Създавай повече с по-малко усилие' },
-  { id: 'freelancing', label: 'AI за freelancing', icon: Clock, desc: 'По-бързи доставки и по-високи rates' },
-  { id: 'career', label: 'AI за кариера', icon: GraduationCap, desc: 'Умения, които работодателите търсят' },
+  { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки', count: '8 урока' },
+  { id: 'productivity', label: 'AI за продуктивност', icon: Zap, desc: 'Автоматизирай рутинните задачи', count: '6 урока' },
+  { id: 'marketing', label: 'AI за маркетинг', icon: Target, desc: 'Кампании, анализи и копи', count: '7 урока' },
+  { id: 'business', label: 'AI за бизнес', icon: Layers, desc: 'Продажби, процеси и мащабиране', count: '5 урока' },
+  { id: 'content', label: 'AI за съдържание', icon: Sparkles, desc: 'Създавай повече с по-малко усилие', count: '6 урока' },
+  { id: 'freelancing', label: 'AI за freelancing', icon: Clock, desc: 'По-бързи доставки и по-високи rates', count: '4 урока' },
+  { id: 'career', label: 'AI за кариера', icon: GraduationCap, desc: 'Умения, които работодателите търсят', count: '5 урока' },
 ];
 
 const FAQS = [
@@ -66,323 +63,228 @@ const FAQS = [
 
 export default function Home({ checkAuthThenGo, setPage }: any) {
   const { user: currentUser } = useAuth();
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [hoveredPath, setHoveredPath] = useState<string | null>(null);
   const featuredPrompts = PROMPTS.slice(0, 3);
   const academyLessons = LESSONS_MODS.reduce((acc, mod) => acc.concat(mod.lessons), [] as any[]).slice(0, 3);
   const nextEvent = EVENTS_DATA[0];
 
-  const copyPrompt = (id: string, text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
-
   return (
-    <div className="min-h-screen text-[var(--text-primary)] overflow-hidden">
+    <div className="min-h-screen text-[var(--text-primary)]">
 
-      {/* HERO — Dramatic, asymmetric, alive */}
-      <section className="relative section-shell pt-20 pb-20 md:pt-32 md:pb-28">
-        {/* Animated background blobs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-20 -right-20 w-[600px] h-[600px] rounded-full bg-[var(--accent)]/[0.04] blur-[100px]"
+      {/* HERO — Editorial, asymmetric, typographic */}
+      <section className="relative min-h-[90vh] flex items-end pb-16 md:pb-24 pt-32 overflow-hidden">
+        {/* Abstract background shape */}
+        <div className="absolute top-0 right-0 w-[55vw] h-full pointer-events-none overflow-hidden">
+          <div
+            className="absolute -top-[20%] -right-[10%] w-[80vw] h-[80vw] rounded-full opacity-[0.07]"
+            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
           />
-          <motion.div
-            animate={{ x: [0, -20, 0], y: [0, 30, 0], scale: [1, 1.15, 1] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute top-40 -left-40 w-[500px] h-[500px] rounded-full bg-[var(--lavender)]/[0.03] blur-[90px]"
-          />
+          <svg className="absolute top-[15%] right-[5%] w-[40vw] h-[40vw] opacity-[0.04]" viewBox="0 0 400 400">
+            <circle cx="200" cy="200" r="180" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            <circle cx="200" cy="200" r="140" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            <line x1="20" y1="200" x2="380" y2="200" stroke="currentColor" strokeWidth="0.3" />
+            <line x1="200" y1="20" x2="200" y2="380" stroke="currentColor" strokeWidth="0.3" />
+          </svg>
         </div>
 
-        <div className="relative max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[13px] font-medium mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              Практична AI академия и общност
-            </span>
+        <div className="section-shell relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-end">
+            {/* Main headline — takes 8 columns */}
+            <motion.div
+              className="lg:col-span-8"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-12 h-[1px] bg-[var(--accent)]" />
+                <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">
+                  AI Академия · България
+                </span>
+              </div>
 
-            <h1 className="text-[clamp(40px,6vw,80px)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--ink-900)] mb-8">
-              Научи AI по начина,<br />
-              <span className="text-[var(--accent)]">по който работи</span><br />
-              в реалността.
-            </h1>
+              <h1 className="text-[clamp(48px,8vw,96px)] font-semibold leading-[0.95] tracking-[-0.04em] text-[var(--ink-900)] mb-8">
+                Научи AI<br />
+                <span className="text-[var(--text-tertiary)]">по начина,</span><br />
+                <span className="text-[var(--accent)]">по който работи.</span>
+              </h1>
 
-            <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] max-w-xl leading-[1.6] mb-10">
-              Уроци, prompts, workflows и live сесии за хора, които искат реални резултати — без шум и без празна теория.
-            </p>
+              <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] max-w-lg leading-[1.6] mb-10">
+                Уроци, prompts и live сесии за хора, които искат реални резултати — без шум и без празна теория.
+              </p>
 
-            <div className="flex flex-wrap items-center gap-4 mb-12">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <div className="flex flex-wrap items-center gap-4">
                 <Button size="lg" onClick={() => checkAuthThenGo('register')}>
                   Започни безплатно
                 </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                 <Button variant="ghost" size="lg" onClick={() => setPage('prompts')}>
                   Виж prompt-ите <ArrowRight size={16} />
                 </Button>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
 
-            <div className="flex flex-wrap items-center gap-4 text-[13px] text-[var(--text-tertiary)]">
-              {[
-                { icon: Users, text: 'Реална общност' },
-                { icon: Sparkles, text: 'Подбрани prompts' },
-                { icon: GraduationCap, text: 'Практически уроци' },
-              ].map((item, i) => (
-                <motion.span
-                  key={item.text}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="flex items-center gap-2"
-                >
-                  <item.icon size={14} className="text-[var(--accent)]" />
-                  {item.text}
-                </motion.span>
-              ))}
-            </div>
-          </motion.div>
+            {/* Side info — takes 4 columns */}
+            <motion.div
+              className="lg:col-span-4 hidden lg:flex flex-col gap-6 pb-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="border-l border-[var(--border)] pl-5">
+                <div className="text-[36px] font-semibold text-[var(--ink-900)] leading-none tracking-tight">40+</div>
+                <div className="text-[13px] text-[var(--text-secondary)] mt-1.5">структурирани уроци</div>
+              </div>
+              <div className="border-l border-[var(--border)] pl-5">
+                <div className="text-[36px] font-semibold text-[var(--ink-900)] leading-none tracking-tight">120+</div>
+                <div className="text-[13px] text-[var(--text-secondary)] mt-1.5">тествани prompts</div>
+              </div>
+              <div className="border-l border-[var(--border)] pl-5">
+                <div className="text-[36px] font-semibold text-[var(--ink-900)] leading-none tracking-tight">∞</div>
+                <div className="text-[13px] text-[var(--text-secondary)] mt-1.5">възможности с AI</div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
+      {/* MARQUEE STRIP — stats on mobile */}
+      <div className="lg:hidden border-y border-[var(--border)] bg-[var(--bg-soft)]">
+        <div className="section-shell py-6 flex justify-around text-center">
+          <div>
+            <div className="text-[24px] font-semibold text-[var(--ink-900)]">40+</div>
+            <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">уроци</div>
+          </div>
+          <div>
+            <div className="text-[24px] font-semibold text-[var(--ink-900)]">120+</div>
+            <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">prompts</div>
+          </div>
+          <div>
+            <div className="text-[24px] font-semibold text-[var(--ink-900)]">∞</div>
+            <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">възможности</div>
+          </div>
+        </div>
+      </div>
 
-      {/* ECOSYSTEM */}
-      <section className="section-shell py-16 md:py-24">
-        <motion.div 
-          className="mb-10 md:mb-16"
+      {/* EDITORIAL STATEMENT */}
+      <section className="section-shell py-24 md:py-32">
+        <motion.div
+          className="max-w-4xl"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7 }}
         >
-          <span className="label-caps mb-3 block">Екосистема</span>
-          <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] max-w-xl">
-            Това не е просто курс.<br />Това е цялостна система.
+          <h2 className="text-[clamp(28px,4vw,52px)] font-semibold leading-[1.15] tracking-[-0.03em] text-[var(--ink-900)] mb-8">
+            AI не е бъдеще. <span className="text-[var(--accent)]">Вече е тук.</span><br />
+            Въпросът е дали ще го използваш,<br />
+            или ще те изпревари.
           </h2>
+          <p className="text-[17px] text-[var(--text-secondary)] leading-[1.7] max-w-2xl">
+            Craative е мястото, където професионалисти от България учат AI практически. 
+            Без „ disruption“, без buzzwords — само работещи методи, които можеш да приложиш още днес.
+          </p>
         </motion.div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* ECOSYSTEM — Bold grid with icons */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="mb-16">
+          <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Екосистема</span>
+          <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4 max-w-md">
+            Това не е просто курс. Това е система.
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border)] rounded-[20px] overflow-hidden">
           {[
-            { icon: GraduationCap, title: 'Академия', desc: 'Структурирани уроци от нулата до напреднали workflow-ове.', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-light)]' },
-            { icon: Users, title: 'Общност', desc: 'Дискусии, weekly challenges и споделен опит от професионалисти.', color: 'text-[var(--emerald)]', bg: 'bg-[var(--emerald-light)]' },
-            { icon: Sparkles, title: 'Prompt Library', desc: 'Тествани prompts за бизнес, маркетинг и автоматизация.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
-            { icon: Calendar, title: 'Workshops', desc: 'Практически live сесии, където изграждаме реални системи.', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-light)]' },
-            { icon: Layers, title: 'Ресурси', desc: 'Шаблони, checklists и готови workflows за незабавно приложение.', color: 'text-[var(--emerald)]', bg: 'bg-[var(--emerald-light)]' },
-            { icon: Target, title: 'Подкрепа', desc: 'Office hours и implementation reviews, за да не си сам.', color: 'text-[var(--amber)]', bg: 'bg-[var(--amber-light)]' },
+            { icon: GraduationCap, title: 'Академия', desc: 'Структурирани уроци от нулата до напреднали workflow-ове.' },
+            { icon: Users, title: 'Общност', desc: 'Дискусии, weekly challenges и споделен опит от професионалисти.' },
+            { icon: Sparkles, title: 'Prompt Library', desc: 'Тествани prompts за бизнес, маркетинг и автоматизация.' },
+            { icon: Calendar, title: 'Workshops', desc: 'Практически live сесии, където изграждаме реални системи.' },
+            { icon: Layers, title: 'Ресурси', desc: 'Шаблони, checklists и готови workflows за незабавно приложение.' },
+            { icon: Target, title: 'Подкрепа', desc: 'Office hours и implementation reviews, за да не си сам.' },
           ].map((item, idx) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 40 }}
+              className="bg-[var(--bg)] p-8 md:p-10 group cursor-default"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.06 }}
+              whileHover={{ backgroundColor: 'var(--bg-soft)' }}
             >
-              <motion.div 
-                className="premium-card p-6 h-full group"
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              >
-                <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}>
-                  <item.icon className={item.color} size={20} />
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-11 h-11 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white group-hover:border-[var(--accent)] transition-all duration-300">
+                  <item.icon size={18} strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1.5 tracking-tight">{item.title}</h3>
-                <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
-              </motion.div>
+                <ArrowUpRight size={16} className="text-[var(--text-tertiary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2 tracking-tight">{item.title}</h3>
+              <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
-
-      {/* ACADEMY PREVIEW */}
-      <section className="section-shell py-16 md:py-24">
-        <motion.div 
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+      {/* LEARNING PATHS — Editorial table of contents style */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
-            <span className="label-caps mb-3 block">Академия</span>
-            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Избери своя път</h2>
+            <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Академия</span>
+            <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+              Избери своя път
+            </h2>
           </div>
-          <Button variant="ghost" onClick={() => setPage('lessons')} className="self-start md:self-auto text-[14px]">
+          <Button variant="ghost" onClick={() => setPage('lessons')} className="self-start md:self-auto">
             Виж всички уроци <ChevronRight size={14} />
           </Button>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
-          {LEARNING_PATHS.slice(0, 4).map((path, idx) => (
+        <div className="border-t border-[var(--border)]">
+          {LEARNING_PATHS.map((path, idx) => (
             <motion.div
               key={path.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-            >
-              <motion.div
-                className="premium-card p-5 cursor-pointer h-full group"
-                onClick={() => setPage('lessons')}
-                whileHover={{ y: -4 }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
-                    <path.icon size={18} />
-                  </div>
-                  <ChevronRight size={14} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] transition-colors" />
-                </div>
-                <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1">{path.label}</h3>
-                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{path.desc}</p>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {academyLessons.map((lesson: any, idx: number) => (
-            <motion.div
-              key={lesson.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="border-b border-[var(--border)] group cursor-pointer"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              onClick={() => setPage('lessons')}
+              onMouseEnter={() => setHoveredPath(path.id)}
+              onMouseLeave={() => setHoveredPath(null)}
             >
-              <motion.div
-                className="group flex items-center gap-4 p-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] hover:border-[var(--border-strong)] transition-all cursor-pointer"
-                onClick={() => setPage('lessons')}
-                whileHover={{ x: 4 }}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${idx === 0 ? 'bg-[var(--accent-light)] text-[var(--accent)]' : idx === 1 ? 'bg-[var(--amber-light)] text-[var(--amber)]' : 'bg-[var(--emerald-light)] text-[var(--emerald)]'}`}>
-                  <Play size={16} />
+              <div className="py-5 md:py-6 flex items-center gap-4 md:gap-8">
+                <span className="text-[13px] text-[var(--text-tertiary)] font-mono w-8 shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="w-9 h-9 rounded-full bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--accent-light)] group-hover:text-[var(--accent)] transition-colors shrink-0">
+                  <path.icon size={16} strokeWidth={1.5} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[15px] font-semibold text-[var(--ink-900)] leading-snug truncate">
-                    {lesson.title}
-                  </h3>
-                  <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-[12px] text-[var(--text-tertiary)]">{lesson.dur}</span>
-                    <span className="text-[12px] text-[var(--text-tertiary)] bg-[var(--bg-soft)] px-2 py-0.5 rounded-md">Начинаеш</span>
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-[16px] md:text-[18px] font-semibold text-[var(--ink-900)] tracking-tight group-hover:text-[var(--accent)] transition-colors">
+                      {path.label}
+                    </h3>
+                    <AnimatePresence>
+                      {hoveredPath === path.id && (
+                        <motion.span
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -5 }}
+                          className="text-[12px] text-[var(--text-tertiary)] hidden md:inline"
+                        >
+                          {path.desc}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
                   </div>
+                  <p className="text-[13px] text-[var(--text-secondary)] md:hidden mt-0.5">{path.desc}</p>
                 </div>
-                <ChevronRight size={16} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] transition-colors shrink-0" />
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <div className="soft-divider section-shell" />
-
-      {/* COMMUNITY PREVIEW */}
-      <section className="section-shell py-16 md:py-24">
-        <motion.div 
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div>
-            <span className="label-caps mb-3 block">Общност</span>
-            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Не си сам в това</h2>
-          </div>
-          <Button variant="ghost" onClick={() => setPage('community')} className="self-start md:self-auto text-[14px]">
-            Виж общността <ChevronRight size={14} />
-          </Button>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { icon: Target, title: 'Седмични предизвикателства', desc: 'Всяка седмица ново предизвикателство, което натрупва умения стъпка по стъпка.' },
-            { icon: MessageSquare, title: 'Дискусии и Q&A', desc: 'Задавай въпроси, получавай обратна връзка и учи от опита на другите.' },
-            { icon: Clock, title: 'Office Hours', desc: 'Редовни live сесии, където разглеждаме конкретни проблеми и решения.' },
-            { icon: Trophy, title: 'Member Wins', desc: 'Споделяй успехите си и виж как други прилагат AI в реални проекти.' },
-            { icon: HelpCircle, title: 'Implementation Feedback', desc: 'Покажи workflow-а си и получи конкретни предложения за подобрение.' },
-            { icon: Users, title: 'Мрежата', desc: 'Свържи се с хора от маркетинг, бизнес, дизайн и development в България.' },
-          ].map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-            >
-              <motion.div 
-                className="premium-card p-5 h-full"
-                whileHover={{ y: -4 }}
-              >
-                <div className="w-9 h-9 rounded-lg bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] mb-3">
-                  <item.icon size={17} />
-                </div>
-                <h3 className="text-[15px] font-semibold text-[var(--ink-900)] mb-1.5">{item.title}</h3>
-                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <div className="soft-divider section-shell" />
-
-      {/* PROMPTS PREVIEW */}
-      <section className="section-shell py-12 md:py-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-          <div>
-            <span className="label-caps mb-3 block">Библиотека</span>
-            <h2 className="display-md text-[var(--ink-900)]">Готови prompts, които работят</h2>
-          </div>
-          <Button variant="ghost" onClick={() => setPage('prompts')} className="self-start md:self-auto text-[14px]">
-            Виж всички <ChevronRight size={14} />
-          </Button>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {featuredPrompts.map((p, idx) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: idx * 0.06 }}
-            >
-              <div className="group grid grid-cols-[56px_1fr_auto] gap-4 md:gap-5 rounded-3xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 transition hover:-translate-y-0.5 hover:border-[var(--brand)]/30 cursor-pointer dark:bg-white/[0.04]"
-                onClick={() => setPage('prompts')}
-              >
-                <div className="text-3xl font-semibold text-black/10 dark:text-white/10">
-                  {String(idx + 1).padStart(2, '0')}
-                </div>
-                <div>
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="rounded-full bg-[var(--brand)]/10 px-3 py-1 text-xs font-medium text-[var(--brand)]">
-                      {p.cat}
-                    </span>
-                    <span className="text-xs text-[var(--text-tertiary)]">{p.saves} запазвания</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-[var(--ink-900)]">
-                    {p.title}
-                  </h3>
-                  <p className="mt-1 max-w-3xl text-sm leading-6 text-[var(--text-tertiary)]">
-                    {p.text}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-2 self-center">
-                  <button
-                    className="h-11 w-11 rounded-full border border-[var(--border)] transition group-hover:bg-[var(--ink-900)] group-hover:text-[var(--bg)] flex items-center justify-center shrink-0"
-                    onClick={(e) => { e.stopPropagation(); setPage('prompts'); }}
-                  >
-                    <ArrowRight size={16} />
-                  </button>
+                <div className="flex items-center gap-4 shrink-0">
+                  <span className="text-[12px] text-[var(--text-tertiary)] hidden sm:block">{path.count}</span>
+                  <ChevronRight size={16} className="text-[var(--text-tertiary)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
             </motion.div>
@@ -390,84 +292,211 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
-
-      {/* EVENTS PREVIEW */}
-      <section className="section-shell py-16 md:py-24">
-        <motion.div 
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div>
-            <span className="label-caps mb-3 block">Събития</span>
-            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Предстоящи workshops</h2>
-          </div>
-          <Button variant="ghost" onClick={() => setPage('events')} className="self-start md:self-auto text-[14px]">
-            Календар <ChevronRight size={14} />
-          </Button>
-        </motion.div>
+      {/* FEATURED LESSONS — Horizontal scroll on mobile, grid on desktop */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="mb-10">
+          <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Най-нови</span>
+          <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+            Започни с тези уроци
+          </h2>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {EVENTS_DATA.slice(0, 3).map((e, idx) => (
+          {academyLessons.map((lesson: any, idx: number) => (
             <motion.div
-              key={e.id}
-              initial={{ opacity: 0, y: 40 }}
+              key={lesson.id}
+              className="group cursor-pointer"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              onClick={() => setPage('lessons')}
             >
-              <motion.div 
-                className="premium-card p-6 h-full flex flex-col"
-                whileHover={{ y: -4 }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[var(--accent-light)] flex flex-col items-center justify-center text-[var(--accent)] border border-[var(--accent)]/10">
-                    <span className="text-[18px] font-bold leading-none">{e.day}</span>
-                    <span className="text-[9px] font-semibold uppercase tracking-wider mt-0.5">{e.mo}</span>
-                  </div>
-                  <div>
-                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">{e.title}</div>
-                    <div className="text-[12px] text-[var(--text-secondary)] flex items-center gap-1 mt-0.5">
-                      <Clock size={11} /> {e.time} · {e.dur}
-                    </div>
+              <div className="aspect-[16/10] rounded-[16px] bg-[var(--bg-soft)] border border-[var(--border)] mb-4 overflow-hidden relative">
+                <div className={`absolute inset-0 opacity-40 ${
+                  idx === 0 ? 'bg-gradient-to-br from-[var(--accent)]/20 to-transparent' :
+                  idx === 1 ? 'bg-gradient-to-br from-[var(--emerald)]/15 to-transparent' :
+                  'bg-gradient-to-br from-[var(--amber)]/15 to-transparent'
+                }`} />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-sm ${
+                    idx === 0 ? 'bg-[var(--accent)]/10 text-[var(--accent)]' :
+                    idx === 1 ? 'bg-[var(--emerald)]/10 text-[var(--emerald)]' :
+                    'bg-[var(--amber)]/10 text-[var(--amber)]'
+                  }`}>
+                    <Play size={20} fill="currentColor" />
                   </div>
                 </div>
-                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed mb-5 flex-1">
-                  {e.desc}
-                </p>
-                <Button size="sm" className="w-full" onClick={() => setPage('events')}>
-                  Научи повече
-                </Button>
-              </motion.div>
+                <div className="absolute bottom-3 right-3 text-[11px] text-[var(--text-tertiary)] bg-[var(--bg)]/80 backdrop-blur-sm px-2 py-1 rounded-md">
+                  {lesson.dur}
+                </div>
+              </div>
+              <h3 className="text-[16px] font-semibold text-[var(--ink-900)] mb-1 group-hover:text-[var(--accent)] transition-colors">
+                {lesson.title}
+              </h3>
+              <p className="text-[13px] text-[var(--text-secondary)] line-clamp-2">{lesson.desc || 'Научи практически техники, които можеш да приложиш веднага.'}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
-
-      {/* PRICING PREVIEW */}
-      <section className="section-shell py-16 md:py-24">
-        <motion.div 
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+      {/* PROMPTS — Editorial numbered list */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
-            <span className="label-caps mb-3 block">Цени</span>
-            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Ясни планове, без изненади</h2>
+            <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Библиотека</span>
+            <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+              Готови prompts
+            </h2>
           </div>
-          <Button variant="ghost" onClick={() => setPage('pricing')} className="self-start md:self-auto text-[14px]">
-            Виж всички цени <ChevronRight size={14} />
+          <Button variant="ghost" onClick={() => setPage('prompts')} className="self-start md:self-auto">
+            Виж всички <ChevronRight size={14} />
           </Button>
-        </motion.div>
+        </div>
+
+        <div className="flex flex-col">
+          {featuredPrompts.map((p, idx) => (
+            <motion.div
+              key={p.id}
+              className="group cursor-pointer border-t border-[var(--border)]"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: idx * 0.06 }}
+              onClick={() => setPage('prompts')}
+            >
+              <div className="py-6 md:py-8 flex items-start gap-5 md:gap-8">
+                <span className="text-[clamp(32px,4vw,56px)] font-semibold text-[var(--ink-900)]/[0.06] leading-none shrink-0 w-[60px] md:w-[80px]">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[var(--accent)]">
+                      {p.cat}
+                    </span>
+                    <span className="text-[11px] text-[var(--text-tertiary)]">{p.saves} запазвания</span>
+                  </div>
+                  <h3 className="text-[18px] md:text-[20px] font-semibold text-[var(--ink-900)] mb-2 group-hover:text-[var(--accent)] transition-colors">
+                    {p.title}
+                  </h3>
+                  <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed line-clamp-2">
+                    {p.text}
+                  </p>
+                </div>
+                <div className="shrink-0 pt-1 hidden md:block">
+                  <div className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-tertiary)] group-hover:bg-[var(--ink-900)] group-hover:text-[var(--bg)] group-hover:border-[var(--ink-900)] transition-all">
+                    <ArrowRight size={16} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+          <div className="border-t border-[var(--border)]" />
+        </div>
+      </section>
+
+      {/* EVENTS — Side by side editorial */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+          <div>
+            <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Събития</span>
+            <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+              Предстоящи workshops
+            </h2>
+          </div>
+          <Button variant="ghost" onClick={() => setPage('events')} className="self-start md:self-auto">
+            Календар <ChevronRight size={14} />
+          </Button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {EVENTS_DATA.slice(0, 3).map((e, idx) => (
+            <motion.div
+              key={e.id}
+              className="group cursor-pointer"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              onClick={() => setPage('events')}
+            >
+              <div className="p-6 md:p-8 rounded-[20px] border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-soft)] transition-colors h-full flex flex-col">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <div className="text-[42px] font-semibold text-[var(--ink-900)] leading-none tracking-tight">{e.day}</div>
+                    <div className="text-[11px] font-medium tracking-[0.15em] uppercase text-[var(--accent)] mt-1">{e.mo}</div>
+                  </div>
+                  <div className="text-[12px] text-[var(--text-tertiary)] flex items-center gap-1.5">
+                    <Clock size={12} /> {e.time}
+                  </div>
+                </div>
+                <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2 group-hover:text-[var(--accent)] transition-colors">
+                  {e.title}
+                </h3>
+                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed mb-6 flex-1">{e.desc}</p>
+                <div className="flex items-center gap-2 text-[13px] text-[var(--accent)] font-medium">
+                  Научи повече <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* COMMUNITY */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Общност</span>
+            <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4 mb-6">
+              Не си сам в това
+            </h2>
+            <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
+              Присъедини се към хора, които вече прилагат AI в работата си. 
+              Споделяй опит, задавай въпроси и учи заедно с други професионалисти.
+            </p>
+            <Button onClick={() => setPage('community')}>Влез в общността <ArrowRight size={16} /></Button>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { icon: Target, title: 'Седмични предизвикателства', desc: 'Всяка седмица ново предизвикателство.' },
+              { icon: MessageSquare, title: 'Дискусии и Q&A', desc: 'Задавай въпроси и получавай обратна връзка.' },
+              { icon: Trophy, title: 'Member Wins', desc: 'Споделяй успехите си с общността.' },
+              { icon: HelpCircle, title: 'Implementation Feedback', desc: 'Покажи workflow-а си за review.' },
+            ].map((item, idx) => (
+              <motion.div
+                key={item.title}
+                className="p-5 rounded-[16px] border border-[var(--border)] bg-[var(--bg-soft)]"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+              >
+                <item.icon size={18} className="text-[var(--accent)] mb-3" strokeWidth={1.5} />
+                <h4 className="text-[14px] font-semibold text-[var(--ink-900)] mb-1">{item.title}</h4>
+                <p className="text-[12px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING — Minimal, clean */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="text-center mb-12">
+          <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">Цени</span>
+          <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+            Ясни планове, без изненади
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
           {[
             {
               name: 'Free',
@@ -500,41 +529,30 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((plan, idx) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <motion.div 
-                className={`relative h-full premium-card p-6 flex flex-col overflow-hidden ${plan.highlight ? 'border-[var(--accent)]/25' : ''}`}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              >
+              <div className={`relative h-full rounded-[20px] border p-6 md:p-8 flex flex-col ${
+                plan.highlight
+                  ? 'border-[var(--accent)] bg-[var(--accent-light)]/30'
+                  : 'border-[var(--border)] bg-[var(--bg)]'
+              }`}>
                 {plan.highlight && (
-                  <>
-                    <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[var(--accent)] to-[var(--lavender)] rounded-t-[24px]" />
-                    <div className="absolute top-4 right-4">
-                      <Badge variant="accent" className="text-[10px] rounded-full px-2.5 py-0.5 font-semibold tracking-wide shadow-sm">Популярен</Badge>
-                    </div>
-                  </>
-                )}
-                <div className={`mb-6 ${plan.highlight ? 'pt-2' : ''}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-[12px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">{plan.name}</h3>
+                  <div className="absolute -top-3 left-6">
+                    <Badge variant="accent" className="text-[10px] rounded-full px-3 py-1 font-semibold tracking-wide">Популярен</Badge>
                   </div>
+                )}
+                <div className="mb-6">
+                  <h3 className="text-[12px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-3">{plan.name}</h3>
                   <div className="flex items-baseline gap-1">
-                    <motion.span 
-                      className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight"
-                      key={plan.price}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      {plan.price}
-                    </motion.span>
+                    <span className="text-[36px] font-semibold text-[var(--ink-900)] tracking-tight">{plan.price}</span>
                     <span className="text-[14px] text-[var(--text-tertiary)]">{plan.period}</span>
                   </div>
                   <p className="text-[13px] text-[var(--text-secondary)] mt-2 leading-relaxed">{plan.desc}</p>
                 </div>
-                <ul className="flex flex-col gap-2.5 mb-6 flex-1">
+                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-[13px] text-[var(--text-secondary)]">
                       <Check size={14} className={`mt-0.5 shrink-0 ${plan.highlight ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'}`} />
@@ -542,30 +560,24 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     </li>
                   ))}
                 </ul>
-                <Button variant={plan.highlight ? 'primary' : 'secondary'} className="w-full h-10" onClick={() => setPage('pricing')}>
+                <Button variant={plan.highlight ? 'primary' : 'secondary'} className="w-full" onClick={() => setPage('pricing')}>
                   {plan.cta}
                 </Button>
-              </motion.div>
+              </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
-
       {/* FAQ */}
-      <section className="section-shell py-16 md:py-24">
+      <section className="section-shell pb-24 md:pb-32">
         <div className="max-w-3xl mx-auto">
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="label-caps mb-3 block">Често задавани въпроси</span>
-            <h2 className="text-[clamp(28px,3.5vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">Всичко, което трябва да знаеш</h2>
-          </motion.div>
+          <div className="text-center mb-12">
+            <span className="text-[12px] font-medium tracking-[0.15em] uppercase text-[var(--accent)]">FAQ</span>
+            <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
+              Всичко, което трябва да знаеш
+            </h2>
+          </div>
 
           <div className="flex flex-col gap-3">
             {FAQS.map((faq, idx) => (
@@ -576,7 +588,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: idx * 0.05 }}
               >
-                <div className="premium-card overflow-hidden">
+                <div className="rounded-[16px] border border-[var(--border)] bg-[var(--bg)] overflow-hidden">
                   <button
                     className="w-full text-left p-5 flex items-center justify-between gap-4"
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
@@ -609,37 +621,30 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
-      <div className="soft-divider section-shell" />
-
-      {/* FINAL CTA */}
-      <section className="section-shell py-16 md:py-24 pb-24">
+      {/* FINAL CTA — Warm, editorial */}
+      <section className="section-shell pb-24 md:pb-32">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="relative rounded-[32px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-12 md:p-20">
-            <motion.div 
-              className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent)] rounded-full opacity-10 blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"
-              animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.12, 0.08] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--emerald)] rounded-full opacity-8 blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none" />
-            <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
-              <h2 className="text-[32px] md:text-[48px] font-semibold mb-5 tracking-[-0.02em] leading-[1.1]">
-                Готов ли си да<br />започнеш?
+          <div className="relative rounded-[24px] bg-[var(--ink-900)] text-[var(--bg)] overflow-hidden p-10 md:p-16 lg:p-20">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--accent)] rounded-full opacity-[0.08] blur-[120px] -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[var(--accent)] rounded-full opacity-[0.05] blur-[100px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+
+            <div className="relative z-10 max-w-2xl">
+              <h2 className="text-[clamp(32px,5vw,56px)] font-semibold mb-6 tracking-[-0.03em] leading-[1.05]">
+                Готов ли си<br />да започнеш?
               </h2>
-              <p className="text-[17px] text-[var(--bg)]/60 mb-10 leading-relaxed max-w-lg">
+              <p className="text-[16px] md:text-[18px] text-[var(--bg)]/50 mb-10 leading-relaxed max-w-lg">
                 Присъедини се към общността, която учи AI практически. Без шум, без празни обещания.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                  <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-8 h-13 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[16px] shadow-xl hover:shadow-2xl transition-all">
-                    Започни безплатно <ArrowRight size={18} />
-                  </Button>
-                </motion.div>
-                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 h-13 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[16px]">
+              <div className="flex flex-wrap items-center gap-4">
+                <Button size="lg" onClick={() => checkAuthThenGo('register')} className="gap-2 px-8 bg-[var(--bg)] text-[var(--ink-900)] hover:bg-[var(--bg-soft)] text-[15px]">
+                  Започни безплатно <ArrowRight size={18} />
+                </Button>
+                <Button size="lg" variant="ghost" onClick={() => setPage('pricing')} className="gap-2 px-7 text-[var(--bg)] hover:bg-[var(--bg)]/10 text-[15px]">
                   Виж цените
                 </Button>
               </div>
