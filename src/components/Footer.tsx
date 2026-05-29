@@ -17,7 +17,7 @@ export default function Footer() {
               <span className="font-semibold text-[17px] text-[var(--ink-900)] tracking-tight">Craative</span>
             </div>
             <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-5">
-              Практична AI академия и общност за хора, които искат да използват AI в работа, бизнес и кариера — без шум, без празна теория и без технически жаргон.
+              Практическа AI академия за български професионалисти. Уроци, prompts и общност — без шум, без празна теория, без английски жаргон, който не разбираш.
             </p>
             <div className="flex items-center gap-4 text-[var(--text-tertiary)]">
               <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-[var(--text-primary)] transition-colors">
@@ -66,7 +66,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-[var(--text-tertiary)]">
           <span>&copy; {new Date().getFullYear()} Craative. Всички права запазени.</span>
-          <span>Цените са в лева. Платформата е в процес на разработка.</span>
+          <span>Цените са в евро.</span>
         </div>
       </div>
     </footer>

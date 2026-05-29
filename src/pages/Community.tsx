@@ -229,8 +229,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
 
             <div className="mb-1">
               <span className="label-caps mb-1 block">Общност</span>
-              <h1 className="text-[26px] md:text-[32px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Дискусии и споделен опит</h1>
-              <p className="text-[15px] text-[var(--text-secondary)]">Дискутирайте инструменти, споделяйте prompts и задавайте въпроси.</p>
+              <h1 className="text-[26px] md:text-[32px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Споделяй и учи заедно</h1>
+              <p className="text-[15px] text-[var(--text-secondary)]">Питай, показвай workflows, споделяй какво работи при теб.</p>
             </div>
 
             {/* Mobile Categories */}
@@ -248,12 +248,12 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <Badge variant="accent" className="rounded-full text-[10px] uppercase tracking-wider">Публично</Badge>
                 <span className="text-[11px] text-[var(--text-tertiary)]">Тази седмица</span>
               </div>
-              <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Prompt Engineering</h3>
+              <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Prompt Engineering седмица</h3>
               <p className="text-[14px] text-[var(--text-secondary)] mb-3">
-                Challenge: Напиши 5 system prompts за различни бизнес use cases.
+                Предизвикателство: Напиши 5 system prompts за различни бизнес задачи. Сподели в общността.
               </p>
               <div className="flex items-center gap-2 text-[12px] text-[var(--text-tertiary)]">
-                <Star size={12} /> 12 участника вече са споделили
+                <Star size={12} /> Присъедини се и ти
               </div>
             </div>
 
@@ -324,8 +324,8 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
             <div className="flex flex-col gap-4">
               {postsToRender.length === 0 ? (
                 <div className="premium-card py-14 text-center">
-                  <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Все още тихо тук...</h3>
-                  <p className="text-[var(--text-secondary)] mb-4 text-[14px]">Бъдете първият, който разбива мълчанието.</p>
+                  <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-1">Тук още няма публикации</h3>
+                  <p className="text-[var(--text-secondary)] mb-4 text-[14px]">Бъди първият, който споделя опит или задава въпрос.</p>
                   <Button variant="secondary" className="h-9 text-[13px]" onClick={() => { setFeedFilter('all'); setCompExpanded(true); }}>Публикувай</Button>
                 </div>
               ) : (

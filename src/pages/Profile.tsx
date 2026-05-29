@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { LogOut, BookOpen, LayoutTemplate, Star, Calendar, ChevronRight, Clock, Zap } from 'lucide-react';
+import { LogOut, BookOpen, LayoutTemplate, Star, Calendar, ChevronRight, Clock, Zap, Check, Users, MessageSquare, Target, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { LESSONS_MODS, PROMPTS, EVENTS_DATA } from '../data';
 import { Avatar } from '../components/ui/Avatar';
@@ -8,8 +8,16 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { ProgressBar } from '../components/ui/ProgressBar';
 
+const GOALS = [
+  { id: 'business', label: 'Автоматизирам бизнеса си', icon: Target },
+  { id: 'marketing', label: 'По-добър маркетинг с AI', icon: Sparkles },
+  { id: 'productivity', label: 'По-продуктивен на работа', icon: Zap },
+  { id: 'team', label: 'Внедрявам AI в екипа', icon: Users },
+];
+
 export function Profile({ db, setPage }: any) {
   const { user, signOut } = useAuth();
+  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
 
   const handleLogout = async () => {
     await signOut();
@@ -42,6 +50,199 @@ export function Profile({ db, setPage }: any) {
     return 'neutral';
   };
 
+  // Check if user is new (no progress, no saved prompts)
+  const isNewUser = doneCount === 0 && savedLen === 0;
+
+  const handleGoalSelect = (goalId: string) => {
+    setSelectedGoal(goalId);
+    localStorage.setItem('craative_goal', goalId);
+  };
+
+  // ONBOARDING for new users
+  if (isNewUser) {
+    return (
+      <div className="min-h-screen text-[var(--text-primary)] grain">
+        <div className="section-shell py-10 md:py-14">
+
+          {/* Welcome Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-10"
+          >
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center text-white text-[24px] font-bold mx-auto mb-4">
+              {initials}
+            </div>
+            <h1 className="display-md text-[var(--ink-900)] mb-2">
+              Добре дошъл, {fullName.split(' ')[0]}
+            </h1>
+            <p className="text-[16px] text-[var(--text-secondary)] max-w-md mx-auto">
+              Готов ли си да получиш първата си малка победа с AI? Следвай тези стъпки.
+            </p>
+          </motion.div>
+
+          {/* Step 1: Choose Goal */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold ${selectedGoal ? 'bg-[var(--emerald)] text-white' : 'bg-[var(--accent)] text-white'}`}>
+                {selectedGoal ? <Check size={16} /> : '1'}
+              </div>
+              <h2 className="text-[18px] font-semibold text-[var(--ink-900)]">Каква е твоята цел?</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 ml-11">
+              {GOALS.map((goal) => (
+                <button
+                  key={goal.id}
+                  onClick={() => handleGoalSelect(goal.id)}
+                  className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
+                    selectedGoal === goal.id
+                      ? 'border-[var(--accent)] bg-[var(--accent-light)]/30'
+                      : 'border-[var(--border)] bg-[var(--bg)] hover:border-[var(--accent)]/30'
+                  }`}
+                >
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${selectedGoal === goal.id ? 'bg-[var(--accent)] text-white' : 'bg-[var(--bg-soft)] text-[var(--text-secondary)]'}`}>
+                    <goal.icon size={16} />
+                  </div>
+                  <span className="text-[14px] font-medium text-[var(--ink-900)]">{goal.label}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Step 2: Start First Lesson */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[13px] font-semibold">2</div>
+              <h2 className="text-[18px] font-semibold text-[var(--ink-900)]">Започни първия безплатен урок</h2>
+            </div>
+            <div className="ml-11">
+              <div className="premium-card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0">
+                    <BookOpen size={18} />
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">{nextLesson.title}</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">{nextLesson.dur} • Безплатно</div>
+                  </div>
+                </div>
+                <Button onClick={() => setPage('lessons')} className="shrink-0">
+                  Започни урока <ArrowRight size={14} />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Step 3: Save First Prompt */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[13px] font-semibold">3</div>
+              <h2 className="text-[18px] font-semibold text-[var(--ink-900)]">Запази първия си prompt</h2>
+            </div>
+            <div className="ml-11">
+              <div className="premium-card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] shrink-0">
+                    <LayoutTemplate size={18} />
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">Библиотека с prompts</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">10+ безплатни готови prompts</div>
+                  </div>
+                </div>
+                <Button variant="secondary" onClick={() => setPage('prompts')} className="shrink-0">
+                  Разгледай prompts
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Step 4: Community Preview */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="max-w-2xl mx-auto mb-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[13px] font-semibold">4</div>
+              <h2 className="text-[18px] font-semibold text-[var(--ink-900)]">Виж какво споделят другите</h2>
+            </div>
+            <div className="ml-11">
+              <div className="premium-card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] shrink-0">
+                    <MessageSquare size={18} />
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">Community preview</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">Виж как други прилагат AI в работата си</div>
+                  </div>
+                </div>
+                <Button variant="secondary" onClick={() => setPage('community')} className="shrink-0">
+                  Виж общността
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Step 5: Book 1:1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="max-w-2xl mx-auto mb-12"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[13px] font-semibold">5</div>
+              <h2 className="text-[18px] font-semibold text-[var(--ink-900)]">Нуждаеш се от насока?</h2>
+            </div>
+            <div className="ml-11">
+              <div className="premium-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 border-l-[3px] border-l-[var(--accent)]">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0">
+                    <Users size={18} />
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold text-[var(--ink-900)]">Безплатен 1:1 разговор</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">15 минути — без ангажимент</div>
+                  </div>
+                </div>
+                <Button onClick={() => setPage('coaching')} className="shrink-0">
+                  Запиши разговор
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Skip */}
+          <div className="text-center">
+            <button onClick={handleLogout} className="text-[13px] text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors">
+              Изход от акаунта
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // REGULAR DASHBOARD for users with progress
   return (
     <div className="min-h-screen text-[var(--text-primary)] grain">
       <div className="section-shell py-10 md:py-14">
@@ -172,8 +373,8 @@ export function Profile({ db, setPage }: any) {
                   <span className="flex items-center gap-2"><BookOpen size={14} /> Виж общността</span>
                   <ChevronRight size={14} />
                 </button>
-                <button onClick={() => setPage('events')} className="flex items-center justify-between p-3 rounded-xl text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] transition-colors">
-                  <span className="flex items-center gap-2"><Calendar size={14} /> Календар със събития</span>
+                <button onClick={() => setPage('coaching')} className="flex items-center justify-between p-3 rounded-xl text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] hover:text-[var(--text-primary)] transition-colors">
+                  <span className="flex items-center gap-2"><Users size={14} /> Резервирай 1:1 разговор</span>
                   <ChevronRight size={14} />
                 </button>
               </div>

@@ -13,7 +13,6 @@ import AIAssistant from './components/AIAssistant';
 import Footer from './components/Footer';
 import CookieBanner from './components/CookieBanner';
 import CommandMenu from './components/CommandMenu';
-import CursorGlow from './components/CursorGlow';
 import ParticleBackground from './components/ParticleBackground';
 import { Spinner } from './components/ui/Spinner';
 import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
@@ -33,6 +32,7 @@ const Admin = lazy(() => import('./pages/Admin'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Pricing = lazy(() => import('./pages/Pricing'));
+const Coaching = lazy(() => import('./pages/Coaching'));
 const SystemCheck = lazy(() => import('./pages/SystemCheck'));
 const PrivacyPolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.PrivacyPolicy })));
 const CookiePolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.CookiePolicy })));
@@ -191,8 +191,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
       <ScrollToTop />
       <ScrollProgress />
       <SpotlightEffect />
-      <CursorGlow />
-      <ParticleBackground />
+      {page === 'home' && <ParticleBackground />}
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(prev => prev.filter(x => x.id !== id))} />
       <CookieBanner />
       <CommandMenu />
@@ -218,6 +217,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
             <Route path="/about" element={<PageTransition><About {...props} /></PageTransition>} />
             <Route path="/contact" element={<PageTransition><Contact {...props} /></PageTransition>} />
             <Route path="/pricing" element={<PageTransition><Pricing {...props} /></PageTransition>} />
+            <Route path="/coaching" element={<PageTransition><Coaching {...props} /></PageTransition>} />
             <Route path="/system-check" element={<PageTransition><SystemCheck /></PageTransition>} />
             <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
             <Route path="/terms" element={<PageTransition><TermsOfUse /></PageTransition>} />

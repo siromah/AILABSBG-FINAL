@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock, Loader2 } from 'lucide-react';
+import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock, Loader2, Zap, Users, Calendar, ArrowRight, Sparkles, MessageSquare } from 'lucide-react';
 import { LESSONS_MODS } from '../data';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -34,6 +34,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const plan = getUserPlan(currentUser);
+  const isFreePlan = plan === 'free';
 
   useEffect(() => {
     try {
@@ -65,6 +66,9 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
   const prev = idx > 0 ? allLessons[idx - 1] : null;
   const next = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
   const nextAccessible = next ? canAccessLesson(next, plan) : true;
+
+  const freeLessons = allLessons.filter((l: any) => l.isFree);
+  const freeDoneCount = freeLessons.filter((l: any) => prog[l.id]).length;
 
   const attachedVideos = useMemo(() => {
     try {
@@ -113,6 +117,7 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
 
   const handleLessonClick = (lesson: any) => {
     setCurrentLesson(lesson);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const levelNum = getLevelFromXP(xp);
@@ -126,12 +131,48 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
         <div className="mb-8 md:mb-10">
           <span className="label-caps mb-3 block">AI Академия</span>
           <h1 className="display-md text-[var(--ink-900)] mb-3">
-            AI инженеринг за предприемачи
+            Научи AI на практика
           </h1>
           <p className="text-[16px] text-[var(--text-secondary)] max-w-xl leading-relaxed">
-            Научи се да автоматизираш workflows и да изграждаш AI системи от нулата — с ясни стъпки и практически упражнения.
+            Кратки уроци с конкретни примери. Без дълги теории — вземи и приложи още днес.
           </p>
         </div>
+
+        {/* Free Plan Banner */}
+        {isFreePlan && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 rounded-[20px] border border-[var(--border)] bg-[var(--bg-soft)] p-5 md:p-6"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0">
+                  <Zap size={18} />
+                </div>
+                <div>
+                  <div className="text-[14px] font-semibold text-[var(--ink-900)]">
+                    Free план — {freeDoneCount} от {freeLessons.length} безплатни урока завършени
+                  </div>
+                  <div className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+                    Завърши всички безплатни уроци, за да видиш дали платформата ти пасва. След това Pro дава пълен достъп.
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <Button variant="secondary" size="sm" onClick={() => setPage('pricing')}>
+                  Виж Pro
+                </Button>
+                <Button size="sm" onClick={() => setPage('coaching')}>
+                  <Users size={14} className="mr-1.5" /> 1:1 разговор
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4">
+              <ProgressBar value={Math.round((freeDoneCount / freeLessons.length) * 100)} />
+            </div>
+          </motion.div>
+        )}
 
         {/* TOP BAR */}
         <div className="premium-card p-5 mb-8 flex flex-col md:flex-row items-center gap-4 md:gap-6">
@@ -162,6 +203,22 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                 {doneCount === total ? 'Курсът е завършен. Отлична работа.' : 'Продължавай, вървиш добре.'}
               </div>
             </div>
+
+            {/* Free Plan CTA in Sidebar */}
+            {isFreePlan && (
+              <div className="premium-card p-5 border-l-[3px] border-l-[var(--accent)]">
+                <div className="flex items-center gap-2 mb-2">
+                  <Lock size={14} className="text-[var(--accent)]" />
+                  <span className="text-[13px] font-semibold text-[var(--ink-900)]">Pro съдържание</span>
+                </div>
+                <p className="text-[12px] text-[var(--text-secondary)] leading-relaxed mb-3">
+                  {total - freeLessons.length} урока са заключени. С Pro получаваш пълен достъп + workshops + prompts.
+                </p>
+                <Button size="sm" className="w-full" onClick={() => setPage('pricing')}>
+                  Отключи Pro <ArrowRight size={13} />
+                </Button>
+              </div>
+            )}
 
             {/* Content Outline */}
             <div className="flex flex-col gap-6">
@@ -313,6 +370,9 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="outline" className="rounded-full text-[10px] uppercase tracking-wider">Модул</Badge>
                       <Badge variant="outline" className="rounded-full text-[10px] uppercase tracking-wider">{currentLesson.dur}</Badge>
+                      {!isAccessible && (
+                        <Badge variant="accent" className="rounded-full text-[10px] uppercase tracking-wider">Pro</Badge>
+                      )}
                     </div>
                     <h2 className="text-[22px] md:text-[28px] font-semibold text-[var(--ink-900)] tracking-tight leading-tight">
                       {currentLesson.h}
@@ -342,16 +402,26 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                   <div className="relative">
                     <div className="text-[15px] text-[var(--text-secondary)] leading-[1.85] space-y-6 max-w-prose">
                       <p>{currentLesson.p1}</p>
-                      <p>{currentLesson.p2}</p>
-                      <p>{currentLesson.p3}</p>
                     </div>
-                    <div className="absolute inset-0 top-auto h-[60%] bg-gradient-to-t from-[var(--surface-strong)] to-transparent pointer-events-none" />
-                    <div className="relative z-10 flex justify-center pt-4 pb-2">
+                    <div className="relative mt-6">
+                      <div className="absolute inset-0 top-auto h-full bg-gradient-to-t from-[var(--surface-strong)] via-[var(--surface-strong)]/80 to-transparent pointer-events-none z-[1]" />
+                      <div className="text-[15px] text-[var(--text-secondary)] leading-[1.85] space-y-6 max-w-prose blur-[3px] select-none">
+                        <p>{currentLesson.p2}</p>
+                        <p>{currentLesson.p3}</p>
+                      </div>
+                    </div>
+                    <div className="relative z-10 flex flex-col items-center pt-6 pb-2">
                       <UpgradeCard
                         title="Отключи пълния урок"
                         description="Включен е в Pro плана. Вземи достъп до всички уроци и материали."
                         onUpgrade={() => setPage('pricing')}
                       />
+                      <button
+                        onClick={() => setPage('coaching')}
+                        className="mt-3 text-[12px] text-[var(--text-tertiary)] hover:text-[var(--accent)] transition-colors flex items-center gap-1"
+                      >
+                        <MessageSquare size={12} /> Или резервирай безплатен 1:1 разговор
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -380,24 +450,46 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                   </div>
                 )}
 
-                {/* NAVIGATION */}
+                {/* NEXT LESSON FLOW */}
                 <div className="mt-10 pt-6 border-t border-[var(--border)]">
-                  <div className="flex justify-between items-center">
-                    {prev ? (
-                      <Button variant="ghost" onClick={() => setCurrentLesson(prev)}>
-                        <ChevronLeft size={15} /> Предишен урок
-                      </Button>
-                    ) : <div />}
-                    {next ? (
-                      <Button onClick={() => setCurrentLesson(next)} className={!canAccessLesson(next, plan) ? 'opacity-60' : ''}>
-                        Следващ урок <ChevronRight size={15} />
-                      </Button>
-                    ) : (
-                      <div className="text-[var(--emerald)] font-medium text-[14px] flex items-center gap-2">
-                        <CheckCircle2 size={15} /> Модулът е завършен
+                  {isDone && next ? (
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-5 rounded-[20px] bg-[var(--bg-soft)] border border-[var(--border)]">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[var(--emerald-light)] flex items-center justify-center text-[var(--emerald)] shrink-0">
+                          <Sparkles size={18} />
+                        </div>
+                        <div>
+                          <div className="text-[13px] font-semibold text-[var(--ink-900)]">Готов за следващата стъпка?</div>
+                          <div className="text-[12px] text-[var(--text-secondary)]">{next.title} • {next.dur}</div>
+                        </div>
                       </div>
-                    )}
-                  </div>
+                      <div className="flex items-center gap-3">
+                        {!nextAccessible && (
+                          <span className="text-[12px] text-[var(--text-tertiary)]">Pro</span>
+                        )}
+                        <Button onClick={() => setCurrentLesson(next)} className={!nextAccessible ? 'opacity-60' : ''}>
+                          Следващ урок <ArrowRight size={15} />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      {prev ? (
+                        <Button variant="ghost" onClick={() => setCurrentLesson(prev)}>
+                          <ChevronLeft size={15} /> Предишен урок
+                        </Button>
+                      ) : <div />}
+                      {next ? (
+                        <Button onClick={() => setCurrentLesson(next)} className={!canAccessLesson(next, plan) ? 'opacity-60' : ''}>
+                          Следващ урок <ChevronRight size={15} />
+                        </Button>
+                      ) : (
+                        <div className="text-[var(--emerald)] font-medium text-[14px] flex items-center gap-2">
+                          <CheckCircle2 size={15} /> Модулът е завършен
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {next && !nextAccessible && (
                     <div className="mt-4">
                       <UpgradeCard
@@ -409,6 +501,22 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* 1:1 Coaching CTA at bottom */}
+            <div className="premium-card p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0">
+                  <Users size={18} />
+                </div>
+                <div>
+                  <div className="text-[14px] font-semibold text-[var(--ink-900)]">Засякохме се на нещо?</div>
+                  <div className="text-[12px] text-[var(--text-secondary)]">Резервирай 15-минутен разговор — безплатно.</div>
+                </div>
+              </div>
+              <Button variant="secondary" onClick={() => setPage('coaching')}>
+                <Calendar size={14} className="mr-1.5" /> Запиши разговор
+              </Button>
             </div>
 
           </div>

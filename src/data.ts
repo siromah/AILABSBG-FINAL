@@ -6,8 +6,8 @@ export const INIT_USERS = [
 ];
 
 export const INIT_POSTS = [
-  {id:'p1',uid:'u1',type:'win',text:'Изградих automation за email sequences с Make.com + Claude. Спестявам 8 часа седмично. Споделям workflow-а в коментарите.',tags:['Automation','Make.com','Win'],likes:['u2'],saved:[],comments:[{id:'c1',uid:'u2',text:'Браво! Как е структуриран trigger-ът? Имаш ли шаблон?',time:Date.now()-3600000}],time:Date.now()-600000,pinned:true},
-  {id:'p2',uid:'u2',type:'question',text:'Как пишете system prompt за Claude за customer support? Имам e-commerce бизнес и търся идеи. Някой пробвал ли е?',tags:['Claude','Customer Support'],likes:['u1'],saved:[],comments:[{id:'c2',uid:'admin',text:'Виж Prompt Library-то — има готов template за Customer Support AI!',time:Date.now()-3000000}],time:Date.now()-3600000,pinned:false}
+  {id:'p1',uid:'u1',type:'win',text:'Честно казано, не очаквах толкова бърз резултат. След първия урок за Make.com вече имам работещ automation за email-ите. Не е перфектен, но спестява ми поне 2-3 часа седмично. Ако някой иска да види setup-а, пишете.',tags:['Automation','Make.com','Win'],likes:['u2'],saved:[],comments:[{id:'c1',uid:'u2',text:'Моля те, сподели! Аз се мъча с trigger-ите от седмица.',time:Date.now()-3600000}],time:Date.now()-600000,pinned:true},
+  {id:'p2',uid:'u2',type:'question',text:'Здравейте, опитвам се да напиша system prompt за Claude, който да отговаря на клиенти в e-commerce. Пробвах няколко варианта, но отговорите са или твърде формални, или твърде generic. Някой има ли работещ пример?',tags:['Claude','Customer Support'],likes:['u1'],saved:[],comments:[{id:'c2',uid:'admin',text:'Погледни Prompt Library-то — има template, който може да ти свърши работа като база. Ако искаш, можем да го подобрим заедно на следващия office hours.',time:Date.now()-3000000}],time:Date.now()-3600000,pinned:false}
 ];
 
 export const INIT_NOTIFS = [
@@ -66,25 +66,25 @@ export const PRICING_PLANS = [
   {
     id: 'free',
     name: 'Free',
-    desc: 'За разглеждане, newsletter и основни ресурси.',
+    desc: 'Разгледай платформата, опитай безплатните уроци и виж дали ти пасва.',
     monthly: 0,
     yearly: 0,
-    features: ['Достъп до ограничени уроци','Ограничена prompt library','Community preview','Новини и ресурси']
+    features: ['3 пълни урока от академията','10+ готови prompts','Преглед на общността','Записи от избрани събития']
   },
   {
     id: 'pro',
     name: 'Pro',
-    desc: 'Community, workshops, prompt library, templates и challenges.',
+    desc: 'Пълен достъп до академията, prompts и общността. За хора, които ще прилагат.',
     monthly: 25,
     yearly: 250,
-    features: ['Пълна академия','Пълна prompt library','Community достъп','Workshops','Challenges','Шаблони']
+    features: ['Всички 15 урока','50+ тествани prompts','Пълен достъп до общността','Седмични workshops','Предизвикателства','Шаблони и workflows']
   },
   {
     id: 'premium',
     name: 'Premium',
-    desc: 'Pro плюс 1-на-1 AI Coaching, office hours и priority Q&A.',
+    desc: 'Pro + лична подкрепа от екипа ни. За хора, които искат резултати бързо.',
     monthly: 65,
     yearly: 650,
-    features: ['Всичко от Pro','1-на-1 AI Coaching','Office hours','Implementation reviews','Priority Q&A']
+    features: ['Всичко от Pro','1-на-1 AI Coaching','Личен AI roadmap','Преглед на твоите workflows','Приоритет при въпроси']
   }
 ];

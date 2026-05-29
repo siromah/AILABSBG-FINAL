@@ -13,6 +13,7 @@ import {
   Calendar,
   Search,
   User,
+  Users,
   Bookmark,
   LogOut,
   X,
@@ -56,8 +57,8 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
   const navLinks = [
     {id: 'home', label: 'Начало', icon: Home, route: '/'},
     {id: 'lessons', label: 'Академия', icon: GraduationCap, route: '/lessons'},
-    {id: 'community', label: 'Общност', icon: MessageSquare, route: '/community'},
     {id: 'prompts', label: 'Prompts', icon: Sparkles, route: '/prompts'},
+    {id: 'community', label: 'Общност', icon: MessageSquare, route: '/community'},
     {id: 'events', label: 'Събития', icon: Calendar, route: '/events'},
     {id: 'pricing', label: 'Цени', icon: Tag, route: '/pricing'},
   ];
@@ -93,17 +94,17 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
 
           {/* RIGHT: Search + Notif + Theme + Avatar */}
           <div className="flex items-center gap-1 md:gap-2 relative" ref={dropdownRef}>
-            <div className="hidden sm:block">
-              <ThemeToggle />
-            </div>
-
             <button
-              className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--bg-soft)] transition-colors"
+              className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--bg-soft)] transition-colors hidden sm:flex"
               onClick={() => navigate('/prompts')}
               aria-label="Търси в prompt-ите"
             >
               <Search size={17} />
             </button>
+
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
 
             {currentUser && (
               <div className="relative">

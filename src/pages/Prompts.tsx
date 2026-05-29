@@ -65,10 +65,10 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
               <h1 className="display-lg text-[var(--ink-900)] mb-3">
-                AI Prompts
+                Prompt библиотека
               </h1>
               <p className="text-[16px] text-[var(--text-secondary)] max-w-lg leading-relaxed">
-                Подбрани prompts за бизнес, маркетинг, продуктивност и автоматизация. Копирайте и използвайте веднага.
+                Готови prompts, които сме тествали в реална работа. Копирай и ползвай директно — без дълги настройки.
               </p>
             </div>
             <div className="flex items-center gap-4 text-[13px] text-[var(--text-tertiary)] shrink-0">
@@ -87,7 +87,7 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
               value={search}
               onChange={(e: any) => setSearch(e.target.value)}
               placeholder="Търсене в prompts..."
-              className="pl-10 h-11 rounded-full text-[14px] border-[var(--border)] bg-[var(--surface-strong)] focus:shadow-[0_0_0_4px_rgba(91,77,219,0.1)] transition-shadow"
+              className="pl-10 h-11 rounded-full text-[14px] border-[var(--border)] bg-[var(--surface-strong)] focus:shadow-[0_0_0_4px_rgba(196,112,58,0.12)] transition-shadow"
             />
           </div>
 

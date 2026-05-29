@@ -148,7 +148,7 @@ export default function Contact({ showToast }: any) {
                 <h3 className="text-[16px] font-semibold text-[var(--ink-900)] tracking-tight">Имейл директно</h3>
               </div>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                hello@ailabsbg.com
+                hello@craative.bg
               </p>
             </div>
 

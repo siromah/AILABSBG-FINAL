@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowRight,
   Sparkles,
@@ -17,78 +17,58 @@ import {
   Target,
   Clock,
   BookOpen,
-  Star,
-  Quote,
   Wand2,
   Rocket,
   BookMarked,
   Heart,
-  Monitor,
-  Cpu,
-  PenTool,
+  Mail,
+  Lock,
+  Shield,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-import { LESSONS_MODS, PROMPTS, EVENTS_DATA, INIT_USERS } from '../data';
+import { LESSONS_MODS, PROMPTS, EVENTS_DATA } from '../data';
 import FloatingShapes from '../components/FloatingShapes';
-import AnimatedCounter from '../components/AnimatedCounter';
+import PathFinder from '../components/PathFinder';
 
 const LEARNING_PATHS = [
-  { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки', count: '8 урока' },
-  { id: 'productivity', label: 'AI за продуктивност', icon: Zap, desc: 'Автоматизирай рутинните задачи', count: '6 урока' },
-  { id: 'marketing', label: 'AI за маркетинг', icon: Target, desc: 'Кампании, анализи и копи', count: '7 урока' },
+  { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки', count: '5 урока' },
+  { id: 'productivity', label: 'AI за продуктивност', icon: Zap, desc: 'Автоматизирай рутинните задачи', count: '4 урока' },
+  { id: 'marketing', label: 'AI за маркетинг', icon: Target, desc: 'Кампании, анализи и копи', count: '3 урока' },
   { id: 'business', label: 'AI за бизнес', icon: Layers, desc: 'Продажби, процеси и мащабиране', count: '5 урока' },
-  { id: 'content', label: 'AI за съдържание', icon: Sparkles, desc: 'Създавай повече с по-малко усилие', count: '6 урока' },
-  { id: 'freelancing', label: 'AI за freelancing', icon: Clock, desc: 'По-бързи доставки и по-високи rates', count: '4 урока' },
-  { id: 'career', label: 'AI за кариера', icon: GraduationCap, desc: 'Умения, които работодателите търсят', count: '5 урока' },
+  { id: 'content', label: 'AI за съдържание', icon: Sparkles, desc: 'Създавай повече с по-малко усилие', count: '4 урока' },
+  { id: 'automation', label: 'AI автоматизация', icon: Clock, desc: 'Make.com, workflows и agents', count: '3 урока' },
 ];
 
 const FAQS = [
   {
+    q: 'Кой стои зад Craative?',
+    a: 'Craative е създадена от хора, които работят с AI инструменти всеки ден. Не сме университетски преподаватели — тестваме, чупим и намираме какво работи в реални български проекти.',
+  },
+  {
     q: 'Какво точно получавам с членството?',
-    a: 'Достъп до структурирани уроци, библиотека с тествани prompts, практически workshops, седмични предизвикателства и общност от професионалисти, които споделят реален опит.',
+    a: 'Структурирани уроци с конкретни примери, библиотека с prompts, които сме тествали, практически workshops и общност от професионалисти, които споделят реален опит. Без теория за теория.',
   },
   {
     q: 'Подходящо ли е за начинаещи?',
-    a: 'Да. Започваме от основите и изграждаме системно. Не са нужни технически познания — фокусът е върху практическо приложение в работата.',
+    a: 'Да. Започваме от нулата — кой инструмент за какво служи, как да пишеш prompt, който връща смислен отговор. Не са нужни технически познания.',
   },
   {
-    q: 'Мога ли да отменя членството си?',
-    a: 'Разбира се. Няма договори със срок. Можеш да спреш или смениш плана по всяко време.',
+    q: 'Мога ли да спра членството си?',
+    a: 'Разбира се. Няма договори със срок. Можеш да спреш или смениш плана по всяко време. Ако не си доволен в рамките на 7 дни, връщаме парите без въпроси.',
   },
   {
     q: 'Има ли live сесии?',
-    a: 'Да. Провеждаме редовни office hours и workshops, където можеш да задаваш въпроси на живо и да получаваш обратна връзка.',
+    a: 'Да. Провеждаме office hours и workshops, където можеш да задаваш въпроси на живо. Графикът е в календара — виж датите и запази място.',
   },
   {
-    q: 'Колко време отнема обучението?',
-    a: 'Всеки урок е между 12 и 30 минути. Можеш да учиш в свое темпо — повечето членове виждат реални резултати в рамките на първите няколко седмици.',
+    q: 'Колко време отнема?',
+    a: 'Всеки урок е между 12 и 30 минути. Можеш да учиш в свое темпо. Повечето хора започват да виждат разлика в работата си още в първите седмици.',
   },
   {
     q: 'Работи ли за български компании?',
-    a: 'Абсолютно. Всички примери, prompts и workflows са адаптирани за българския пазар и европейския бизнес контекст.',
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    name: 'Мария Георгиева',
-    role: 'Digital Marketing Freelancer',
-    text: 'След първия workshop вече автоматизирах email sequences-а си. Спестявам 8 часа седмично.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face',
-  },
-  {
-    name: 'Стефан Димитров',
-    role: 'E-commerce Founder',
-    text: 'Prompt Library-то само си струва членството. Намерих готови prompts, които веднага работиха за бизнеса ми.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
-  },
-  {
-    name: 'Виктория Николова',
-    role: 'Content Creator',
-    text: 'Най-накрая някой обяснява AI на разбираем език. Уроците са кратки, конкретни и веднага приложими.',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face',
+    a: 'Абсолютно. Всички примери, prompts и workflows са адаптирани за българския пазар и европейския бизнес контекст. Не превеждаме американски курс — правим наш.',
   },
 ];
 
@@ -138,16 +118,26 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
   const { user: currentUser } = useAuth();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [email, setEmail] = useState('');
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
   const featuredPrompts = PROMPTS.slice(0, 3);
   const academyLessons = LESSONS_MODS.reduce((acc, mod) => acc.concat(mod.lessons), [] as any[]).slice(0, 3);
-  const members = INIT_USERS.filter(u => !u.isAdmin).slice(0, 3);
+  const totalLessons = LESSONS_MODS.reduce((acc, mod) => acc + mod.lessons.length, 0);
+  const freeLessonsCount = LESSONS_MODS.flatMap(m => m.lessons).filter((l: any) => l.isFree).length;
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+    localStorage.setItem('craative_lead_email', email);
+    setEmailSubmitted(true);
+    setTimeout(() => setEmail(''), 3000);
+  };
 
   return (
     <div className="min-h-screen text-[var(--text-primary)]">
 
-      {/* HERO — Cinematic with image background */}
-      <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+      {/* HERO */}
+      <section className="relative min-h-[85vh] md:min-h-[100vh] flex items-center overflow-hidden">
         <FloatingShapes />
 
         {/* Background image with overlay */}
@@ -155,18 +145,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           <img
             src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1920&q=80"
             alt=""
-            className="w-full h-full object-cover opacity-[0.15] dark:opacity-[0.08]"
+            className="w-full h-full object-cover opacity-[0.12] dark:opacity-[0.06]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/80 to-[var(--bg)]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-transparent to-transparent" />
         </div>
 
-        {/* Large background text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">
-          <span className="text-[35vw] font-bold text-[var(--ink-900)]/[0.015] leading-none tracking-tighter">AI</span>
-        </div>
-
-        <div className="section-shell relative z-10 w-full pt-24 pb-16">
+        <div className="section-shell relative z-10 w-full pt-20 md:pt-24 pb-12 md:pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left content */}
             <motion.div
@@ -176,77 +161,55 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[13px] font-medium mb-8"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[13px] font-medium mb-6 md:mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
                 <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-                Първата AI Академия в България
+                Практическа AI академия за българи
               </motion.div>
 
-              <motion.div
-                className="hidden md:flex items-center gap-2 mb-6 text-[12px] text-[var(--text-tertiary)]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <Star size={12} className="text-[var(--accent)] fill-[var(--accent)]" />
-                <span>Единствената с 1-на-1 AI Coaching в България</span>
-                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
-                <span>500+ членове</span>
-              </motion.div>
-
-              <h1 className="text-[clamp(56px,10vw,120px)] font-semibold leading-[0.9] tracking-[-0.04em] text-[var(--ink-900)] mb-8">
+              <h1 className="text-[clamp(40px,8vw,90px)] font-semibold leading-[0.95] tracking-[-0.04em] text-[var(--ink-900)] mb-6 md:mb-8">
                 Научи AI<br />
-                <span className="text-[var(--text-tertiary)]">по начина,</span><br />
+                <span className="text-[var(--text-tertiary)]">без да губиш</span><br />
                 <span className="relative inline-block">
-                  <span className="text-[var(--accent)]">по който работи</span>
+                  <span className="text-[var(--accent)]">време в YouTube</span>
                   <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
                     <path d="M2 8C50 2 150 2 298 8" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" opacity="0.3"/>
                   </svg>
                 </span>
               </h1>
 
-              <p className="text-[18px] md:text-[21px] text-[var(--text-secondary)] max-w-xl leading-[1.65] mb-10">
-                Уроци, prompts и live сесии за хора, които искат реални резултати — без шум и без празна теория.
+              <p className="text-[17px] md:text-[20px] text-[var(--text-secondary)] max-w-xl leading-[1.65] mb-8 md:mb-10">
+                Кратки уроци, тествани prompts и хора, които вече прилагат AI в работата си.
+                Без празна теория. Без английски жаргон, който не разбираш.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 mb-12">
+              <div className="flex flex-wrap items-center gap-4 mb-10 md:mb-12">
                 <MagneticButton onClick={() => checkAuthThenGo('register')}>
                   <Button size="lg">Започни безплатно</Button>
                 </MagneticButton>
-                <MagneticButton onClick={() => setPage('prompts')}>
-                  <Button variant="ghost" size="lg">Виж prompt-ите <ArrowRight size={16} /></Button>
+                <MagneticButton onClick={() => setPage('lessons')}>
+                  <Button variant="ghost" size="lg">Виж първи урок <ArrowRight size={16} /></Button>
                 </MagneticButton>
               </div>
 
-              {/* Member avatars stack */}
-              <div className="flex items-center gap-4">
-                <div className="flex -space-x-3">
-                  {members.map((m, i) => (
-                    <motion.div
-                      key={m.id}
-                      className="w-10 h-10 rounded-full border-2 border-[var(--bg)] flex items-center justify-center text-[12px] font-semibold overflow-hidden"
-                      style={{ background: m.color, color: m.tc || '#1c1917' }}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.8 + i * 0.1, duration: 0.4 }}
-                    >
-                      {m.initials}
-                    </motion.div>
-                  ))}
-                  <div className="w-10 h-10 rounded-full border-2 border-[var(--bg)] bg-[var(--bg-soft)] flex items-center justify-center text-[11px] text-[var(--text-tertiary)] font-medium">
-                    +40
-                  </div>
-                </div>
-                <span className="text-[13px] text-[var(--text-secondary)]">
-                  Присъединиха се този месец
+              {/* Trust micro-bar */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-[var(--text-tertiary)]">
+                <span className="flex items-center gap-1.5">
+                  <Check size={13} className="text-[var(--accent)]" /> Без кредитна карта
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check size={13} className="text-[var(--accent)]" /> {freeLessonsCount} безплатни урока
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check size={13} className="text-[var(--accent)]" /> 7 дни гаранция
                 </span>
               </div>
             </motion.div>
 
-            {/* Right — Floating cards composition */}
+            {/* Right — Platform preview composition */}
             <motion.div
               className="lg:col-span-5 relative hidden lg:block"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -256,7 +219,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               <div className="relative w-full aspect-[4/5] max-w-[420px] ml-auto">
                 {/* Main image card */}
                 <motion.div
-                  className="absolute top-[5%] right-[5%] w-[75%] h-[55%] rounded-[24px] overflow-hidden shadow-2xl"
+                  className="absolute top-[5%] right-[5%] w-[75%] h-[55%] rounded-[24px] overflow-hidden shadow-2xl border border-[var(--border)]"
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                 >
@@ -281,38 +244,38 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   />
                 </motion.div>
 
-                {/* Floating stat card */}
+                {/* Lesson card */}
                 <motion.div
-                  className="absolute top-[45%] left-[5%] glass-card rounded-2xl p-4 flex items-center gap-3 shadow-lg"
+                  className="absolute top-[45%] left-[5%] glass-card rounded-2xl p-4 flex items-center gap-3 shadow-lg border border-[var(--border)]"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                 >
                   <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
-                    <Sparkles size={18} />
+                    <Play size={18} fill="currentColor" />
                   </div>
                   <div>
-                    <div className="text-[13px] font-semibold text-[var(--ink-900)]">AI Workflow</div>
-                    <div className="text-[11px] text-[var(--text-tertiary)]">Активен сега</div>
+                    <div className="text-[13px] font-semibold text-[var(--ink-900)]">Въведение в AI</div>
+                    <div className="text-[11px] text-[var(--text-tertiary)]">12 мин • Безплатно</div>
                   </div>
                 </motion.div>
 
-                {/* Progress card */}
+                {/* Prompt card */}
                 <motion.div
-                  className="absolute bottom-[5%] right-[10%] glass-card rounded-2xl p-4 shadow-lg"
+                  className="absolute bottom-[5%] right-[10%] glass-card rounded-2xl p-4 shadow-lg border border-[var(--border)]"
                   animate={{ y: [0, 8, 0] }}
                   transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-8 h-8 rounded-lg bg-[var(--emerald-light)] flex items-center justify-center text-[var(--emerald)]">
-                      <Check size={16} />
+                      <Zap size={16} />
                     </div>
-                    <span className="text-[13px] font-semibold text-[var(--ink-900)]">+25% продуктивност</span>
+                    <span className="text-[13px] font-semibold text-[var(--ink-900)]">Готов prompt</span>
                   </div>
                   <div className="w-32 h-1.5 bg-[var(--bg-soft)] rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-[var(--emerald)] rounded-full"
                       initial={{ width: 0 }}
-                      animate={{ width: '75%' }}
+                      animate={{ width: '100%' }}
                       transition={{ duration: 1.5, delay: 1 }}
                     />
                   </div>
@@ -324,12 +287,12 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <span className="text-[11px] text-[var(--text-tertiary)] tracking-wider uppercase">Scroll</span>
-          <div className="w-[1px] h-8 bg-gradient-to-b from-[var(--text-tertiary)] to-transparent" />
+          <div className="w-[1px] h-6 md:h-8 bg-gradient-to-b from-[var(--text-tertiary)] to-transparent" />
         </motion.div>
       </section>
 
@@ -345,34 +308,31 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
-      {/* STATS BAR */}
-      <section className="section-shell py-16 md:py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+      {/* HONEST VALUE PROPOSITION — What makes us different */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {[
-            { value: 40, suffix: '+', label: 'структурирани урока' },
-            { value: 120, suffix: '+', label: 'тествани prompts' },
-            { value: 15, suffix: '+', label: 'workshop-а месечно' },
-            { value: 500, suffix: '+', label: 'члена в общността' },
-          ].map((stat, i) => (
+            { title: 'За българския пазар', desc: 'Примерите, prompts и workflows са адаптирани за работа тук — не преведени от чужд курс.' },
+            { title: 'Кратко и практично', desc: 'Уроците са 12–30 минути. Без filler. Вземаш и прилагаш още днес.' },
+            { title: 'Общност, не аудитория', desc: 'Питаш, споделяш, получаваш обратна връзка. Не си сам с tutorial-а.' },
+          ].map((item, i) => (
             <motion.div
               key={i}
-              className="text-center"
+              className="text-left"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
-              <div className="text-[clamp(36px,5vw,56px)] font-semibold text-[var(--ink-900)] tracking-tight">
-                <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="text-[14px] text-[var(--text-secondary)] mt-1">{stat.label}</div>
+              <div className="text-[15px] font-semibold text-[var(--ink-900)] mb-2">{item.title}</div>
+              <div className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{item.desc}</div>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* FREE HOOK — What you get for free */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <motion.div
           className="rounded-[24px] border border-[var(--border)] bg-[var(--bg-soft)] p-8 md:p-12 lg:p-16 overflow-hidden relative"
           initial={{ opacity: 0, y: 30 }}
@@ -380,18 +340,18 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* Decorative */}
           <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[var(--accent)]/5 blur-[80px] pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div>
               <Badge variant="accent" className="mb-4 text-[11px] tracking-wide">Free Forever</Badge>
               <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-4">
-                Започни безплатно.<br />
-                <span className="text-[var(--accent)]">Остани заради резултатите.</span>
+                Пробвай безплатно.<br />
+                <span className="text-[var(--accent)]">Реши после дали ти пасва.</span>
               </h2>
               <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
                 Не е нужна кредитна карта. Получаваш достъп до безплатни уроци, prompts и общността веднага.
+                Ако харесаш — ъпгрейдваш. Ако не — поне си спестил време в търсене.
               </p>
               <MagneticButton onClick={() => checkAuthThenGo('register')}>
                 <Button size="lg">Създай безплатен профил</Button>
@@ -400,10 +360,10 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { icon: BookOpen, title: '3 безплатни урока', desc: 'Пълни уроци от академията без ограничения.' },
-                { icon: Zap, title: '10+ готови prompts', desc: 'Тествани prompts за email, social media и продуктивност.' },
-                { icon: Users, title: 'Community preview', desc: 'Виж какво споделят другите членове.' },
-                { icon: Calendar, title: 'Workshop preview', desc: 'Гледай записи от избрани събития.' },
+                { icon: BookOpen, title: `${freeLessonsCount} безплатни урока`, desc: 'Пълни уроци от академията — без ограничения във времето.' },
+                { icon: Zap, title: '10+ готови prompts', desc: 'Тествани prompts за email, social media и продуктивност. Копирай и ползвай.' },
+                { icon: Users, title: 'Community preview', desc: 'Виж какво споделят другите членове. Питай и ти.' },
+                { icon: Calendar, title: 'Workshop preview', desc: 'Гледай записи от избрани събития, за да усетиш атмосферата.' },
               ].map((item, idx) => (
                 <motion.div
                   key={item.title}
@@ -424,19 +384,19 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="section-shell pb-24 md:pb-32">
-        <div className="text-center mb-16">
+      <section className="section-shell pb-20 md:pb-28">
+        <div className="text-center mb-14 md:mb-16">
           <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Как работи</span>
           <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
-            Три стъпки до резултати
+            От нулата до резултат
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           {[
-            { num: '01', icon: BookMarked, title: 'Научи', desc: 'Гледай кратки, структурирани уроци с реални примери. Без filler content.' },
-            { num: '02', icon: Wand2, title: 'Приложи', desc: 'Използвай готови prompts и templates директно в работата си. Веднага.' },
-            { num: '03', icon: Rocket, title: 'Автоматизирай', desc: 'Изгради workflows, които работят за теб. Печели време всеки ден.' },
+            { num: '01', icon: BookMarked, title: 'Научи', desc: 'Гледай кратки уроци с реални примери. Без filler content, без 2 часа теория.' },
+            { num: '02', icon: Wand2, title: 'Приложи', desc: 'Вземи готов prompt или workflow и го използвай директно в работата си. Днес.' },
+            { num: '03', icon: Rocket, title: 'Автоматизирай', desc: 'Свържи инструментите в система, която работи за теб, докато ти правиш други неща.' },
           ].map((step, i) => (
             <motion.div
               key={step.num}
@@ -463,8 +423,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
-      {/* FEATURED LESSONS — Cards with real images */}
-      <section className="section-shell pb-24 md:pb-32">
+      {/* FEATURED LESSONS */}
+      <section className="section-shell pb-20 md:pb-28">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
             <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Академия</span>
@@ -495,7 +455,6 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-                {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.div
                     className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[var(--accent)] shadow-lg"
@@ -505,7 +464,6 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     <Play size={24} fill="currentColor" className="ml-1" />
                   </motion.div>
                 </div>
-                {/* Bottom info */}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <div className="flex items-center gap-2 text-white/90 text-[13px]">
                     <Clock size={13} /> {lesson.dur}
@@ -513,7 +471,6 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     <span>{lesson.isFree ? 'Безплатно' : 'Pro'}</span>
                   </div>
                 </div>
-                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-[var(--accent)]/0 group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
               </div>
               <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-1.5 group-hover:text-[var(--accent)] transition-colors">
@@ -528,7 +485,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* LEARNING PATHS */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
             <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Пътеки</span>
@@ -591,81 +548,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="section-shell pb-24 md:pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Отзиви</span>
-            <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mt-4 mb-6">
-              Какво казват членовете
-            </h2>
-            <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
-              Реални хора, реални резултати. Без платени отзиви — само споделен опит от общността.
-            </p>
-
-            <div className="flex gap-3">
-              {TESTIMONIALS.map((t, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveTestimonial(i)}
-                  className={`relative w-14 h-14 rounded-full overflow-hidden transition-all duration-300 ${
-                    activeTestimonial === i
-                      ? 'ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-[var(--bg)] scale-110'
-                      : 'opacity-50 hover:opacity-80 scale-100'
-                  }`}
-                >
-                  <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTestimonial}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="relative p-8 md:p-10 rounded-[24px] border border-[var(--border)] bg-[var(--bg-soft)]"
-              >
-                <Quote size={40} className="text-[var(--accent)]/20 mb-4" />
-                <p className="text-[20px] md:text-[22px] text-[var(--ink-900)] leading-[1.5] mb-8 font-medium">
-                  "{TESTIMONIALS[activeTestimonial].text}"
-                </p>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={TESTIMONIALS[activeTestimonial].image}
-                    alt={TESTIMONIALS[activeTestimonial].name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="text-[16px] font-semibold text-[var(--ink-900)]">{TESTIMONIALS[activeTestimonial].name}</div>
-                    <div className="text-[14px] text-[var(--text-secondary)]">{TESTIMONIALS[activeTestimonial].role}</div>
-                  </div>
-                </div>
-                <div className="absolute top-8 right-8 flex gap-0.5">
-                  {[1,2,3,4,5].map(s => <Star key={s} size={14} className="text-[var(--accent)] fill-[var(--accent)]" />)}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </section>
+      {/* PATH FINDER — Creative Touch */}
+      <PathFinder setPage={setPage} />
 
       {/* PROMPTS */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
             <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Библиотека</span>
@@ -722,7 +609,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* EVENTS */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <div>
             <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Събития</span>
@@ -747,7 +634,6 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               onClick={() => setPage('events')}
             >
               <div className="relative h-full rounded-[20px] border border-[var(--border)] bg-[var(--bg)] overflow-hidden flex flex-col">
-                {/* Image header */}
                 <div className="relative h-40 overflow-hidden">
                   <img
                     src={EVENT_IMAGE}
@@ -781,14 +667,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* COMMUNITY */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="rounded-[24px] border border-[var(--border)] overflow-hidden relative">
-          {/* Background image */}
           <div className="absolute inset-0">
             <img
               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80"
               alt="Community"
-              className="w-full h-full object-cover opacity-[0.08] dark:opacity-[0.05]"
+              className="w-full h-full object-cover opacity-[0.06] dark:opacity-[0.04]"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/95 to-[var(--bg)]/80" />
           </div>
@@ -805,7 +690,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 Не си сам в това
               </h2>
               <p className="text-[17px] text-[var(--text-secondary)] leading-[1.7] mb-8">
-                Присъедини се към хора, които вече прилагат AI в работата си. 
+                Присъедини се към хора, които вече прилагат AI в работата си.
                 Споделяй опит, задавай въпроси и учи заедно с други професионалисти.
               </p>
               <Button onClick={() => setPage('community')}>Влез в общността <ArrowRight size={16} /></Button>
@@ -837,7 +722,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* 1-ON-1 COACHING */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <motion.div
           className="relative rounded-[24px] overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
@@ -845,12 +730,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* Background image */}
           <div className="absolute inset-0">
             <img
               src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&q=80"
               alt="1-on-1 coaching"
-              className="w-full h-full object-cover opacity-[0.12] dark:opacity-[0.08]"
+              className="w-full h-full object-cover opacity-[0.10] dark:opacity-[0.06]"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/95 to-[var(--bg)]/80" />
           </div>
@@ -864,13 +748,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[12px] font-medium mb-4">
                 <Users size={12} />
-                Единствените в България
+                Персонализирано обучение
               </div>
               <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-4">
                 1-на-1 AI Coaching
               </h2>
               <p className="text-[17px] text-[var(--text-secondary)] leading-[1.7] mb-6">
-                Персонализирани сесии с нашите AI експерти. Ще анализираме твоя workflow, ще ти помогнем да избереш правилните инструменти и ще изградим заедно система, която работи за теб.
+                Персонализирани сесии с нашия екип. Ще анализираме твоя workflow, ще ти помогнем да избереш правилните инструменти и ще изградим заедно система, която работи за теб.
               </p>
               <ul className="flex flex-col gap-3 mb-8">
                 {[
@@ -898,7 +782,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <div className="relative w-full aspect-square max-w-[400px] mx-auto">
-                <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-2xl border border-[var(--border)]">
                   <img
                     src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80"
                     alt="Coaching session"
@@ -907,17 +791,17 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </div>
                 <motion.div
-                  className="absolute -bottom-4 -left-4 glass-card rounded-2xl p-4 shadow-lg"
+                  className="absolute -bottom-4 -left-4 glass-card rounded-2xl p-4 shadow-lg border border-[var(--border)]"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white">
-                      <Star size={18} fill="currentColor" />
+                      <Shield size={18} />
                     </div>
                     <div>
-                      <div className="text-[13px] font-semibold text-[var(--ink-900)]">4.9/5 рейтинг</div>
-                      <div className="text-[11px] text-[var(--text-tertiary)]">от членове с coaching</div>
+                      <div className="text-[13px] font-semibold text-[var(--ink-900)]">7 дни гаранция</div>
+                      <div className="text-[11px] text-[var(--text-tertiary)]">Ако не си доволен, връщаме парите</div>
                     </div>
                   </div>
                 </motion.div>
@@ -927,8 +811,78 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </motion.div>
       </section>
 
+      {/* EMAIL CAPTURE — Lead magnet */}
+      <section className="section-shell pb-20 md:pb-28">
+        <motion.div
+          className="relative rounded-[24px] border border-[var(--border)] bg-[var(--bg-soft)] p-8 md:p-12 lg:p-16 overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-[var(--accent)]/5 blur-[80px] pointer-events-none" />
+          <div className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full bg-[var(--emerald)]/5 blur-[80px] pointer-events-none" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[12px] font-medium mb-4">
+                <Mail size={12} />
+                Безплатен ресурс
+              </div>
+              <h2 className="text-[clamp(24px,3vw,40px)] font-semibold leading-[1.15] tracking-[-0.02em] text-[var(--ink-900)] mb-4">
+                5 prompts, които спестяват<br />
+                <span className="text-[var(--accent)]">5 часа седмично</span>
+              </h2>
+              <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-6">
+                Практически PDF с готови prompts за email, срещи, content и automation. Плюс достъп до първия урок от академията.
+              </p>
+              <div className="flex items-center gap-4 text-[12px] text-[var(--text-tertiary)]">
+                <span className="flex items-center gap-1.5"><Check size={13} className="text-[var(--accent)]" /> Моментален достъп</span>
+                <span className="flex items-center gap-1.5"><Check size={13} className="text-[var(--accent)]" /> Без спам</span>
+              </div>
+            </div>
+
+            <div>
+              {emailSubmitted ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center p-8 rounded-[20px] border border-[var(--border)] bg-[var(--bg)]"
+                >
+                  <div className="w-14 h-14 rounded-full bg-[var(--emerald-light)] flex items-center justify-center text-[var(--emerald)] mx-auto mb-4">
+                    <Check size={24} />
+                  </div>
+                  <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mb-2">Готово!</h3>
+                  <p className="text-[14px] text-[var(--text-secondary)]">Провери email-а си. Изпратихме ти PDF-а и линк към първия урок.</p>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleEmailSubmit} className="space-y-4">
+                  <div className="relative">
+                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
+                    <input
+                      type="email"
+                      placeholder="твоят@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full h-14 pl-12 pr-4 rounded-[16px] border border-[var(--border)] bg-[var(--bg)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" size="lg" className="w-full">
+                    Изпрати ми PDF-а
+                  </Button>
+                  <p className="text-[11px] text-[var(--text-tertiary)] text-center">
+                    Не споделяме email-а ти с никого. Можеш да се отпишеш по всяко време.
+                  </p>
+                </form>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
       {/* PRICING */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="text-center mb-12">
           <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">Цени</span>
           <h2 className="text-[clamp(28px,4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mt-4">
@@ -942,8 +896,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               name: 'Free',
               price: '0 €',
               period: '/месец',
-              desc: 'За разглеждане, newsletter и основни ресурси.',
-              features: ['Достъп до ограничени уроци', 'Ограничена prompt library', 'Community preview', 'Избрани workshop превюта'],
+              desc: 'Разгледай платформата, опитай безплатните уроци и виж дали ти пасва.',
+              features: [`${freeLessonsCount} безплатни урока`, '10+ готови prompts', 'Community preview', 'Записи от избрани събития'],
               cta: 'Започни',
               plan: 'free',
             },
@@ -951,8 +905,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               name: 'Pro',
               price: '25 €',
               period: '/месец',
-              desc: 'Community, workshops, prompt library, templates и challenges.',
-              features: ['Пълна академия', 'Пълна prompt library', 'Пълна общност', 'Workshops', 'Challenges', 'Шаблони'],
+              desc: 'Пълен достъп до академията, prompts и общността. За хора, които ще прилагат.',
+              features: [`Всички ${totalLessons} урока`, '50+ тествани prompts', 'Пълен достъп до общността', 'Седмични workshops', 'Предизвикателства', 'Шаблони и workflows'],
               cta: 'Избери Pro',
               plan: 'pro',
               highlight: true,
@@ -961,8 +915,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               name: 'Premium',
               price: '65 €',
               period: '/месец',
-              desc: 'Pro + 1-на-1 AI Coaching, office hours и priority support.',
-              features: ['Всичко от Pro', '1-на-1 AI Coaching', 'Office hours', 'Implementation reviews', 'Priority Q&A'],
+              desc: 'Pro + лична подкрепа от екипа ни. За хора, които искат резултати бързо.',
+              features: ['Всичко от Pro', '1-на-1 AI Coaching', 'Личен AI roadmap', 'Преглед на твоите workflows', 'Приоритет при въпроси'],
               cta: 'Избери Premium',
               plan: 'premium',
             },
@@ -1008,10 +962,16 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             </motion.div>
           ))}
         </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-[12px] text-[var(--text-tertiary)]">
+          <span className="flex items-center gap-1.5"><Lock size={13} /> Сигурно плащане</span>
+          <span className="flex items-center gap-1.5"><Shield size={13} /> 7 дни гаранция</span>
+          <span className="flex items-center gap-1.5"><Check size={13} /> Без договор</span>
+        </div>
       </section>
 
       {/* FAQ */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)]">FAQ</span>
@@ -1065,7 +1025,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* FINAL CTA */}
-      <section className="section-shell pb-24 md:pb-32">
+      <section className="section-shell pb-20 md:pb-28">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1073,12 +1033,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           transition={{ duration: 0.7 }}
         >
           <div className="relative rounded-[24px] overflow-hidden">
-            {/* Background image */}
             <div className="absolute inset-0">
               <img
                 src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80"
                 alt=""
-                className="w-full h-full object-cover opacity-[0.15] dark:opacity-[0.1]"
+                className="w-full h-full object-cover opacity-[0.12] dark:opacity-[0.08]"
               />
               <div className="absolute inset-0 bg-[var(--ink-900)]" />
             </div>
@@ -1088,7 +1047,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
               <div className="max-w-2xl">
                 <motion.h2
-                  className="text-[clamp(40px,6vw,64px)] font-semibold mb-6 tracking-[-0.03em] leading-[1.05] text-[var(--bg)]"
+                  className="text-[clamp(36px,5vw,60px)] font-semibold mb-6 tracking-[-0.03em] leading-[1.05] text-[var(--bg)]"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}

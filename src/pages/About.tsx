@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Target, Users, Zap, Briefcase, ArrowRight, BookOpen, MapPin, Clock } from 'lucide-react';
+import { Target, Users, Zap, Briefcase, ArrowRight, BookOpen, MapPin, Clock, Linkedin, Mail } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { BackgroundMedia } from '../components/BackgroundMedia';
@@ -22,13 +22,13 @@ export default function About({ openModal }: any) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge variant="accent" className="mb-5 rounded-full">Нашата мисия</Badge>
+              <Badge variant="accent" className="mb-5 rounded-full">За нас</Badge>
               <h1 className="display-lg text-white mb-5">
-                AI грамотност за<br />
-                <span className="text-white/90">реална Европа.</span>
+                AI умения за<br />
+                <span className="text-white/90">реална работа.</span>
               </h1>
               <p className="text-[17px] text-white/70 max-w-xl leading-relaxed">
-                Помагаме на професионалисти и малки екипи да усвоят AI умения, които водят до реални резултати — по-бързи workflows, по-добри решения, повече време за важното.
+                Помагаме на професионалисти и малки екипи да усвоят AI инструментите, които вече променят работата. По-бързи процеси, по-добри решения, повече време за важното.
               </p>
             </motion.div>
           </div>
@@ -62,6 +62,69 @@ export default function About({ openModal }: any) {
             </div>
           </div>
         </motion.div>
+      </section>
+
+      <div className="section-shell">
+        <div className="soft-divider" />
+      </div>
+
+      {/* FOUNDER */}
+      <section className="section-shell py-14 md:py-20">
+        <div className="mb-10">
+          <span className="label-caps mb-3 block">Екип</span>
+          <h2 className="display-md text-[var(--ink-900)] mb-3">Кой стои зад Craative?</h2>
+          <p className="text-[16px] text-[var(--text-secondary)] max-w-lg">Реални хора с реален опит. Без корпоративни титли — само практически резултати.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div initial={{opacity:0, y:16}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration: 0.5}}>
+            <div className="premium-card p-6 md:p-8 h-full">
+              <div className="flex items-start gap-5">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center text-white text-[20px] font-semibold shrink-0">
+                  ИН
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[18px] font-semibold text-[var(--ink-900)] tracking-tight">Иван Николов</h3>
+                  <p className="text-[13px] text-[var(--text-secondary)] mb-3">Основател</p>
+                  <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4">
+                    Работи с AI инструменти от първите версии на ChatGPT. Автоматизира процеси за български и чуждестранни клиенти. Вярва, че AI не замества хората — дава им време за по-интересна работа.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <a href="mailto:hello@craative.bg" className="flex items-center gap-1.5 text-[12px] text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                      <Mail size={14} /> hello@craative.bg
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{opacity:0, y:16}} whileInView={{opacity:1, y:0}} viewport={{once:true}} transition={{duration: 0.5, delay: 0.1}}>
+            <div className="premium-card p-6 md:p-8 h-full">
+              <div className="flex items-start gap-5">
+                <div className="w-16 h-16 rounded-2xl bg-[var(--bg-soft)] border border-[var(--border)] flex items-center justify-center text-[var(--text-tertiary)] text-[20px] font-semibold shrink-0">
+                  ЕК
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[18px] font-semibold text-[var(--ink-900)] tracking-tight">Екипът на Craative</h3>
+                  <p className="text-[13px] text-[var(--text-secondary)] mb-3">Преподаватели и модератори</p>
+                  <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4">
+                    Малък, но фокусиран екип от хора, които всеки ден използват AI в реална работа. Не преподаваме това, което сме прочели — преподаваме това, което сме пробвали.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[12px] text-[var(--text-tertiary)]">ChatGPT</span>
+                    <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                    <span className="text-[12px] text-[var(--text-tertiary)]">Claude</span>
+                    <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                    <span className="text-[12px] text-[var(--text-tertiary)]">Make.com</span>
+                    <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                    <span className="text-[12px] text-[var(--text-tertiary)]">Midjourney</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       <div className="section-shell">
@@ -160,6 +223,15 @@ export default function About({ openModal }: any) {
             <div className="space-y-4 text-[15px] text-[var(--text-secondary)] leading-relaxed">
               <p>Craative е създадена с ясна цел: да намали разстоянието между обещанията на AI индустрията и реалните умения, които професионалистите в България и ЕС могат да приложат в работата си.</p>
               <p>Вярваме, че AI не е заместител на човешкото мислене, а инструмент, който увеличава способността ни да създаваме, решаваме и растем.</p>
+              <div className="pt-2">
+                <div className="flex items-center gap-4 text-[12px] text-[var(--text-tertiary)]">
+                  <span>Основана: 2024</span>
+                  <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                  <span>База: София, България</span>
+                  <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+                  <span>Език: Български</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

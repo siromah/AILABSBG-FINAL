@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Check, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Check, ArrowRight, Shield, Lock, X, HelpCircle, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 
@@ -50,8 +50,40 @@ const PLANS = [
   },
 ];
 
+const COMPARISON_FEATURES = [
+  { name: 'Уроци', free: '3 безплатни', pro: 'Всички 15', premium: 'Всички 15' },
+  { name: 'Prompts', free: '10+', pro: '50+', premium: '50+' },
+  { name: 'Community', free: 'Preview', pro: 'Пълен достъп', premium: 'Пълен достъп' },
+  { name: 'Workshops', free: 'Превюта', pro: 'Всички', premium: 'Всички' },
+  { name: 'Challenges', free: false, pro: true, premium: true },
+  { name: 'Шаблони', free: false, pro: true, premium: true },
+  { name: '1-на-1 Coaching', free: false, pro: false, premium: true },
+  { name: 'Office Hours', free: false, pro: false, premium: true },
+  { name: 'Priority Support', free: false, pro: false, premium: true },
+];
+
+const PRICING_FAQS = [
+  {
+    q: 'Има ли скрити такси?',
+    a: 'Не. Цената, която виждаш, е крайната цена. Без setup fees, без такси за поддръжка. Плащаш само за плана, който си избрал.',
+  },
+  {
+    q: 'Мога ли да сменя плана си по всяко време?',
+    a: 'Да. Можеш да ъпгрейдваш или даунгрейдваш плана си по всяко време. При ъпгрейд получаваш незабавен достъп до новите функции.',
+  },
+  {
+    q: 'Как работи 7-дневната гаранция?',
+    a: 'Ако в рамките на 7 дни след плащането решиш, че Craative не е за теб, пишеш ни на hello@craative.bg и връщаме парите без въпроси.',
+  },
+  {
+    q: 'Приемате ли български карти?',
+    a: 'Да. Работим със Stripe и приемаме всички основни карти (Visa, Mastercard, Amex), както и Revolut, Wise и други дигитални портфейли.',
+  },
+];
+
 export default function Pricing({ currentUser, openModal, showToast }: any) {
   const [yearly, setYearly] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const handleCta = (planId: string) => {
     if (!currentUser) {
@@ -80,12 +112,12 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
             <div>
               <span className="label-caps mb-3 block">Цени</span>
               <h1 className="display-lg text-[var(--ink-900)]">
-                Ясни планове, без изненади
+                Просто и честно
               </h1>
             </div>
             <div>
               <p className="text-[16px] text-[var(--text-secondary)] leading-relaxed mb-4">
-                Изберете план, който пасва на вашия workflow. Всички цени са в евро. Без скрити такси.
+                Избери план, който пасва на твоя ритъм. Всички цени са в евро. Без скрити такси, без договори.
               </p>
 
               <div className="inline-flex items-center gap-1 bg-[var(--surface-strong)] border border-[var(--border)] rounded-full p-1 relative">
@@ -108,13 +140,31 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
                   Годишно
                 </button>
               </div>
-              {yearly && <p className="text-[13px] text-[var(--emerald)] font-medium mt-2">Спестете до 2 месеца с годишно плащане</p>}
+              {yearly && <p className="text-[13px] text-[var(--emerald)] font-medium mt-2">Спести 2 месеца с годишно плащане</p>}
             </div>
           </motion.div>
         </div>
 
+        {/* Trust badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-12"
+        >
+          <span className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
+            <Shield size={15} className="text-[var(--accent)]" /> 7 дни гаранция
+          </span>
+          <span className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
+            <Lock size={15} className="text-[var(--accent)]" /> Сигурно плащане със Stripe
+          </span>
+          <span className="flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
+            <Check size={15} className="text-[var(--accent)]" /> Без договор — отказ по всяко време
+          </span>
+        </motion.div>
+
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
           {PLANS.map((plan, idx) => (
             <motion.div
               key={plan.id}
@@ -197,12 +247,122 @@ export default function Pricing({ currentUser, openModal, showToast }: any) {
           ))}
         </div>
 
+        {/* Comparison Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
+        >
+          <h2 className="text-[22px] md:text-[26px] font-semibold text-[var(--ink-900)] tracking-tight mb-8 text-center">
+            Сравнение на плановете
+          </h2>
+          <div className="rounded-[20px] border border-[var(--border)] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-[13px]">
+                <thead>
+                  <tr className="border-b border-[var(--border)] bg-[var(--bg-soft)]">
+                    <th className="text-left p-4 font-semibold text-[var(--ink-900)]">Функция</th>
+                    <th className="text-center p-4 font-semibold text-[var(--text-secondary)] w-[120px]">Free</th>
+                    <th className="text-center p-4 font-semibold text-[var(--accent)] w-[120px]">Pro</th>
+                    <th className="text-center p-4 font-semibold text-[var(--text-secondary)] w-[120px]">Premium</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARISON_FEATURES.map((feature, i) => (
+                    <tr key={feature.name} className="border-b border-[var(--border)] last:border-0">
+                      <td className="p-4 text-[var(--text-primary)] font-medium">{feature.name}</td>
+                      <td className="p-4 text-center">
+                        {feature.free === true ? (
+                          <Check size={16} className="mx-auto text-[var(--emerald)]" />
+                        ) : feature.free === false ? (
+                          <X size={16} className="mx-auto text-[var(--text-tertiary)]" />
+                        ) : (
+                          <span className="text-[var(--text-secondary)]">{feature.free}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center bg-[var(--accent-light)]/10">
+                        {feature.pro === true ? (
+                          <Check size={16} className="mx-auto text-[var(--accent)]" />
+                        ) : feature.pro === false ? (
+                          <X size={16} className="mx-auto text-[var(--text-tertiary)]" />
+                        ) : (
+                          <span className="text-[var(--accent)] font-medium">{feature.pro}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        {feature.premium === true ? (
+                          <Check size={16} className="mx-auto text-[var(--emerald)]" />
+                        ) : feature.premium === false ? (
+                          <X size={16} className="mx-auto text-[var(--text-tertiary)]" />
+                        ) : (
+                          <span className="text-[var(--text-secondary)]">{feature.premium}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Pricing FAQ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mx-auto mb-16"
+        >
+          <h2 className="text-[22px] md:text-[26px] font-semibold text-[var(--ink-900)] tracking-tight mb-8 text-center">
+            Въпроси за цените
+          </h2>
+          <div className="flex flex-col gap-3">
+            {PRICING_FAQS.map((faq, idx) => (
+              <div key={idx} className="rounded-[16px] border border-[var(--border)] bg-[var(--bg)] overflow-hidden">
+                <button
+                  className="w-full text-left p-5 flex items-center justify-between gap-4"
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                >
+                  <span className="text-[15px] font-semibold text-[var(--ink-900)] flex items-center gap-2">
+                    <HelpCircle size={16} className="text-[var(--accent)] shrink-0" />
+                    {faq.q}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: openFaq === idx ? 90 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronRight size={18} className="text-[var(--text-tertiary)] shrink-0" />
+                  </motion.div>
+                </button>
+                <AnimatePresence initial={false}>
+                  {openFaq === idx && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-5 text-[14px] text-[var(--text-secondary)] leading-relaxed">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Footer note */}
-        <div className="mt-12 text-center">
+        <div className="text-center">
           <p className="text-[14px] text-[var(--text-tertiary)]">
-            Нуждаете се от персонализиран план?{' '}
+            Нуждаеш се от персонализиран план?{' '}
             <button onClick={() => openModal('contact')} className="text-[var(--accent)] font-medium hover:underline">
-              Пишете ни
+              Пиши ни
             </button>
           </p>
         </div>

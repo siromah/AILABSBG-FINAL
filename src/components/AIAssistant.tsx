@@ -5,11 +5,11 @@ import { Sparkles, X, Trash2, Send } from 'lucide-react';
 
 const SUGGESTED_QUESTIONS = [
   "С какво да започна?",
-  "Как работи Академията?",
-  "Как да използвам Prompt Library?",
-  "Какво има в Общността?",
-  "Кой урок е подходящ за начинаещи?",
-  "Как AI може да помогне на бизнеса ми?"
+  "Кои уроци са безплатни?",
+  "Как да пиша по-добри prompts?",
+  "Какво има в общността?",
+  "Кой урок е за начинаещи?",
+  "Как AI може да ми спести време?"
 ];
 
 export default function AIAssistant({ currentPage, setPage }: { currentPage?: string, setPage?: (page: string) => void }) {
@@ -127,8 +127,8 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
                   <Sparkles size={20} />
                 </div>
                 <div>
-                  <div className="font-semibold text-[15px] leading-tight text-[var(--ink-900)]">AI Navigator</div>
-                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">Craative Assistant</div>
+                  <div className="font-semibold text-[15px] leading-tight text-[var(--ink-900)]">AI Помощник</div>
+                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">Craative</div>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -151,9 +151,9 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
                     <div className="w-16 h-16 bg-[var(--accent)]/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--accent)]/10">
                       <Sparkles size={32} className="text-[var(--accent)]" />
                     </div>
-                    <div className="font-semibold text-[18px] text-[var(--ink-900)] mb-2">Здравейте!</div>
+                    <div className="font-semibold text-[18px] text-[var(--ink-900)] mb-2">Здравей!</div>
                     <div className="text-[14px] text-[var(--text-secondary)] px-4 max-w-[280px]">
-                      Аз съм вашият AI асистент в Craative. Как мога да ви помогна днес?
+                      Питай ме за уроците, prompts или как да започнеш с AI. Ще ти дам конкретен отговор — без общи приказки.
                     </div>
                   </div>
 
