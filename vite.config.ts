@@ -4,6 +4,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/craative-bg-ai-/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -11,6 +12,7 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'build',
     target: 'es2022',
     rollupOptions: {
       output: {

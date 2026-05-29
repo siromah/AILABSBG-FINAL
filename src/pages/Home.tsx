@@ -31,6 +31,7 @@ import { Badge } from '../components/ui/Badge';
 import { LESSONS_MODS, PROMPTS, EVENTS_DATA } from '../data';
 import FloatingShapes from '../components/FloatingShapes';
 import PathFinder from '../components/PathFinder';
+import RotatingText from '../components/RotatingText';
 
 const LEARNING_PATHS = [
   { id: 'beginner', label: 'AI за начинаещи', icon: BookOpen, desc: 'Основи, инструменти и първи стъпки', count: '5 урока' },
@@ -172,18 +173,12 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
               <h1 className="text-[clamp(40px,8vw,90px)] font-semibold leading-[0.95] tracking-[-0.04em] text-[var(--ink-900)] mb-6 md:mb-8">
                 Научи AI<br />
-                <span className="text-[var(--text-tertiary)]">без да губиш</span><br />
-                <span className="relative inline-block">
-                  <span className="text-[var(--accent)]">време в YouTube</span>
-                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
-                    <path d="M2 8C50 2 150 2 298 8" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" opacity="0.3"/>
-                  </svg>
-                </span>
+                <span className="text-[var(--text-tertiary)]">практически</span><br />
+                <RotatingText />
               </h1>
 
               <p className="text-[17px] md:text-[20px] text-[var(--text-secondary)] max-w-xl leading-[1.65] mb-8 md:mb-10">
-                Кратки уроци, тествани prompts и хора, които вече прилагат AI в работата си.
-                Без празна теория. Без английски жаргон, който не разбираш.
+                Кратки практически уроци, готови prompts и реални примери — от Meta Ads и бизнес автоматизация до учене, съдържание, дизайн и работа с AI инструменти.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 mb-10 md:mb-12">
