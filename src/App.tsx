@@ -13,7 +13,7 @@ import AIAssistant from './components/AIAssistant';
 import Footer from './components/Footer';
 import CookieBanner from './components/CookieBanner';
 import CommandMenu from './components/CommandMenu';
-import ParticleBackground from './components/ParticleBackground';
+
 import { Spinner } from './components/ui/Spinner';
 import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
 import { Button } from './components/ui/Button';
@@ -69,28 +69,11 @@ function ScrollProgress() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[70] h-[2px] bg-transparent">
       <div
-        className="h-full bg-[var(--accent)] transition-all duration-150 ease-out"
+        className="scroll-progress h-full"
         style={{ width: `${progress}%` }}
       />
     </div>
   );
-}
-
-function SpotlightEffect() {
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest('.spotlight-hover') as HTMLElement | null;
-      if (!target) return;
-      const rect = target.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      target.style.setProperty('--mouse-x', `${x}%`);
-      target.style.setProperty('--mouse-y', `${y}%`);
-    };
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
-  }, []);
-  return null;
 }
 
 function AppContent() {
@@ -190,8 +173,6 @@ function RequireAuth({ children }: { children: ReactNode }) {
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       <ScrollProgress />
-      <SpotlightEffect />
-      {page === 'home' && <ParticleBackground />}
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(prev => prev.filter(x => x.id !== id))} />
       <CookieBanner />
       <CommandMenu />

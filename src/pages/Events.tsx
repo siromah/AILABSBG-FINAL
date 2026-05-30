@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
 import { Clock, Users, Video, CheckCircle2, ArrowRight, CalendarDays, Sparkles } from 'lucide-react';
 import { EVENTS_DATA } from '../data';
@@ -6,6 +7,7 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 
 export default function Events({ currentUser, openModal, showToast }: any) {
+  useDocumentTitle('Събития');
   const [joined, setJoined] = useState<string[]>([]);
 
   useEffect(() => {

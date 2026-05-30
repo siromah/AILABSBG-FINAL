@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, CheckCircle2, Circle, ChevronLeft, ChevronRight, Paperclip, X, Save, Lock, Loader2, Zap, Users, Calendar, ArrowRight, Sparkles, MessageSquare } from 'lucide-react';
 import { LESSONS_MODS } from '../data';
@@ -23,6 +24,7 @@ function getVideoEmbedUrl(url: string): { type: 'youtube' | 'vimeo' | 'mp4' | 'u
 }
 
 export default function Lessons({ db, updateDb, showToast, currentUser, setPage }: any) {
+  useDocumentTitle('Академия');
   const allLessons = LESSONS_MODS.flatMap((m: any) => m.lessons);
   const [currentLesson, setCurrentLesson] = useState(allLessons[0]);
   const [showAttachModal, setShowAttachModal] = useState(false);

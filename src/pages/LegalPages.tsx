@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LegalLayout = ({ title, children }: any) => (
-  <div className="min-h-screen text-[var(--text-primary)] grain py-16 md:py-20">
+  <div className="min-h-screen text-[var(--text-primary)] py-16 md:py-20">
     <div className="section-shell max-w-3xl">
       <div className="premium-card p-8 md:p-12">
         <h1 className="display-lg text-[var(--ink-900)] mb-8">
@@ -23,7 +23,7 @@ export const PrivacyPolicy = () => (
     <p>Последна актуализация: {new Date().toLocaleDateString('bg-BG')}</p>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">1. Кои сме ние?</h3>
-    <p>Този сайт се управлява от Craative и служи като концептуална платформа. Тази политика обяснява как събираме и използваме вашите данни при използване на нашите услуги.</p>
+    <p>Този сайт се управлява от AILABS.BG и служи като концептуална платформа. Тази политика обяснява как събираме и използваме вашите данни при използване на нашите услуги.</p>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">2. Какви данни събираме</h3>
     <ul className="list-disc pl-5 space-y-2">
@@ -72,7 +72,7 @@ export const TermsOfUse = () => (
     <p>Последна актуализация: {new Date().toLocaleDateString('bg-BG')}</p>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">1. Приемане на условията</h3>
-    <p>С достъпването и използването на Craative се съгласявате с тези Условия за ползване. Това е платформа за обучение и професионална общност.</p>
+    <p>С достъпването и използването на AILABS.BG се съгласявате с тези Условия за ползване. Това е платформа за обучение и професионална общност.</p>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">2. Потребителски акаунти и съдържание</h3>
     <ul className="list-disc pl-5 space-y-2">
@@ -81,7 +81,7 @@ export const TermsOfUse = () => (
     </ul>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">3. Интелектуална собственост</h3>
-    <p>Всички учебни материали, текстове, дизайни и графики на платформата са собственост на Craative, освен ако не е посочено друго. Потребителските prompts остават собственост на своите създатели, но се показват в рамките на платформата.</p>
+    <p>Всички учебни материали, текстове, дизайни и графики на платформата са собственост на AILABS.BG, освен ако не е посочено друго. Потребителските prompts остават собственост на своите създатели, но се показват в рамките на платформата.</p>
 
     <h3 className="text-[18px] font-semibold text-[var(--ink-900)] mt-10 mb-3">4. Ограничение на отговорността</h3>
     <p>Платформата и AI интеграциите се предоставят "както са". Не носим отговорност за щети, произтичащи от използването или невъзможността за използване на материалите. AI генерираното съдържание трябва да бъде проверено, тъй като не гарантираме неговата точност.</p>

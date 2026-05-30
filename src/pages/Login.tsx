@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,6 +11,7 @@ function isEmail(value: string) {
 }
 
 export function Login() {
+  useDocumentTitle('Вход');
   const { signIn, isConfigured } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,7 +65,7 @@ export function Login() {
       <div className="w-full max-w-[440px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm rounded-3xl p-8 md:p-10">
         <div className="text-center mb-10">
           <h1 className="text-[30px] font-semibold text-[var(--ink-900)] tracking-tight mb-2">Отново си тук</h1>
-          <p className="text-[15px] text-[var(--text-secondary)]">Влез, за да продължиш към Craative.</p>
+          <p className="text-[15px] text-[var(--text-secondary)]">Влез, за да продължиш към AILABS.BG.</p>
         </div>
 
         {!isConfigured && (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { EVENTS_DATA, PROMPTS } from '../data';
 import { Button } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react';
 
 export default function Admin({ db, updateDb, showToast }: any) {
+  useDocumentTitle('Админ');
   const [sec, setSec] = useState('dashboard');
   
   const users = db.users;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
 import { LogOut, BookOpen, LayoutTemplate, Star, Calendar, ChevronRight, Clock, Zap, Check, Users, MessageSquare, Target, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -16,6 +17,7 @@ const GOALS = [
 ];
 
 export function Profile({ db, setPage }: any) {
+  useDocumentTitle('Профил');
   const { user, signOut } = useAuth();
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
 
@@ -26,7 +28,7 @@ export function Profile({ db, setPage }: any) {
   const fullName =
     typeof user?.user_metadata?.full_name === 'string'
       ? user.user_metadata.full_name
-      : 'Craative Member';
+      : 'AILABS.BG Member';
 
   const initials = (fullName[0] || '?').toUpperCase();
 
@@ -61,7 +63,7 @@ export function Profile({ db, setPage }: any) {
   // ONBOARDING for new users
   if (isNewUser) {
     return (
-      <div className="min-h-screen text-[var(--text-primary)] grain">
+      <div className="min-h-screen text-[var(--text-primary)]">
         <div className="section-shell py-10 md:py-14">
 
           {/* Welcome Header */}
@@ -244,7 +246,7 @@ export function Profile({ db, setPage }: any) {
 
   // REGULAR DASHBOARD for users with progress
   return (
-    <div className="min-h-screen text-[var(--text-primary)] grain">
+    <div className="min-h-screen text-[var(--text-primary)]">
       <div className="section-shell py-10 md:py-14">
 
         {/* Profile Header */}
@@ -271,19 +273,19 @@ export function Profile({ db, setPage }: any) {
 
         {/* Quick Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <div className="luxury-card spotlight-hover p-4 text-center">
+          <div className="luxury-card p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{progressPct}%</div>
             <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Прогрес</div>
           </div>
-          <div className="luxury-card spotlight-hover p-4 text-center">
+          <div className="luxury-card p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{doneCount}</div>
             <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Уроци</div>
           </div>
-          <div className="luxury-card spotlight-hover p-4 text-center">
+          <div className="luxury-card p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{savedLen}</div>
             <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Prompts</div>
           </div>
-          <div className="luxury-card spotlight-hover p-4 text-center">
+          <div className="luxury-card p-4 text-center">
             <div className="text-[26px] font-semibold text-[var(--ink-900)]">{totalL - doneCount}</div>
             <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-wider mt-1">Остават</div>
           </div>
@@ -294,7 +296,7 @@ export function Profile({ db, setPage }: any) {
 
           {/* Continue Learning */}
           <div className="lg:col-span-7">
-            <div className="luxury-card spotlight-hover p-6 md:p-8 h-full flex flex-col">
+            <div className="luxury-card p-6 md:p-8 h-full flex flex-col">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2 text-[17px] font-semibold text-[var(--ink-900)]">
                   <BookOpen size={18} className="text-[var(--accent)]" /> Продължи обучението

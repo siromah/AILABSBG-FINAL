@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
 import { Users, Check, ArrowRight, Calendar, Clock, MessageSquare, Target, Zap, BookOpen, Send, Mail, User } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -37,6 +38,7 @@ const TOPICS = [
 ];
 
 export default function Coaching({ showToast }: any) {
+  useDocumentTitle('Coaching');
   const [form, setForm] = useState({ name: '', email: '', company: '', goal: '' });
   const [submitted, setSubmitted] = useState(false);
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion, AnimatePresence } from 'motion/react';
 import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap, Lock, Star, Users } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -21,6 +22,7 @@ function useAutoResize() {
 }
 
 export default function Community({ db, updateDb, currentUser, openModal, showToast, setPage }: any) {
+  useDocumentTitle('Общност');
   const [feedFilter, setFeedFilter] = useState('all');
   const [compExpanded, setCompExpanded] = useState(false);
   const [compText, setCompText] = useState('');

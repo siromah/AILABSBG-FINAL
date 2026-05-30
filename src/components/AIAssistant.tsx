@@ -67,7 +67,7 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
           message: trimmed,
           history: messages,
           currentPage: currentPage || window.location.pathname.replace('/', '') || 'home',
-          siteContext: 'Craative Platform - AI School & Community'
+          siteContext: 'AILABS.BG - AI School & Community'
         })
       });
 
@@ -128,7 +128,7 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
                 </div>
                 <div>
                   <div className="font-semibold text-[15px] leading-tight text-[var(--ink-900)]">AI Помощник</div>
-                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">Craative</div>
+                  <div className="text-[12px] text-[var(--text-tertiary)] font-medium">AILABS.BG</div>
                 </div>
               </div>
               <div className="flex items-center gap-1">

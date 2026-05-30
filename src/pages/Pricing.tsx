@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check, ArrowRight, Shield, Lock, X, HelpCircle, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -73,7 +74,7 @@ const PRICING_FAQS = [
   },
   {
     q: 'Как работи 7-дневната гаранция?',
-    a: 'Ако в рамките на 7 дни след плащането решиш, че Craative не е за теб, пишеш ни на hello@craative.bg и връщаме парите без въпроси.',
+    a: 'Ако в рамките на 7 дни след плащането решиш, че AILABS.BG не е за теб, пишеш ни на hello@ailabs.bg и връщаме парите без въпроси.',
   },
   {
     q: 'Приемате ли български карти?',
@@ -82,6 +83,7 @@ const PRICING_FAQS = [
 ];
 
 export default function Pricing({ currentUser, openModal, showToast }: any) {
+  useDocumentTitle('Цени');
   const [yearly, setYearly] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 

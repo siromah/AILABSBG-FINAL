@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
 import { Target, Users, Zap, Briefcase, ArrowRight, BookOpen, MapPin, Clock, Linkedin, Mail } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -6,6 +7,7 @@ import { Badge } from '../components/ui/Badge';
 import { BackgroundMedia } from '../components/BackgroundMedia';
 
 export default function About({ openModal }: any) {
+  useDocumentTitle('За нас');
   return (
     <div className="min-h-screen text-[var(--text-primary)] grain">
 
@@ -56,7 +58,7 @@ export default function About({ openModal }: any) {
                   Има твърде много шум около AI и твърде малко практически умения. Хората отварят ChatGPT, задават въпрос, получават среден отговор и спират дотам. Пропускат се системните prompts, ясните workflows и дълбокото разбиране на възможностите.
                 </p>
                 <p>
-                  Затова създадохме Craative — място, където проверени практики, структурирани уроци и общност от съмишленици се срещат. Без маркетингов шум, без фалшиви обещания. Само работещи инструменти и хора, които ги използват всеки ден.
+                  Затова създадохме AILABS.BG — място, където проверени практики, структурирани уроци и общност от съмишленици се срещат. Без маркетингов шум, без фалшиви обещания. Само работещи инструменти и хора, които ги използват всеки ден.
                 </p>
               </div>
             </div>
@@ -72,7 +74,7 @@ export default function About({ openModal }: any) {
       <section className="section-shell py-14 md:py-20">
         <div className="mb-10">
           <span className="label-caps mb-3 block">Екип</span>
-          <h2 className="display-md text-[var(--ink-900)] mb-3">Кой стои зад Craative?</h2>
+          <h2 className="display-md text-[var(--ink-900)] mb-3">Кой стои зад AILABS.BG?</h2>
           <p className="text-[16px] text-[var(--text-secondary)] max-w-lg">Реални хора с реален опит. Без корпоративни титли — само практически резултати.</p>
         </div>
 
@@ -90,8 +92,8 @@ export default function About({ openModal }: any) {
                     Работи с AI инструменти от първите версии на ChatGPT. Автоматизира процеси за български и чуждестранни клиенти. Вярва, че AI не замества хората — дава им време за по-интересна работа.
                   </p>
                   <div className="flex items-center gap-3">
-                    <a href="mailto:hello@craative.bg" className="flex items-center gap-1.5 text-[12px] text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
-                      <Mail size={14} /> hello@craative.bg
+                    <a href="mailto:hello@ailabs.bg" className="flex items-center gap-1.5 text-[12px] text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                      <Mail size={14} /> hello@ailabs.bg
                     </a>
                   </div>
                 </div>
@@ -106,7 +108,7 @@ export default function About({ openModal }: any) {
                   ЕК
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-[18px] font-semibold text-[var(--ink-900)] tracking-tight">Екипът на Craative</h3>
+                  <h3 className="text-[18px] font-semibold text-[var(--ink-900)] tracking-tight">Екипът на AILABS.BG</h3>
                   <p className="text-[13px] text-[var(--text-secondary)] mb-3">Преподаватели и модератори</p>
                   <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4">
                     Малък, но фокусиран екип от хора, които всеки ден използват AI в реална работа. Не преподаваме това, което сме прочели — преподаваме това, което сме пробвали.
@@ -135,7 +137,7 @@ export default function About({ openModal }: any) {
       <section className="section-shell py-14 md:py-20">
         <div className="mb-10">
           <span className="label-caps mb-3 block">Аудитория</span>
-          <h2 className="display-md text-[var(--ink-900)] mb-3">За кого е Craative?</h2>
+          <h2 className="display-md text-[var(--ink-900)] mb-3">За кого е AILABS.BG?</h2>
           <p className="text-[16px] text-[var(--text-secondary)] max-w-lg">Създадена за професионалисти, които изграждат реална промяна.</p>
         </div>
 
@@ -221,7 +223,7 @@ export default function About({ openModal }: any) {
           <div className="premium-card p-6 md:p-8 flex flex-col justify-center">
             <h3 className="text-[20px] font-semibold text-[var(--ink-900)] mb-4">За платформата</h3>
             <div className="space-y-4 text-[15px] text-[var(--text-secondary)] leading-relaxed">
-              <p>Craative е създадена с ясна цел: да намали разстоянието между обещанията на AI индустрията и реалните умения, които професионалистите в България и ЕС могат да приложат в работата си.</p>
+              <p>AILABS.BG е създадена с ясна цел: да намали разстоянието между обещанията на AI индустрията и реалните умения, които професионалистите в България и ЕС могат да приложат в работата си.</p>
               <p>Вярваме, че AI не е заместител на човешкото мислене, а инструмент, който увеличава способността ни да създаваме, решаваме и растем.</p>
               <div className="pt-2">
                 <div className="flex items-center gap-4 text-[12px] text-[var(--text-tertiary)]">

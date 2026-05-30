@@ -114,7 +114,7 @@ export default function SystemCheck() {
   };
 
   return (
-    <div className="min-h-screen text-[var(--text-primary)] grain">
+    <div className="min-h-screen text-[var(--text-primary)]">
       <div className="section-shell py-10 md:py-14">
         <div className="mb-10">
           <span className="label-caps mb-3 block">Диагностика</span>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
 import { Mail, Send, User, MessageSquare, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 export default function Contact({ showToast }: any) {
+  useDocumentTitle('Контакт');
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<{name?:string, email?:string, message?:string}>({});
@@ -148,14 +150,14 @@ export default function Contact({ showToast }: any) {
                 <h3 className="text-[16px] font-semibold text-[var(--ink-900)] tracking-tight">Имейл директно</h3>
               </div>
               <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">
-                hello@craative.bg
+                hello@ailabs.bg
               </p>
             </div>
 
             <div className="rounded-3xl overflow-hidden h-40 relative border border-[var(--border)]">
               <div className="absolute inset-0 bg-[var(--accent)]/5" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[28px] font-semibold text-[var(--ink-900)]/10 tracking-tight">Craative</span>
+                <span className="text-[28px] font-semibold text-[var(--ink-900)]/10 tracking-tight">AILABS.BG</span>
               </div>
             </div>
           </div>

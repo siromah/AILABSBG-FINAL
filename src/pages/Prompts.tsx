@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Bookmark, Copy, Lightbulb, Check, ArrowRight, Lock } from 'lucide-react';
 import { PROMPTS } from '../data';
@@ -20,6 +21,7 @@ const CAT_LABELS: Record<string, string> = {
 const CAT_ORDER = ['all', 'marketing', 'business', 'content', 'productivity', 'automation'];
 
 export default function Prompts({ db, updateDb, showToast, currentUser, setPage }: any) {
+  useDocumentTitle('Prompts');
   const [search, setSearch] = useState('');
   const [cat, setCat] = useState('all');
   const [savedOnly, setSavedOnly] = useState(false);
