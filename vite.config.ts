@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist/client',
+    outDir: 'build',
     target: 'es2022',
     rollupOptions: {
       output: {

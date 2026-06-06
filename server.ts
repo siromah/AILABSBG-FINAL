@@ -201,7 +201,7 @@ Site Context: ${siteContext || 'AILABSBG Platform'}
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist/client');
+    const distPath = path.join(process.cwd(), 'build');
     app.use(express.static(distPath));
     app.get('*', (req: Request, res: Response) => {
       if (req.path.startsWith('/api/')) {
