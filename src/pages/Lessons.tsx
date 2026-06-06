@@ -9,6 +9,8 @@ import { ProgressBar } from '../components/ui/ProgressBar';
 import { Input } from '../components/ui/Input';
 import { getUserPlan, canAccessLesson } from '../lib/access';
 import { getXP, addXP, setLessonDone, getLevelFromXP, getLevelName } from '../lib/progress';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 import { XPProgress } from '../components/XPProgress';
 import { LockedOverlay } from '../components/LockedOverlay';
 import { UpgradeCard } from '../components/UpgradeCard';
@@ -81,38 +83,58 @@ export default function Lessons({ db, updateDb, showToast, currentUser, setPage 
   const currentVideo = attachedVideos[currentLesson.id] || '';
   const videoInfo = getVideoEmbedUrl(currentVideo);
 
-  const markLesson = (id: string) => {
-    if (!prog[id]) {
-      const lesson = allLessons.find((l: any) => l.id === id);
-      const xpAmount = lesson?.xp || 25;
+  const { user } = useAuth();
+
+  const markLesson = async (id: string) => {
+    if (!user) { showToast('Влезте, за да записвате прогрес', true); return; }
+    const lesson = allLessons.find((l: any) => l.id === id);
+    const xpAmount = lesson?.xp || 25;
+    const completed = !prog[id];
+
+    const { error } = await supabase.from('lesson_progress').upsert({
+      user_id: user.id,
+      lesson_id: id,
+      completed,
+      xp_earned: completed ? xpAmount : 0,
+      updated_at: new Date().toISOString(),
+    });
+
+    if (error) {
+      showToast(error.message, true);
+      return;
+    }
+
+    if (completed) {
       const newXP = addXP(xpAmount);
       setXp(newXP);
-      const newProg = setLessonDone(id, true);
-      updateDb('lessonProg', newProg);
       setCelebrateId(id);
       setTimeout(() => setCelebrateId(null), 800);
       showToast(`+${xpAmount} XP — Урокът е завършен`);
     } else {
-      const newProg = setLessonDone(id, false);
-      updateDb('lessonProg', newProg);
       showToast('Отбелязан като незавършен');
     }
+    updateDb('lessonProg', { ...prog, [id]: completed });
   };
 
-  const saveAttachedVideo = () => {
-    if (!attachUrl.trim()) return;
-    const existing = JSON.parse(localStorage.getItem('ailabs_attachedVideos') || '{}');
-    existing[currentLesson.id] = attachUrl.trim();
-    localStorage.setItem('ailabs_attachedVideos', JSON.stringify(existing));
+  const saveAttachedVideo = async () => {
+    if (!attachUrl.trim() || !user) return;
+    const { error } = await supabase.from('user_videos').upsert({
+      user_id: user.id,
+      lesson_id: currentLesson.id,
+      video_url: attachUrl.trim(),
+    });
+    if (error) { showToast(error.message, true); return; }
     setAttachUrl('');
     setShowAttachModal(false);
     showToast('Видеото е прикачено');
   };
 
-  const removeAttachedVideo = () => {
-    const existing = JSON.parse(localStorage.getItem('ailabs_attachedVideos') || '{}');
-    delete existing[currentLesson.id];
-    localStorage.setItem('ailabs_attachedVideos', JSON.stringify(existing));
+  const removeAttachedVideo = async () => {
+    if (!user) return;
+    const { error } = await supabase.from('user_videos').delete()
+      .eq('user_id', user.id)
+      .eq('lesson_id', currentLesson.id);
+    if (error) { showToast(error.message, true); return; }
     setShowAttachModal(false);
     showToast('Видеото е премахнато');
   };

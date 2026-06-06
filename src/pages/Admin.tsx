@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { useAuth } from '../contexts/AuthContext';
 import { EVENTS_DATA, PROMPTS } from '../data';
 import { Button } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
@@ -15,33 +16,107 @@ import {
   PinOff
 } from 'lucide-react';
 
-export default function Admin({ db, updateDb, showToast }: any) {
+export default function Admin({ db, showToast, refreshDb }: any) {
   useDocumentTitle('Админ');
+  const { session } = useAuth();
   const [sec, setSec] = useState('dashboard');
-  
-  const users = db.users;
-  const posts = db.posts;
+  const [users, setUsers] = useState<any[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [coachingRequests, setCoachingRequests] = useState<any[]>([]);
 
-  const adminDelUser = (uid: string) => {
-    if (uid === 'admin') { showToast('Не може да се изтрие администраторски акаунт', true); return; }
+  const posts = db.posts || [];
+
+  const apiHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${session?.access_token || ''}`,
+  });
+
+  useEffect(() => {
+    if (sec === 'users') loadUsers();
+    if (sec === 'coaching') loadCoaching();
+  }, [sec]);
+
+  async function loadUsers() {
+    setUsersLoading(true);
+    try {
+      const res = await fetch('/api/admin/users', { headers: apiHeaders() });
+      const data = await res.json();
+      if (res.ok) setUsers(data.users || []);
+      else showToast(data.error || 'Грешка при зареждане', true);
+    } catch {
+      showToast('Грешка при зареждане на потребители', true);
+    } finally {
+      setUsersLoading(false);
+    }
+  }
+
+  async function loadCoaching() {
+    try {
+      const res = await fetch('/api/admin/coaching', { headers: apiHeaders() });
+      const data = await res.json();
+      if (res.ok) setCoachingRequests(data.requests || []);
+    } catch {
+      showToast('Грешка при зареждане', true);
+    }
+  }
+
+  const adminDelUser = async (uid: string) => {
     if (!confirm('Изтриване на този потребител?')) return;
-    updateDb('users', users.filter((u:any) => u.id !== uid));
-    showToast('Потребителят е изтрит');
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'DELETE',
+        headers: apiHeaders(),
+        body: JSON.stringify({ userId: uid }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast('Потребителят е изтрит');
+        loadUsers();
+      } else {
+        showToast(data.error || 'Грешка', true);
+      }
+    } catch {
+      showToast('Грешка при изтриване', true);
+    }
   };
 
-  const deletePost = (pid: string) => {
+  const deletePost = async (pid: string) => {
     if (!confirm('Изтриване на тази публикация?')) return;
-    updateDb('posts', posts.filter((p:any) => p.id !== pid));
-    showToast('Публикацията е изтрита');
+    try {
+      const res = await fetch(`/api/posts/${pid}`, {
+        method: 'DELETE',
+        headers: apiHeaders(),
+      });
+      if (res.ok) {
+        showToast('Публикацията е изтрита');
+        if (refreshDb) await refreshDb();
+      } else {
+        const data = await res.json();
+        showToast(data.error || 'Грешка', true);
+      }
+    } catch {
+      showToast('Грешка при изтриване', true);
+    }
   };
 
-  const togglePin = (pid: string) => {
-    const pIndex = posts.findIndex((x:any) => x.id === pid);
-    if(pIndex !== -1) {
-      const newPosts = [...posts];
-      newPosts[pIndex].pinned = !newPosts[pIndex].pinned;
-      updateDb('posts', newPosts);
-      showToast(newPosts[pIndex].pinned ? 'Закачена' : 'Откачена');
+  const togglePin = async (pid: string) => {
+    const post = posts.find((p: any) => p.id === pid);
+    if (!post) return;
+    try {
+      const res = await fetch(`/api/posts/${pid}`, {
+        method: 'PATCH',
+        headers: apiHeaders(),
+        body: JSON.stringify({ pinned: !post.pinned }),
+      });
+      if (res.ok) {
+        showToast(!post.pinned ? 'Закачена' : 'Откачена');
+        if (refreshDb) await refreshDb();
+      } else {
+        const data = await res.json();
+        showToast(data.error || 'Грешка', true);
+      }
+    } catch {
+      showToast('Грешка', true);
     }
   };
 
@@ -85,26 +160,28 @@ export default function Admin({ db, updateDb, showToast }: any) {
                   <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Потребител</th>
                   <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Имейл</th>
                   <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Роля</th>
-                  <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Присъединил се</th>
+                  <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">План</th>
                   <th className="py-2.5 px-4 text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider text-right">Действия</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border)]">
-                {users.map((u:any) => (
+                {usersLoading ? (
+                  <tr><td colSpan={5} className="py-8 text-center text-[var(--text-secondary)]">Зареждане...</td></tr>
+                ) : users.map((u:any) => (
                   <tr key={u.id} className="hover:bg-[var(--bg-soft)]/50 transition-colors">
                     <td className="py-2.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <Avatar initials={u.initials} size="sm" />
-                        <span className="font-semibold text-[13px] text-[var(--ink-900)]">{u.fname} {u.lname}</span>
+                        <Avatar initials={u.initials || u.full_name?.charAt(0) || '?'} size="sm" />
+                        <span className="font-semibold text-[13px] text-[var(--ink-900)]">{u.full_name || 'Потребител'}</span>
                       </div>
                     </td>
                     <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)]">{u.email}</td>
                     <td className="py-2.5 px-4">
-                      <Badge variant={u.isAdmin ? 'danger' : 'default'} className="px-2 py-0.5 rounded-full text-[10px]">
-                        {u.isAdmin ? 'Админ' : u.role}
+                      <Badge variant={u.role === 'admin' ? 'danger' : 'default'} className="px-2 py-0.5 rounded-full text-[10px]">
+                        {u.role === 'admin' ? 'Админ' : u.role}
                       </Badge>
                     </td>
-                    <td className="py-2.5 px-4 text-[13px] text-[var(--text-tertiary)]">{u.joined}</td>
+                    <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)] capitalize">{u.plan}</td>
                     <td className="py-2.5 px-4 text-right">
                       <Button variant="ghost" size="sm" onClick={() => adminDelUser(u.id)} className="text-[var(--rose)] hover:bg-[var(--rose-light)]/50 h-7 px-2 group">
                         <Trash2 size={14} className="opacity-70 group-hover:opacity-100" />
@@ -136,12 +213,12 @@ export default function Admin({ db, updateDb, showToast }: any) {
               </thead>
               <tbody className="divide-y divide-[var(--border)]">
                 {posts.map((p:any) => {
-                  const a = users.find((u:any) => u.id === p.uid) || {fname:'?',lname:''};
+                  const a = p.profiles || { full_name: '?' };
                   return (
                     <tr key={p.id} className="hover:bg-[var(--bg-soft)]/50 transition-colors">
-                      <td className="py-2.5 px-4 text-[13px] font-semibold text-[var(--ink-900)] whitespace-nowrap">{a.fname} {a.lname}</td>
+                      <td className="py-2.5 px-4 text-[13px] font-semibold text-[var(--ink-900)] whitespace-nowrap">{a.full_name}</td>
                       <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)] max-w-[300px] truncate">{p.text}</td>
-                      <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)]">{p.likes.length}</td>
+                      <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)]">{(p.post_likes || []).length}</td>
                       <td className="py-2.5 px-4 text-[13px] text-[var(--text-secondary)]">{p.pinned ? 'Да' : '-'}</td>
                       <td className="py-2.5 px-4 text-right flex justify-end gap-1.5">
                         <Button variant="ghost" size="sm" onClick={() => togglePin(p.id)} className="h-7 px-2 text-[var(--text-secondary)] hover:text-[var(--ink-900)]">
@@ -194,6 +271,27 @@ export default function Admin({ db, updateDb, showToast }: any) {
         </div>
       </div>
     );
+
+    if (sec === 'coaching') return (
+      <div className="animate-in fade-in duration-300">
+        <h2 className="text-[20px] font-medium tracking-tight text-[var(--ink-900)] mb-6">Coaching заявки ({coachingRequests.length})</h2>
+        <div className="flex flex-col gap-3">
+          {coachingRequests.map((r: any) => (
+            <div key={r.id} className="premium-card p-4">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <div className="font-medium text-[15px] text-[var(--ink-900)]">{r.name}</div>
+                  <div className="text-[12px] text-[var(--text-secondary)]">{r.email}</div>
+                </div>
+                <Badge variant={r.status === 'pending' ? 'warning' : r.status === 'contacted' ? 'info' : 'default'} className="rounded-full text-[10px]">{r.status}</Badge>
+              </div>
+              <div className="text-[13px] text-[var(--text-secondary)] mb-2">{r.message}</div>
+              <div className="text-[12px] text-[var(--text-tertiary)]">Бюджет: {r.budget || 'Не е посочен'}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -210,6 +308,7 @@ export default function Admin({ db, updateDb, showToast }: any) {
                 { id: 'dashboard', label: 'Преглед', icon: LayoutDashboard },
                 { id: 'users', label: 'Потребители', icon: Users },
                 { id: 'posts', label: 'Публикации', icon: MessageSquare },
+                { id: 'coaching', label: 'Coaching', icon: Sparkles },
                 { id: 'events-a', label: 'Събития', icon: Calendar },
                 { id: 'prompts-a', label: 'Библиотека', icon: Sparkles }
               ].map(item => (

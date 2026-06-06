@@ -18,19 +18,15 @@ const GOALS = [
 
 export function Profile({ db, setPage }: any) {
   useDocumentTitle('Профил');
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
 
   const handleLogout = async () => {
     await signOut();
   };
 
-  const fullName =
-    typeof user?.user_metadata?.full_name === 'string'
-      ? user.user_metadata.full_name
-      : 'AILABS.BG Member';
-
-  const initials = (fullName[0] || '?').toUpperCase();
+  const fullName = profile?.full_name || user?.user_metadata?.full_name || 'AILABS.BG Member';
+  const initials = profile?.initials || (fullName[0] || '?').toUpperCase();
 
   const savedLen = (db?.savedPrompts || []).length;
   const prog = db?.lessonProg || {};

@@ -8,7 +8,8 @@ export const PLAN_LABELS: Record<Plan, string> = {
 
 export function getUserPlan(user: any): Plan {
   if (!user) return 'free';
-  const plan = user.plan || user.user_metadata?.plan;
+  // Prefer server-verified profile.plan over client metadata
+  const plan = user.profile?.plan || user.plan || user.user_metadata?.plan;
   if (plan === 'pro' || plan === 'premium') return plan;
   return 'free';
 }

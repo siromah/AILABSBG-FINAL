@@ -15,8 +15,8 @@ import CookieBanner from './components/CookieBanner';
 import CommandMenu from './components/CommandMenu';
 
 import { Spinner } from './components/ui/Spinner';
-import { INIT_USERS, INIT_POSTS, INIT_NOTIFS } from './data';
 import { Button } from './components/ui/Button';
+import { supabase } from './lib/supabase';
 
 const Home = lazy(() => import('./pages/Home'));
 const Community = lazy(() => import('./pages/Community'));
@@ -82,51 +82,109 @@ function AppContent() {
   const page = location.pathname.split('/')[1] || 'home';
   const setPage = (p: string) => navigate(`/${p === 'home' ? '' : p}`);
 
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
-  const nameParts = user?.user_metadata?.full_name?.split(' ') || [];
   const currentUser = user ? {
     id: user.id,
     email: user.email,
-    fname: nameParts[0] || 'Member',
-    lname: nameParts.slice(1).join(' ') || '',
-    initials: (user.user_metadata?.full_name?.[0] || 'A').toUpperCase(),
-    role: 'Member',
-    color: 'var(--blue)',
-    tc: 'var(--bg-soft)',
-    isAdmin: user.user_metadata?.role === 'admin' || user.email === 'admin@ailabsbg.com',
-    plan: user.user_metadata?.plan || 'free'
+    fname: profile?.full_name?.split(' ')[0] || 'Member',
+    lname: profile?.full_name?.split(' ').slice(1).join(' ') || '',
+    initials: profile?.initials || (profile?.full_name?.[0] || 'A').toUpperCase(),
+    role: profile?.role || 'user',
+    color: profile?.color || 'var(--blue)',
+    tc: profile?.tc || 'var(--bg-soft)',
+    isAdmin: profile?.role === 'admin',
+    plan: profile?.plan || 'free',
+    profile,
   } : null;
 
   const [toasts, setToasts] = useState<any[]>([]);
   const [db, setDb] = useState<{users:any[], posts:any[], notifs:any[], lessonProg:any, savedPrompts:any[]}>({
     users: [], posts: [], notifs: [], lessonProg: {}, savedPrompts: []
   });
+  const [dbLoading, setDbLoading] = useState(true);
 
+  // Fetch real data from Supabase
   useEffect(() => {
-    try {
-      const isSeeded = localStorage.getItem('ailabs_seeded');
-      if (!isSeeded) {
-        localStorage.setItem('ailabs_seeded', 'true');
-        localStorage.setItem('ailabs_users', JSON.stringify(INIT_USERS));
-        localStorage.setItem('ailabs_posts', JSON.stringify(INIT_POSTS));
-        localStorage.setItem('ailabs_notifs', JSON.stringify(INIT_NOTIFS));
+    async function loadData() {
+      setDbLoading(true);
+      try {
+        // Fetch posts with author info
+        const { data: postsData } = await supabase
+          .from('posts')
+          .select('*, profiles(full_name, initials, color, tc)')
+          .order('created_at', { ascending: false });
+
+        // Fetch lesson progress for current user
+        let lessonProg = {};
+        let savedPrompts: string[] = [];
+        if (user) {
+          const { data: progData } = await supabase
+            .from('lesson_progress')
+            .select('lesson_id, completed')
+            .eq('user_id', user.id);
+          lessonProg = Object.fromEntries((progData || []).map(p => [p.lesson_id, p.completed]));
+
+          const { data: savedData } = await supabase
+            .from('saved_prompts')
+            .select('prompt_id')
+            .eq('user_id', user.id);
+          savedPrompts = (savedData || []).map(s => s.prompt_id);
+        }
+
+        setDb({
+          users: [], // populated by admin only
+          posts: postsData || [],
+          notifs: [],
+          lessonProg,
+          savedPrompts,
+        });
+      } catch (e) {
+        console.error('Failed to load data:', e);
+      } finally {
+        setDbLoading(false);
       }
-      setDb({
-        users: JSON.parse(localStorage.getItem('ailabs_users') || '[]'),
-        posts: JSON.parse(localStorage.getItem('ailabs_posts') || '[]'),
-        notifs: JSON.parse(localStorage.getItem('ailabs_notifs') || '[]'),
-        lessonProg: JSON.parse(localStorage.getItem('ailabs_lessonProg') || '{}'),
-        savedPrompts: JSON.parse(localStorage.getItem('ailabs_savedPrompts') || '[]'),
-      });
-    } catch (e) {
-      console.error(e);
     }
-  }, []);
+    loadData();
+  }, [user]);
 
   const updateDb = (key: keyof typeof db, value: any) => {
     setDb(prev => ({ ...prev, [key]: value }));
-    localStorage.setItem(`ailabs_${String(key)}`, JSON.stringify(value));
+  };
+
+  const refreshDb = async () => {
+    setDbLoading(true);
+    try {
+      const { data: postsData } = await supabase
+        .from('posts')
+        .select('*, profiles(full_name, initials, color, tc)')
+        .order('created_at', { ascending: false });
+
+      let lessonProg = {};
+      let savedPrompts: string[] = [];
+      if (user) {
+        const { data: progData } = await supabase
+          .from('lesson_progress')
+          .select('lesson_id, completed')
+          .eq('user_id', user.id);
+        lessonProg = Object.fromEntries((progData || []).map(p => [p.lesson_id, p.completed]));
+
+        const { data: savedData } = await supabase
+          .from('saved_prompts')
+          .select('prompt_id')
+          .eq('user_id', user.id);
+        savedPrompts = (savedData || []).map(s => s.prompt_id);
+      }
+
+      setDb(prev => ({
+        ...prev,
+        posts: postsData || [],
+        lessonProg,
+        savedPrompts,
+      }));
+    } finally {
+      setDbLoading(false);
+    }
   };
 
   const showToast = (msg: string, isError = false) => {
@@ -167,7 +225,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
     navigate(`/${path}`, { state: path === 'login' ? { from: location.pathname } : undefined });
   };
 
-  const props = { page, setPage, showToast, checkAuthThenGo, currentUser, setCurrentUser: () => {}, openModal: handleModal, db, updateDb };
+  const props = { page, setPage, showToast, checkAuthThenGo, currentUser, setCurrentUser: () => {}, openModal: handleModal, db, updateDb, refreshDb, dbLoading };
 
   return (
     <div className="flex flex-col min-h-screen">

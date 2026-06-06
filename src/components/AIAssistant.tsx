@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from './ui/Button';
 import { Sparkles, X, Trash2, Send } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const SUGGESTED_QUESTIONS = [
   "С какво да започна?",
@@ -13,6 +14,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export default function AIAssistant({ currentPage, setPage }: { currentPage?: string, setPage?: (page: string) => void }) {
+  const { session } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([]);
   const [inputStr, setInputStr] = useState('');
@@ -60,9 +62,14 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
     setIsLoading(true);
 
     try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const res = await fetch('/api/ai-assistant', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           message: trimmed,
           history: messages,
@@ -73,7 +80,9 @@ export default function AIAssistant({ currentPage, setPage }: { currentPage?: st
 
       const data = await res.json();
 
-      if (!res.ok) {
+      if (res.status === 401) {
+        setMessages([...newMsgs, { role: 'assistant', content: 'Моля, влезте в профила си, за да използвате AI асистента.' }]);
+      } else if (!res.ok) {
         setMessages([...newMsgs, { role: 'assistant', content: data.error || 'Възникна проблем с отговора на AI. Моля, опитайте отново по-късно.' }]);
       } else {
         setMessages([...newMsgs, { role: 'assistant', content: data.answer || 'Няма отговор.' }]);

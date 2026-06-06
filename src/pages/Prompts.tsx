@@ -9,6 +9,8 @@ import { Input } from '../components/ui/Input';
 import { EmptyState } from '../components/ui/EmptyState';
 import { getUserPlan, canAccessPrompt } from '../lib/access';
 import { UpgradeCard } from '../components/UpgradeCard';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 const CAT_LABELS: Record<string, string> = {
   marketing: 'Маркетинг',
@@ -45,16 +47,24 @@ export default function Prompts({ db, updateDb, showToast, currentUser, setPage 
     });
   };
 
-  const toggleSave = (id: string) => {
-    let newSaved;
+  const { user } = useAuth();
+
+  const toggleSave = async (id: string) => {
+    if (!user) { showToast('Влезте, за да запазвате', true); return; }
     if (saved.includes(id)) {
-      newSaved = saved.filter((x: string) => x !== id);
+      const { error } = await supabase.from('saved_prompts').delete()
+        .eq('user_id', user.id)
+        .eq('prompt_id', id);
+      if (error) { showToast(error.message, true); return; }
       showToast('Премахнато');
     } else {
-      newSaved = [...saved, id];
+      const { error } = await supabase.from('saved_prompts').insert({ user_id: user.id, prompt_id: id });
+      if (error) { showToast(error.message, true); return; }
       showToast('Запазено');
     }
-    updateDb('savedPrompts', newSaved);
+    // Refresh saved prompts
+    const { data } = await supabase.from('saved_prompts').select('prompt_id').eq('user_id', user.id);
+    updateDb('savedPrompts', (data || []).map((s: any) => s.prompt_id));
   };
 
   return (

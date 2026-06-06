@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap, Lock, Star, Users } from 'lucide-react';
+import { Home, Lightbulb, GraduationCap, Calendar, Trophy, HelpCircle, Settings, Trash2, Heart, MessageSquare, Bookmark, Send, Zap, Lock, Star } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Avatar } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
@@ -9,6 +9,7 @@ import { Textarea } from '../components/ui/Input';
 import { EVENTS_DATA } from '../data';
 import { getUserPlan } from '../lib/access';
 import { UpgradeCard } from '../components/UpgradeCard';
+import { supabase } from '../lib/supabase';
 
 function useAutoResize() {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -21,7 +22,7 @@ function useAutoResize() {
   return { ref, adjust };
 }
 
-export default function Community({ db, updateDb, currentUser, openModal, showToast, setPage }: any) {
+export default function Community({ db, updateDb, currentUser, openModal, showToast, setPage, refreshDb }: any) {
   useDocumentTitle('Общност');
   const [feedFilter, setFeedFilter] = useState('all');
   const [compExpanded, setCompExpanded] = useState(false);
@@ -35,75 +36,87 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
     composerTextarea.adjust();
   }, [compText]);
 
-  const addNotif = (text: string, icon = 'bell') => {
-    const n = { id: 'n' + Date.now(), text, icon, time: Date.now(), read: false };
-    updateDb('notifs', [n, ...db.notifs].slice(0, 50));
-  };
-
-  const submitPost = () => {
+  const submitPost = async () => {
     if (!compText.trim()) { showToast('Напишете нещо, преди да публикувате', true); return; }
     const nTypeLabel = { win: 'Успех', question: 'Въпрос', workflow: 'Workflow', 'prompt-share': 'Prompt' } as any;
-    const newPost = {
-      id: 'p' + Date.now(),
-      uid: currentUser.id,
+
+    const { error } = await supabase.from('posts').insert({
+      user_id: currentUser.id,
       type: compType,
       text: compText.trim(),
       tags: [nTypeLabel[compType] || compType],
-      likes: [], saved: [], comments: [],
-      time: Date.now(), pinned: false
-    };
-    updateDb('posts', [newPost, ...db.posts]);
+    });
+
+    if (error) {
+      showToast(error.message, true);
+      return;
+    }
+
     setCompText('');
     setCompExpanded(false);
     showToast('Публикувано');
+    if (refreshDb) await refreshDb();
   };
 
-  const toggleLike = (pid: string) => {
+  const toggleLike = async (pid: string) => {
     if (!currentUser) { openModal('login'); return; }
-    const posts = [...db.posts];
-    const i = posts.findIndex(p => p.id === pid);
-    if (i !== -1) {
-      const idx = posts[i].likes.indexOf(currentUser.id);
-      if (idx === -1) { posts[i].likes.push(currentUser.id); addNotif(`${currentUser.fname} хареса твоя пост`, 'heart'); }
-      else { posts[i].likes.splice(idx, 1); }
-      updateDb('posts', posts);
+    const post = db.posts.find((p: any) => p.id === pid);
+    const liked = post?.post_likes?.some((l: any) => l.user_id === currentUser.id);
+
+    if (liked) {
+      await supabase.from('post_likes').delete().eq('post_id', pid).eq('user_id', currentUser.id);
+    } else {
+      await supabase.from('post_likes').insert({ post_id: pid, user_id: currentUser.id });
     }
+    if (refreshDb) await refreshDb();
   };
 
-  const toggleSave = (pid: string) => {
+  const toggleSave = async (pid: string) => {
     if (!currentUser) { openModal('login'); return; }
-    const posts = [...db.posts];
-    const i = posts.findIndex(p => p.id === pid);
-    if (i !== -1) {
-      if (!posts[i].saved) posts[i].saved = [];
-      const idx = posts[i].saved.indexOf(currentUser.id);
-      if (idx === -1) { posts[i].saved.push(currentUser.id); showToast('Запазено'); }
-      else { posts[i].saved.splice(idx, 1); showToast('Премахнато'); }
-      updateDb('posts', posts);
+    const post = db.posts.find((p: any) => p.id === pid);
+    const saved = post?.post_saves?.some((s: any) => s.user_id === currentUser.id);
+
+    if (saved) {
+      await supabase.from('post_saves').delete().eq('post_id', pid).eq('user_id', currentUser.id);
+      showToast('Премахнато');
+    } else {
+      await supabase.from('post_saves').insert({ post_id: pid, user_id: currentUser.id });
+      showToast('Запазено');
     }
+    if (refreshDb) await refreshDb();
   };
 
-  const addComment = (pid: string, val: string) => {
+  const addComment = async (pid: string, val: string) => {
     if (!currentUser) { openModal('login'); return; }
     if (!val.trim()) return;
-    const posts = [...db.posts];
-    const i = posts.findIndex(p => p.id === pid);
-    if (i !== -1) {
-      if (!posts[i].comments) posts[i].comments = [];
-      posts[i].comments.push({ id: 'c' + Date.now(), uid: currentUser.id, text: val.trim(), time: Date.now() });
-      updateDb('posts', posts);
-      addNotif(`${currentUser.fname} коментира твоя пост`, 'message');
+
+    const { error } = await supabase.from('comments').insert({
+      post_id: pid,
+      user_id: currentUser.id,
+      text: val.trim(),
+    });
+
+    if (error) {
+      showToast(error.message, true);
+      return;
     }
+    if (refreshDb) await refreshDb();
   };
 
-  const delPost = (pid: string) => {
+  const delPost = async (pid: string) => {
     if (!confirm('Изтриване на тази публикация?')) return;
-    updateDb('posts', db.posts.filter((p: any) => p.id !== pid));
+    const { error } = await supabase.from('posts').delete().eq('id', pid);
+    if (error) {
+      showToast(error.message, true);
+      return;
+    }
     showToast('Изтрито');
+    if (refreshDb) await refreshDb();
   };
 
-  const fTime = (ts: number) => {
-    const d = Date.now() - ts;
+  const fTime = (ts: string | number) => {
+    const t = typeof ts === 'string' ? new Date(ts).getTime() : ts;
+    const d = Date.now() - t;
     if (d < 60000) return 'току-що';
     if (d < 3600000) return `преди ${Math.floor(d / 60000)} мин`;
     if (d < 86400000) return `преди ${Math.floor(d / 3600000)} ч`;
@@ -115,9 +128,9 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
     return m[type] || { label: type, variant: 'neutral' };
   };
 
-  let postsToRender = db.posts;
+  let postsToRender = db.posts || [];
   if (feedFilter !== 'all') postsToRender = postsToRender.filter((p: any) => p.type === feedFilter);
-  postsToRender.sort((a: any, b: any) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.time - a.time);
+  postsToRender.sort((a: any, b: any) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   const escH = (t: string) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -166,7 +179,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 >
                   <Home size={15} /> Общност
                   <span className={`ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full ${feedFilter === 'all' ? 'bg-[var(--accent)] text-white' : 'bg-[var(--border)] text-[var(--text-secondary)]'}`}>
-                    {db.posts.length}
+                    {db.posts?.length || 0}
                   </span>
                 </button>
                 <button onClick={() => setPage('prompts')} className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left text-[13px] text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]/60 hover:text-[var(--ink-900)] transition-colors">
@@ -341,7 +354,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                       transition={{ duration: 0.2 }}
                     >
                       <PostCard
-                        p={p} db={db} currentUser={currentUser} openModal={openModal}
+                        p={p} currentUser={currentUser} openModal={openModal}
                         toggleLike={toggleLike} toggleSave={toggleSave} addComment={addComment}
                         delPost={delPost} fTime={fTime} getTypeInfo={getTypeInfo} escH={escH}
                       />
@@ -382,19 +395,19 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                 <Trophy size={14} className="text-[var(--amber)]" /> Последни успехи
               </div>
               <div className="flex flex-col gap-2.5">
-                {db.posts.filter((p: any) => p.type === 'win').slice(0, 3).map((p: any) => {
-                  const a = db.users.find((u: any) => u.id === p.uid) || { fname: '?' };
+                {postsToRender.filter((p: any) => p.type === 'win').slice(0, 3).map((p: any) => {
+                  const author = p.profiles || { full_name: 'Потребител', initials: '?' };
                   return (
                     <div key={p.id} className="flex gap-2.5 p-2.5 bg-[var(--bg-soft)] border border-[var(--border)] rounded-xl items-start transition-all hover:border-[var(--border-strong)] hover:-translate-y-0.5">
-                      <Avatar size="sm" initials={a.initials || a.fname.charAt(0)} />
+                      <Avatar size="sm" initials={author.initials || author.full_name?.charAt(0) || '?'} />
                       <div className="text-[12px] text-[var(--text-secondary)] leading-snug">
-                        <span className="font-semibold text-[var(--ink-900)]">{a.fname}</span>{' '}
+                        <span className="font-semibold text-[var(--ink-900)]">{author.full_name?.split(' ')[0] || 'Потребител'}</span>{' '}
                         {p.text.substring(0, 45)}{p.text.length > 45 ? '...' : ''}
                       </div>
                     </div>
                   );
                 })}
-                {db.posts.filter((p: any) => p.type === 'win').length === 0 && (
+                {postsToRender.filter((p: any) => p.type === 'win').length === 0 && (
                   <p className="text-[12px] text-[var(--text-tertiary)]">Все още няма споделени успехи.</p>
                 )}
               </div>
@@ -427,7 +440,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   );
 }
 
-function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addComment, delPost, fTime, getTypeInfo, escH }: any) {
+function PostCard({ p, currentUser, openModal, toggleLike, toggleSave, addComment, delPost, fTime, getTypeInfo, escH }: any) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -443,10 +456,10 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
     adjustComment();
   }, [commentText]);
 
-  const a = db.users.find((u: any) => u.id === p.uid) || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', fname: 'Потребител', lname: '' };
-  const liked = currentUser && p.likes.includes(currentUser.id);
-  const saved = currentUser && p.saved && p.saved.includes(currentUser.id);
-  const isOwn = currentUser && p.uid === currentUser.id;
+  const author = p.profiles || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', full_name: 'Потребител' };
+  const liked = currentUser && p.post_likes?.some((l: any) => l.user_id === currentUser.id);
+  const saved = currentUser && p.post_saves?.some((s: any) => s.user_id === currentUser.id);
+  const isOwn = currentUser && p.user_id === currentUser.id;
   const isAdmin = currentUser && currentUser.isAdmin;
   const ti = getTypeInfo(p.type);
 
@@ -461,11 +474,11 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
 
         <div className="flex justify-between items-start mb-3">
           <div className="flex items-center gap-2.5">
-            <Avatar size="sm" initials={a.initials} />
+            <Avatar size="sm" initials={author.initials || author.full_name?.charAt(0) || '?'} />
             <div>
-              <div className="text-[14px] font-semibold text-[var(--ink-900)]">{a.fname} {a.lname}</div>
+              <div className="text-[14px] font-semibold text-[var(--ink-900)]">{author.full_name || 'Потребител'}</div>
               <div className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1.5 mt-0.5">
-                {fTime(p.time)}
+                {fTime(p.created_at)}
                 <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]"></span>
                 <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md border ${
                   ti.variant === 'success' ? 'bg-[var(--emerald-light)] text-[var(--emerald)] border-[var(--emerald)]/20' :
@@ -510,7 +523,7 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
             onClick={() => toggleLike(p.id)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-semibold border transition-colors ${liked ? 'bg-[var(--rose-light)] text-[var(--rose)] border-[var(--rose)]/20' : 'bg-[var(--bg-soft)] text-[var(--text-secondary)] border-transparent hover:bg-[var(--border)] hover:text-[var(--ink-900)]'}`}
           >
-            <Heart size={14} className={liked ? "fill-[var(--rose)] text-[var(--rose)]" : ""} /> {p.likes.length}
+            <Heart size={14} className={liked ? "fill-[var(--rose)] text-[var(--rose)]" : ""} /> {(p.post_likes || []).length}
           </button>
 
           <button
@@ -543,14 +556,14 @@ function PostCard({ p, db, currentUser, openModal, toggleLike, toggleSave, addCo
                 ) : (
                   <div className="flex flex-col gap-3">
                     {p.comments.map((c: any) => {
-                      const ca = db.users.find((u: any) => u.id === c.uid) || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', fname: '?', lname: '' };
+                      const ca = c.profiles || { initials: '?', color: 'var(--s2)', tc: 'var(--txt2)', full_name: 'Потребител' };
                       return (
                         <div key={c.id} className="flex gap-2.5">
-                          <Avatar size="sm" initials={ca.initials} />
+                          <Avatar size="sm" initials={ca.initials || ca.full_name?.charAt(0) || '?'} />
                           <div className="flex-1 bg-[var(--bg-soft)] p-3 rounded-2xl rounded-tl-sm border border-[var(--border)]">
                             <div className="flex items-baseline gap-2 mb-1">
-                              <span className="text-[12px] font-semibold text-[var(--ink-900)]">{ca.fname} {ca.lname}</span>
-                              <span className="text-[10px] text-[var(--text-tertiary)]">{fTime(c.time)}</span>
+                              <span className="text-[12px] font-semibold text-[var(--ink-900)]">{ca.full_name || 'Потребител'}</span>
+                              <span className="text-[10px] text-[var(--text-tertiary)]">{fTime(c.created_at)}</span>
                             </div>
                             <div className="text-[13px] leading-snug text-[var(--text-primary)] whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: escH(c.text) }} />
                           </div>
