@@ -77,8 +77,9 @@ function BrandPattern() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden brand-pattern">
       <div className="absolute inset-0 brand-mesh opacity-[0.02]" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--accent)]/4 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/4" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[var(--accent)]/3 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--accent)]/4 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/4 animate-float-slow" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[var(--accent)]/3 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 animate-float" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--blue)]/5 rounded-full blur-[100px] animate-gradient-shift opacity-60" />
     </div>
   );
 }
@@ -158,7 +159,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
             {/* Right — visual */}
             <div className="hero-visual lg:col-span-6 xl:col-span-7 relative hidden lg:block opacity-0">
-              <div className="relative w-full aspect-[4/3] max-w-[580px] ml-auto">
+              <div className="relative w-full aspect-[4/3] max-w-[580px] ml-auto animate-float">
                 <div className="absolute inset-0 rounded-[32px] overflow-hidden shadow-2xl border border-[var(--border)]">
                   <img
                     src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80"
@@ -169,7 +170,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
                 </div>
 
-                <div className="absolute -bottom-5 -left-5 retina-card rounded-2xl px-5 py-3.5 shadow-xl flex items-center gap-3">
+                <div className="absolute -bottom-5 -left-5 retina-card rounded-2xl px-5 py-3.5 shadow-xl flex items-center gap-3 stat-bubble">
                   <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)]">
                     <Play size={16} fill="currentColor" />
                   </div>
@@ -231,11 +232,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {LEARNING_PATHS.map((path) => (
             <div
               key={path.id}
-              className="gsap-item group cursor-pointer retina-card p-7 md:p-8 hover:shadow-lg transition-shadow duration-500"
+              className="gsap-item group cursor-pointer retina-card p-7 md:p-8 card-hover-glow shine-hover"
               onClick={() => setPage('lessons')}
             >
               <div className="w-12 h-12 rounded-2xl bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--accent-light)] group-hover:text-[var(--accent)] transition-colors duration-300 mb-5">
-                <path.icon size={22} strokeWidth={1.5} />
+                <path.icon size={22} strokeWidth={1.5} className="icon-pop" />
               </div>
               <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2 group-hover:text-[var(--accent)] transition-colors duration-300">
                 {path.label}
@@ -266,9 +267,9 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             { num: '04', icon: MessageSquare, title: 'Получаваш помощ', desc: 'Питаш в общността или на 1:1 сесия.' },
             { num: '05', icon: Rocket, title: 'Надграждаш', desc: 'Всяка следваща стъпка е по-уверена.' },
           ].map((step) => (
-            <div key={step.num} className="gsap-item text-center">
-              <div className="w-16 h-16 rounded-[20px] bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] mx-auto mb-5">
-                <step.icon size={24} strokeWidth={1.5} />
+            <div key={step.num} className="gsap-item text-center group">
+              <div className="w-16 h-16 rounded-[20px] bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                <step.icon size={24} strokeWidth={1.5} className="icon-pop" />
               </div>
               <div className="text-[11px] font-bold text-[var(--text-tertiary)] tracking-wider mb-2">{step.num}</div>
               <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2">{step.title}</h3>
@@ -413,7 +414,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   className="group cursor-pointer"
                   onClick={() => setPage('events')}
                 >
-                  <div className="flex gap-4 p-5 rounded-[20px] bg-[var(--bg-soft)]/50 hover:bg-[var(--bg-soft)] transition-colors duration-300 border border-[var(--border)] solid-card">
+                  <div className="flex gap-4 p-5 rounded-[20px] bg-[var(--bg-soft)]/50 hover:bg-[var(--bg-soft)] transition-colors duration-300 border border-[var(--border)] solid-card card-hover-glow">
                     <div className="shrink-0 w-16 h-16 rounded-2xl bg-[var(--bg)] flex flex-col items-center justify-center border border-[var(--border)]">
                       <div className="text-[20px] font-bold text-[var(--ink-900)] leading-none">{e.day}</div>
                       <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--accent)]">{e.mo}</div>
@@ -451,10 +452,10 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {OUTCOMES.map((item) => (
             <div
               key={item.text}
-              className="gsap-item flex items-center gap-5 p-6 rounded-[20px] solid-card border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-soft)] transition-colors duration-300"
+              className="gsap-item group flex items-center gap-5 p-6 rounded-[20px] solid-card border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-soft)] transition-colors duration-300 card-hover-glow"
             >
-              <div className="w-11 h-11 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0">
-                <item.icon size={20} strokeWidth={1.5} />
+              <div className="w-11 h-11 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                <item.icon size={20} strokeWidth={1.5} className="icon-pop" />
               </div>
               <span className="text-[16px] font-medium text-[var(--ink-900)]">{item.text}</span>
             </div>
@@ -468,7 +469,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell py-28 md:py-40">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
           <div className="gsap-section">
-            <div className="rounded-[24px] bg-[var(--bg-soft)] p-10 md:p-12 relative overflow-hidden h-full border border-[var(--border)] solid-card">
+            <div className="rounded-[24px] bg-[var(--bg-soft)] p-10 md:p-12 relative overflow-hidden h-full border border-[var(--border)] solid-card card-hover-glow">
               <div className="relative z-10">
                 <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Общност</p>
                 <h2 className="text-[clamp(26px,3vw,36px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-5">
@@ -496,7 +497,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           </div>
 
           <div className="gsap-section">
-            <div className="rounded-[24px] border border-[var(--border)] p-10 md:p-12 relative overflow-hidden h-full bg-[var(--bg)] solid-card">
+            <div className="rounded-[24px] border border-[var(--border)] p-10 md:p-12 relative overflow-hidden h-full bg-[var(--bg)] solid-card card-hover-glow">
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[11px] font-medium mb-4">
                   <Users size={11} />
@@ -621,9 +622,9 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((plan) => (
             <div
               key={plan.name}
-              className={`gsap-item relative h-full rounded-[24px] p-8 md:p-10 flex flex-col ${
+              className={`gsap-item relative h-full rounded-[24px] p-8 md:p-10 flex flex-col card-hover-glow ${
                 plan.highlight
-                  ? 'bg-[var(--accent-light)]/30 border border-[var(--accent)]/20 retina-card'
+                  ? 'bg-[var(--accent-light)]/30 border border-[var(--accent)]/20 retina-card shine-hover'
                   : 'bg-[var(--bg-soft)]/50 border border-[var(--border)] solid-card'
               }`}
             >
