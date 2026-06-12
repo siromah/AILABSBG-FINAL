@@ -71,6 +71,21 @@
         }
       })();
     </script>
+    <script>
+      (() => {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(reg => reg.unregister());
+          });
+        }
+        if ('caches' in window) {
+          caches.keys().then(names => names.forEach(name => caches.delete(name)));
+        }
+        try {
+          localStorage.removeItem('craative_lead_email');
+        } catch {}
+      })();
+    </script>
   </head>
   <body>
     <div id="loading-root">

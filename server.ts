@@ -27,7 +27,7 @@ import {
 dotenv.config({ path: '.env.local' });
 dotenv.config();
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 8080;
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
@@ -229,7 +229,7 @@ async function startServer() {
   // CORS - restrict in production
   const allowedOrigins = process.env.NODE_ENV === 'production'
     ? (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean)
-    : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000'];
+    : ['http://localhost:8080', 'http://localhost:5173', 'http://127.0.0.1:8080'];
 
   app.use((req: Request, res: Response, next: NextFunction) => {
     const origin = req.headers.origin;
