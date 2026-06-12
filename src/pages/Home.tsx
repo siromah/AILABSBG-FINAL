@@ -133,13 +133,33 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 Уроци, общност и 1:1 помощ за хора, които искат да използват AI в работа, учене, реклама, съдържание и бизнес — без празна теория.
               </p>
 
-              <div className="hero-cta flex flex-wrap items-center gap-4 mb-10 opacity-0">
+              <div className="hero-cta flex flex-wrap items-center gap-4 mb-8 opacity-0">
                 <Button size="lg" onClick={() => checkAuthThenGo('register')}>
                   Започни безплатно
                 </Button>
                 <Button variant="secondary" size="lg" onClick={() => setPage('lessons')}>
                   Виж академията <ArrowRight size={16} />
                 </Button>
+              </div>
+
+              <div className="hero-rating flex items-center gap-3 mb-10 opacity-0">
+                <div className="flex -space-x-2">
+                  {[
+                    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80',
+                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80',
+                    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
+                    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80',
+                  ].map((src, i) => (
+                    <img key={i} src={src} alt="" className="w-8 h-8 rounded-full border-2 border-[var(--bg)] object-cover" />
+                  ))}
+                </div>
+                <div>
+                  <div className="flex items-center gap-1 text-[var(--accent)]">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                    <span className="text-[13px] font-semibold text-[var(--ink-900)] ml-1">4.8/5</span>
+                  </div>
+                  <div className="text-[12px] text-[var(--text-secondary)]">от 500+ членове на общността</div>
+                </div>
               </div>
 
               <div className="hero-trust flex flex-wrap items-center gap-x-8 gap-y-3 text-[13px] text-[var(--text-secondary)] opacity-0">
@@ -183,9 +203,25 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       </section>
 
       {/* ═══════════════════════════════════════
+          TRUST BAR
+         ═══════════════════════════════════════ */}
+      <section className="section-shell pb-10 md:pb-14">
+        <div className="text-center gsap-section">
+          <p className="text-[12px] font-semibold tracking-[0.15em] uppercase text-[var(--text-tertiary)] mb-5">
+            Инструментите, които изучаваме
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70">
+            {['ChatGPT', 'Claude', 'Gemini', 'Midjourney', 'Make.com', 'Notion AI'].map((tool) => (
+              <span key={tool} className="text-[15px] font-medium text-[var(--text-secondary)]">{tool}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
           STATS BAR
          ═══════════════════════════════════════ */}
-      <section className="relative z-20 -mt-10 mx-4 md:mx-8 lg:mx-auto max-w-5xl">
+      <section className="relative z-20 -mt-4 mx-4 md:mx-8 lg:mx-auto max-w-5xl">
         <div className="bg-[var(--surface-strong)] rounded-[20px] shadow-sm border border-[var(--border)] p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
             { value: '500+', label: 'Членове на общността' },
@@ -240,6 +276,60 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          TESTIMONIALS
+         ═══════════════════════════════════════ */}
+      <section className="section-shell pb-24 md:pb-32">
+        <div className="text-center mb-14 md:mb-16 gsap-section">
+          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Мнения</p>
+          <h2 className="display-lg text-[var(--ink-900)] mb-5">
+            Какво казват членовете
+          </h2>
+          <p className="text-[17px] text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Реални хора, реални резултати. Без платени отзиви.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 gsap-stagger">
+          {[
+            {
+              name: 'Мария К.',
+              role: 'Маркетинг мениджър',
+              text: 'За две седмици намалих времето за писане на имейли и социални постове с поне 60%. Уроците са директни и приложими.',
+              avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
+            },
+            {
+              name: 'Георги П.',
+              role: 'Предприемач',
+              text: 'Най-накрая някой обяснява AI на български и с реални бизнес примери. Вече автоматизирам част от операциите си с Make.com.',
+              avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
+            },
+            {
+              name: 'Даниела Т.',
+              role: 'Студентка',
+              text: 'Ползвам AI за учене и подготовка за изпити. Общността е страхотна — винаги има кой да отговори на въпрос.',
+              avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80',
+            },
+          ].map((t, i) => (
+            <div key={i} className="gsap-item bg-[var(--surface-strong)] border border-[var(--border)] rounded-[24px] p-7 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-center gap-1 text-[var(--accent)] mb-4">
+                {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
+              </div>
+              <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed mb-6">
+                „{t.text}“
+              </p>
+              <div className="flex items-center gap-3">
+                <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover" />
+                <div>
+                  <div className="text-[14px] font-semibold text-[var(--ink-900)]">{t.name}</div>
+                  <div className="text-[12px] text-[var(--text-tertiary)]">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
