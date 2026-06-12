@@ -59,9 +59,9 @@ const FAQS = [
 const TOOLS = ['ChatGPT', 'Claude', 'Gemini', 'Midjourney', 'Runway', 'ElevenLabs', 'Perplexity', 'Notion AI', 'Canva AI', 'Make.com'];
 
 const COURSE_IMAGES = [
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
-  'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80',
-  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+  'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&q=80',
+  'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80',
+  'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=800&q=80',
 ];
 
 const OUTCOMES = [
@@ -76,10 +76,9 @@ const OUTCOMES = [
 function BrandPattern() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden brand-pattern">
-      <div className="absolute inset-0 brand-mesh opacity-[0.02]" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--accent)]/4 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/4 animate-float-slow" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[var(--accent)]/3 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 animate-float" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--blue)]/5 rounded-full blur-[100px] animate-gradient-shift opacity-60" />
+      <div className="absolute inset-0 brand-mesh opacity-[0.015]" />
+      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-[var(--accent)]/[0.03] rounded-full blur-[160px] -translate-y-1/3 translate-x-1/4" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--blue)]/[0.03] rounded-full blur-[140px] translate-y-1/4 -translate-x-1/4" />
     </div>
   );
 }
@@ -123,7 +122,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 AILABS.BG — БЪЛГАРСКА AI АКАДЕМИЯ
               </span>
 
-              <h1 className="text-[clamp(40px,6vw,76px)] font-semibold leading-[1.05] tracking-[-0.04em] text-[var(--ink-900)] mb-8 md:mb-10">
+              <h1 className="display-xl text-[var(--ink-900)] mb-8 md:mb-10">
                 <span className="hero-title-line block opacity-0">Научи AI</span>
                 <span className="hero-title-line block opacity-0">практично.</span>
                 <span className="hero-title-line block text-[var(--accent)] opacity-0">
@@ -159,10 +158,10 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
             {/* Right — visual */}
             <div className="hero-visual lg:col-span-6 xl:col-span-7 relative hidden lg:block opacity-0">
-              <div className="relative w-full aspect-[4/3] max-w-[580px] ml-auto animate-float">
+              <div className="relative w-full aspect-[4/3] max-w-[580px] ml-auto animate-float-slow">
                 <div className="absolute inset-0 rounded-[32px] overflow-hidden shadow-2xl border border-[var(--border)]">
                   <img
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80"
+                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80"
                     alt="AILABS.BG — практическо AI обучение"
                     loading="eager"
                     className="w-full h-full object-cover"
@@ -193,7 +192,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-5">
             За платформата
           </p>
-          <h2 className="text-[clamp(28px,3.5vw,44px)] font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--ink-900)] mb-8">
+          <h2 className="display-lg text-[var(--ink-900)] mb-8">
             Какво е AILABS.BG?
           </h2>
           <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] leading-[1.7]">
@@ -223,7 +222,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell py-28 md:py-40">
         <div className="text-center mb-16 md:mb-20 gsap-section">
           <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Обучение</p>
-          <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+          <h2 className="display-lg text-[var(--ink-900)]">
             Избери своя AI път
           </h2>
         </div>
@@ -254,7 +253,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell py-28 md:py-40">
         <div className="max-w-3xl mx-auto text-center mb-20 md:mb-24 gsap-section">
           <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Процес</p>
-          <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+          <h2 className="display-lg text-[var(--ink-900)]">
             Как работи?
           </h2>
         </div>
@@ -286,7 +285,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16 md:mb-20 gsap-section">
           <div>
             <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Академия</p>
-            <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+            <h2 className="display-lg text-[var(--ink-900)]">
               Започни с тези уроци
             </h2>
           </div>
@@ -349,7 +348,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             <div className="flex items-end justify-between gap-4 mb-10">
               <div>
                 <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Библиотека</p>
-                <h2 className="text-[clamp(26px,3vw,36px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">
+                <h2 className="display-md text-[var(--ink-900)]">
                   Готови prompt-и
                 </h2>
               </div>
@@ -398,7 +397,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             <div className="flex items-end justify-between gap-4 mb-10">
               <div>
                 <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Събития</p>
-                <h2 className="text-[clamp(26px,3vw,36px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)]">
+                <h2 className="display-md text-[var(--ink-900)]">
                   Предстоящи
                 </h2>
               </div>
@@ -443,7 +442,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell py-28 md:py-40">
         <div className="text-center mb-16 md:mb-20 gsap-section">
           <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Резултати</p>
-          <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+          <h2 className="display-lg text-[var(--ink-900)]">
             Какво ще можеш след това?
           </h2>
         </div>
@@ -472,7 +471,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             <div className="rounded-[24px] bg-[var(--bg-soft)] p-10 md:p-12 relative overflow-hidden h-full border border-[var(--border)] solid-card card-hover-glow">
               <div className="relative z-10">
                 <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Общност</p>
-                <h2 className="text-[clamp(26px,3vw,36px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-5">
+                <h2 className="display-md text-[var(--ink-900)] mb-5">
                   Не си сам в това
                 </h2>
                 <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-10">
@@ -503,7 +502,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   <Users size={11} />
                   Персонализирано обучение
                 </div>
-                <h2 className="text-[clamp(26px,3vw,36px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[var(--ink-900)] mb-5">
+                <h2 className="display-md text-[var(--ink-900)] mb-5">
                   1:1 AI Коучинг
                 </h2>
                 <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
@@ -538,7 +537,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             <Mail size={11} />
             Безплатен ресурс
           </div>
-          <h2 className="text-[clamp(30px,3.5vw,42px)] font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--ink-900)] mb-5">
+          <h2 className="display-lg text-[var(--ink-900)] mb-5">
             5 prompt-а, които спестяват<br />
             <span className="text-[var(--accent)]">5 часа седмично</span>
           </h2>
@@ -584,7 +583,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell pb-28 md:pb-40">
         <div className="text-center mb-16 md:mb-20 gsap-section">
           <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Цени</p>
-          <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+          <h2 className="display-lg text-[var(--ink-900)]">
             Ясни планове, без изненади
           </h2>
         </div>
@@ -670,7 +669,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-16 md:mb-20 gsap-section">
             <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-4">FAQ</p>
-            <h2 className="text-[clamp(32px,4vw,48px)] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--ink-900)]">
+            <h2 className="display-lg text-[var(--ink-900)]">
               Всичко, което трябва да знаеш
             </h2>
           </div>

@@ -76,7 +76,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
               <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] rounded-[10px] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
-              <span className="font-semibold text-[15px] tracking-[-0.02em] text-[var(--ink-900)]">AILABS.BG</span>
+              <span className="font-display font-medium text-[16px] tracking-normal text-[var(--ink-900)]">AILABS.BG</span>
             </div>
 
             {/* CENTER (Desktop): Nav Links */}

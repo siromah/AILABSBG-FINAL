@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-[10px] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
-              <span className="font-semibold text-[16px] text-[var(--ink-900)] tracking-tight">AILABS.BG</span>
+              <span className="font-display font-medium text-[17px] text-[var(--ink-900)]">AILABS.BG</span>
             </div>
             <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-6">
               Практическа AI академия за български професионалисти. Уроци, prompt-и и общност — без шум и без празна теория.
