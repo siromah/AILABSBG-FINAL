@@ -118,9 +118,14 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-6 xl:col-span-5">
-              <span className="hero-brand text-[11px] font-semibold tracking-[0.3em] uppercase text-[var(--text-tertiary)] block mb-10 md:mb-12 opacity-0">
-                AILABS.BG — БЪЛГАРСКА AI АКАДЕМИЯ
-              </span>
+              <div className="hero-brand mb-10 md:mb-12 opacity-0">
+                <Badge variant="luxury" className="rounded-full px-3 py-1 text-[10px] tracking-wide mb-4">
+                  Премиум общност
+                </Badge>
+                <span className="text-[11px] font-semibold tracking-[0.3em] uppercase text-[var(--text-tertiary)] block">
+                  AILABS.BG — БЪЛГАРСКА AI АКАДЕМИЯ
+                </span>
+              </div>
 
               <h1 className="display-xl text-[var(--ink-900)] mb-8 md:mb-10">
                 <span className="hero-title-line block opacity-0">Научи AI</span>
@@ -145,13 +150,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
 
               <div className="hero-trust flex flex-wrap items-center gap-x-8 gap-y-3 text-[13px] text-[var(--text-tertiary)] opacity-0">
                 <span className="flex items-center gap-2">
-                  <Check size={14} className="text-[var(--accent)]" /> Без кредитна карта
+                  <Check size={14} className="text-[var(--green)]" /> Без кредитна карта
                 </span>
                 <span className="flex items-center gap-2">
                   <Check size={14} className="text-[var(--accent)]" /> {freeLessonsCount} безплатни урока
                 </span>
                 <span className="flex items-center gap-2">
-                  <Check size={14} className="text-[var(--accent)]" /> Подходящо за начинаещи
+                  <Check size={14} className="text-[var(--green)]" /> Подходящо за начинаещи
                 </span>
               </div>
             </div>
@@ -187,18 +192,20 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           WHAT IS AILABS.BG
          ═══════════════════════════════════════ */}
-      <section className="section-shell py-28 md:py-40">
-        <div className="max-w-3xl mx-auto text-center gsap-section">
-          <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--accent)] mb-5">
-            За платформата
-          </p>
-          <h2 className="display-lg text-[var(--ink-900)] mb-8">
-            Какво е AILABS.BG?
-          </h2>
-          <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] leading-[1.7]">
-            AILABS.BG е българска AI академия и общност, създадена за практическо учене — без излишна теория, 
-            без сложни термини и без объркване. Учим се да използваме AI в реални задачи, заедно.
-          </p>
+      <section className="py-28 md:py-40 bg-[var(--gradient-warm)]">
+        <div className="section-shell">
+          <div className="max-w-3xl mx-auto text-center gsap-section">
+            <p className="text-[12px] font-medium tracking-[0.2em] uppercase text-[var(--green)] mb-5">
+              За платформата
+            </p>
+            <h2 className="display-lg text-[var(--ink-900)] mb-8">
+              Какво е AILABS.BG?
+            </h2>
+            <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] leading-[1.7]">
+              AILABS.BG е българска AI академия и общност, създадена за практическо учене — без излишна теория,
+              без сложни термини и без объъркване. Учим се да използваме AI в реални задачи, заедно.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -228,22 +235,29 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 gsap-stagger">
-          {LEARNING_PATHS.map((path) => (
-            <div
-              key={path.id}
-              className="gsap-item group cursor-pointer retina-card p-7 md:p-8 card-hover-glow shine-hover"
-              onClick={() => setPage('lessons')}
-            >
-              <div className="w-12 h-12 rounded-2xl bg-[var(--bg-soft)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--accent-light)] group-hover:text-[var(--accent)] transition-colors duration-300 mb-5">
-                <path.icon size={22} strokeWidth={1.5} className="icon-pop" />
+          {LEARNING_PATHS.map((path, idx) => {
+            const isGreen = idx % 2 === 1;
+            return (
+              <div
+                key={path.id}
+                className="gsap-item group cursor-pointer retina-card p-7 md:p-8 card-hover-glow shine-hover"
+                onClick={() => setPage('lessons')}
+              >
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300 ${
+                  isGreen
+                    ? 'bg-[var(--green-light)] text-[var(--green)] group-hover:bg-[var(--green)] group-hover:text-white'
+                    : 'bg-[var(--orange-light)] text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white'
+                }`}>
+                  <path.icon size={22} strokeWidth={1.5} className="icon-pop" />
+                </div>
+                <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2 group-hover:text-[var(--accent)] transition-colors duration-300">
+                  {path.label}
+                </h3>
+                <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4">{path.desc}</p>
+                <span className="text-[12px] font-medium text-[var(--text-tertiary)]">{path.count}</span>
               </div>
-              <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2 group-hover:text-[var(--accent)] transition-colors duration-300">
-                {path.label}
-              </h3>
-              <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mb-4">{path.desc}</p>
-              <span className="text-[12px] font-medium text-[var(--text-tertiary)]">{path.count}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -265,16 +279,23 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             { num: '03', icon: Wand2, title: 'Правиш задача', desc: 'Прилагаш веднага с реален пример.' },
             { num: '04', icon: MessageSquare, title: 'Получаваш помощ', desc: 'Питаш в общността или на 1:1 сесия.' },
             { num: '05', icon: Rocket, title: 'Надграждаш', desc: 'Всяка следваща стъпка е по-уверена.' },
-          ].map((step) => (
-            <div key={step.num} className="gsap-item text-center group">
-              <div className="w-16 h-16 rounded-[20px] bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
-                <step.icon size={24} strokeWidth={1.5} className="icon-pop" />
+          ].map((step, idx) => {
+            const isGreen = idx % 2 === 1;
+            return (
+              <div key={step.num} className="gsap-item text-center group">
+                <div className={`w-16 h-16 rounded-[20px] flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300 ${
+                  isGreen
+                    ? 'bg-[var(--green-light)] text-[var(--green)]'
+                    : 'bg-[var(--orange-light)] text-[var(--accent)]'
+                }`}>
+                  <step.icon size={24} strokeWidth={1.5} className="icon-pop" />
+                </div>
+                <div className="text-[11px] font-bold text-[var(--text-tertiary)] tracking-wider mb-2">{step.num}</div>
+                <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2">{step.title}</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed max-w-[220px] mx-auto">{step.desc}</p>
               </div>
-              <div className="text-[11px] font-bold text-[var(--text-tertiary)] tracking-wider mb-2">{step.num}</div>
-              <h3 className="text-[17px] font-semibold text-[var(--ink-900)] mb-2">{step.title}</h3>
-              <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed max-w-[220px] mx-auto">{step.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -448,17 +469,24 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 gsap-stagger">
-          {OUTCOMES.map((item) => (
-            <div
-              key={item.text}
-              className="gsap-item group flex items-center gap-5 p-6 rounded-[20px] solid-card border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-soft)] transition-colors duration-300 card-hover-glow"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[var(--accent-light)] flex items-center justify-center text-[var(--accent)] shrink-0 group-hover:scale-110 transition-transform duration-300">
-                <item.icon size={20} strokeWidth={1.5} className="icon-pop" />
+          {OUTCOMES.map((item, idx) => {
+            const isGreen = idx % 2 === 1;
+            return (
+              <div
+                key={item.text}
+                className="gsap-item group flex items-center gap-5 p-6 rounded-[20px] solid-card border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-soft)] transition-colors duration-300 card-hover-glow"
+              >
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 ${
+                  isGreen
+                    ? 'bg-[var(--green-light)] text-[var(--green)]'
+                    : 'bg-[var(--orange-light)] text-[var(--accent)]'
+                }`}>
+                  <item.icon size={20} strokeWidth={1.5} className="icon-pop" />
+                </div>
+                <span className="text-[16px] font-medium text-[var(--ink-900)]">{item.text}</span>
               </div>
-              <span className="text-[16px] font-medium text-[var(--ink-900)]">{item.text}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -496,13 +524,14 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           </div>
 
           <div className="gsap-section">
-            <div className="rounded-[24px] border border-[var(--border)] p-10 md:p-12 relative overflow-hidden h-full bg-[var(--bg)] solid-card card-hover-glow">
+            <div className="rounded-[24px] border border-[var(--green-soft)] p-10 md:p-12 relative overflow-hidden h-full bg-[var(--green-light)]/40 card-hover-glow">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--green)]/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4" />
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[11px] font-medium mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--green)] text-white text-[11px] font-medium mb-4">
                   <Users size={11} />
                   Персонализирано обучение
                 </div>
-                <h2 className="display-md text-[var(--ink-900)] mb-5">
+                <h2 className="display-md text-[var(--green-dark)] mb-5">
                   1:1 AI Коучинг
                 </h2>
                 <p className="text-[16px] text-[var(--text-secondary)] leading-[1.7] mb-8">
@@ -515,8 +544,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     'Имплементация в реално време',
                     'Follow-up и подкрепа',
                   ].map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-[14px] text-[var(--text-secondary)]">
-                      <Check size={15} className="text-[var(--accent)] shrink-0" />
+                    <li key={f} className="flex items-center gap-2.5 text-[14px] text-[var(--green-text)]">
+                      <Check size={15} className="text-[var(--green)] shrink-0" />
                       {f}
                     </li>
                   ))}
@@ -532,14 +561,14 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           EMAIL CAPTURE
          ═══════════════════════════════════════ */}
       <section className="section-shell pb-28 md:pb-40">
-        <div className="max-w-2xl mx-auto text-center gsap-section">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent-light)] text-[var(--accent-text)] text-[11px] font-medium mb-6">
+        <div className="max-w-2xl mx-auto text-center gsap-section p-8 md:p-12 rounded-[32px] bg-[var(--gradient-warm)] border border-[var(--border)]">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--green)] text-white text-[11px] font-medium mb-6">
             <Mail size={11} />
             Безплатен ресурс
           </div>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             5 prompt-а, които спестяват<br />
-            <span className="text-[var(--accent)]">5 часа седмично</span>
+            <span className="text-[var(--green)]">5 часа седмично</span>
           </h2>
           <p className="text-[16px] md:text-[17px] text-[var(--text-secondary)] leading-[1.7] mb-10 max-w-md mx-auto">
             Практически PDF с готови prompt-и за email, срещи, content и automation. Плюс достъп до първия урок.
@@ -618,41 +647,56 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               cta: 'Избери Premium',
               plan: 'premium',
             },
-          ].map((plan) => (
-            <div
-              key={plan.name}
-              className={`gsap-item relative h-full rounded-[24px] p-8 md:p-10 flex flex-col card-hover-glow ${
-                plan.highlight
-                  ? 'bg-[var(--accent-light)]/30 border border-[var(--accent)]/20 retina-card shine-hover'
-                  : 'bg-[var(--bg-soft)]/50 border border-[var(--border)] solid-card'
-              }`}
-            >
-              {plan.highlight && (
-                <div className="absolute -top-3 left-8">
-                  <Badge variant="accent" className="text-[10px] rounded-full px-3 py-1 font-semibold tracking-wide">Популярен</Badge>
+          ].map((plan) => {
+            const isPremium = plan.plan === 'premium';
+            const isPro = plan.plan === 'pro';
+            return (
+              <div
+                key={plan.name}
+                className={`gsap-item relative h-full rounded-[24px] p-8 md:p-10 flex flex-col card-hover-glow ${
+                  isPro
+                    ? 'bg-[var(--orange-light)]/40 border border-[var(--accent)]/20 retina-card shine-hover'
+                    : isPremium
+                      ? 'bg-[var(--green-light)]/50 border border-[var(--green-soft)] retina-card shine-hover'
+                      : 'bg-[var(--bg-soft)]/50 border border-[var(--border)] solid-card'
+                }`}
+              >
+                {isPro && (
+                  <div className="absolute -top-3 left-8">
+                    <Badge variant="accent" className="text-[10px] rounded-full px-3 py-1 font-semibold tracking-wide">Популярен</Badge>
+                  </div>
+                )}
+                {isPremium && (
+                  <div className="absolute -top-3 left-8">
+                    <Badge variant="luxury" className="text-[10px] rounded-full px-3 py-1 font-semibold tracking-wide text-white bg-[var(--green)]">Premium</Badge>
+                  </div>
+                )}
+                <div className="mb-6">
+                  <h3 className={`text-[11px] font-semibold uppercase tracking-wider mb-4 ${
+                    isPremium ? 'text-[var(--green)]' : 'text-[var(--text-tertiary)]'
+                  }`}>{plan.name}</h3>
+                  <div className="flex items-baseline gap-1">
+                    <span className={`text-[40px] font-semibold tracking-tight ${isPremium ? 'text-[var(--green-dark)]' : 'text-[var(--ink-900)]'}`}>{plan.price}</span>
+                    <span className="text-[14px] text-[var(--text-tertiary)]">{plan.period}</span>
+                  </div>
+                  <p className="text-[14px] text-[var(--text-secondary)] mt-3 leading-relaxed">{plan.desc}</p>
                 </div>
-              )}
-              <div className="mb-6">
-                <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-4">{plan.name}</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-[40px] font-semibold text-[var(--ink-900)] tracking-tight">{plan.price}</span>
-                  <span className="text-[14px] text-[var(--text-tertiary)]">{plan.period}</span>
-                </div>
-                <p className="text-[14px] text-[var(--text-secondary)] mt-3 leading-relaxed">{plan.desc}</p>
+                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-[14px] text-[var(--text-secondary)]">
+                      <Check size={15} className={`mt-0.5 shrink-0 ${
+                        isPro ? 'text-[var(--accent)]' : isPremium ? 'text-[var(--green)]' : 'text-[var(--text-tertiary)]'
+                      }`} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Button variant={isPro ? 'primary' : isPremium ? 'secondary' : 'secondary'} className={`w-full ${isPremium ? 'bg-[var(--green)] text-white hover:bg-[var(--green-dark)] border-transparent' : ''}`} onClick={() => setPage('pricing')}>
+                  {plan.cta}
+                </Button>
               </div>
-              <ul className="flex flex-col gap-2.5 mb-8 flex-1">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-[14px] text-[var(--text-secondary)]">
-                    <Check size={15} className={`mt-0.5 shrink-0 ${plan.highlight ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'}`} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button variant={plan.highlight ? 'primary' : 'secondary'} className="w-full" onClick={() => setPage('pricing')}>
-                {plan.cta}
-              </Button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-8 text-[13px] text-[var(--text-tertiary)]">

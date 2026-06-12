@@ -53,8 +53,8 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
     window.scrollTo(0, 0);
   };
 
-  const activeClass = "font-semibold text-[var(--text-primary)] bg-[var(--ink-900)]/[0.05]";
-  const inactiveClass = "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--ink-900)]/[0.03]";
+  const activeClass = "font-semibold text-[var(--green-dark)] bg-[var(--green-light)]";
+  const inactiveClass = "text-[var(--text-secondary)] hover:text-[var(--green-dark)] hover:bg-[var(--green-light)]/50";
 
   const navLinks = [
     {id: 'home', label: 'Начало', icon: Home, route: '/'},
@@ -73,7 +73,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
           {/* LEFT: Logo */}
           <div className="flex items-center gap-5 h-full">
             <div className="cursor-pointer flex items-center gap-2" onClick={() => go('home')}>
-              <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] rounded-[10px] flex items-center justify-center">
+              <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--green)] rounded-[10px] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
               <span className="font-display font-medium text-[16px] tracking-normal text-[var(--ink-900)]">AILABS.BG</span>

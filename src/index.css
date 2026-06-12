@@ -17,6 +17,21 @@
   --color-accent-light: var(--accent-light);
   --color-accent-text: var(--accent-text);
 
+  --color-orange: var(--orange);
+  --color-orange-light: var(--orange-light);
+  --color-orange-text: var(--orange-text);
+  --color-orange-soft: var(--orange-soft);
+
+  --color-green: var(--green);
+  --color-green-dark: var(--green-dark);
+  --color-green-light: var(--green-light);
+  --color-green-soft: var(--green-soft);
+  --color-green-text: var(--green-text);
+
+  --color-cream: var(--cream);
+  --color-warm-white: var(--warm-white);
+  --color-pure-white: var(--pure-white);
+
   --color-emerald: var(--emerald);
   --color-emerald-light: var(--emerald-light);
   --color-emerald-text: var(--emerald-text);
@@ -88,6 +103,27 @@
 
   --brand:         #a65c32;
   --brand-dark:    #8a4b28;
+
+  /* Branded palette */
+  --orange:        #b8693c;
+  --orange-light:  #faf0e8;
+  --orange-text:   #6d3a1f;
+  --orange-soft:   #f7e8dd;
+
+  --green:         #2a4d42;
+  --green-dark:    #1f3a32;
+  --green-light:   #e8efec;
+  --green-soft:    #d4e0da;
+  --green-text:    #1f3a32;
+
+  --cream:         #fffcfa;
+  --warm-white:    #faf8f5;
+  --pure-white:    #ffffff;
+
+  --gradient-warm: linear-gradient(135deg, #faf0e8 0%, #e8efec 100%);
+  --gradient-luxury: linear-gradient(135deg, #2a4d42 0%, #b8693c 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(255,252,250,0) 0%, rgba(250,240,232,0.4) 100%);
+
   --blue:          #4a7c59;
   --amber:         #a16207;
   --olive:         #5a7c4d;
@@ -105,12 +141,12 @@
   --rose-light:    #fff1f2;
   --rose-text:     #881337;
 
-  --code-bg:       #f5f5f7;
-  --code-border:   #e5e5ea;
+  --code-bg:       #f5f2ee;
+  --code-border:   #e5e2dc;
 
-  --bg-elevated:   #ffffff;
-  --border:        rgba(0, 0, 0, 0.06);
-  --border-strong: rgba(0, 0, 0, 0.10);
+  --bg-elevated:   var(--cream);
+  --border:        rgba(42, 32, 22, 0.06);
+  --border-strong: rgba(42, 32, 22, 0.10);
 
   --r-sm:  8px;
   --r-md:  12px;
@@ -160,6 +196,27 @@
 
   --brand:         #d8916a;
   --brand-dark:    #e0a682;
+
+  /* Branded palette dark */
+  --orange:        #d8916a;
+  --orange-light:  #2d2018;
+  --orange-text:   #f0c9ad;
+  --orange-soft:   #3d271b;
+
+  --green:         #7eb8a2;
+  --green-dark:    #4a7c6a;
+  --green-light:   #1f2e28;
+  --green-soft:    #2a3f36;
+  --green-text:    #a8d4c2;
+
+  --cream:         #1f1d1a;
+  --warm-white:    #262420;
+  --pure-white:    #2e2b26;
+
+  --gradient-warm: linear-gradient(135deg, #2d2018 0%, #1f2e28 100%);
+  --gradient-luxury: linear-gradient(135deg, #7eb8a2 0%, #d8916a 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(31,29,26,0) 0%, rgba(45,32,24,0.4) 100%);
+
   --blue:          #6a9c7a;
   --amber:         #d4a845;
   --olive:         #7ec49a;
@@ -539,8 +596,8 @@ input, textarea, select { font-family: inherit; }
    ============================================ */
 .scroll-progress {
   height: 2px;
-  background: var(--accent);
-  box-shadow: 0 0 6px rgba(184, 103, 58, 0.3);
+  background: var(--gradient-luxury);
+  box-shadow: 0 0 6px rgba(42, 77, 66, 0.2);
 }
 
 /* ============================================

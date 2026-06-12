@@ -9,7 +9,7 @@ export default function Footer() {
 
           <div className="md:max-w-xs">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--lavender)] rounded-[10px] flex items-center justify-center">
+              <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--green)] rounded-[10px] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 bg-white/90 rounded-[3px]" />
               </div>
               <span className="font-display font-medium text-[17px] text-[var(--ink-900)]">AILABS.BG</span>
