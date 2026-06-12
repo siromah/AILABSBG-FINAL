@@ -182,7 +182,7 @@ export default function PathFinder({ setPage }: { setPage: (page: string) => voi
 
   return (
     <section className="section-shell pb-20 md:pb-28">
-      <div className="relative rounded-[24px] retina-card overflow-hidden p-8 md:p-12 lg:p-14">
+      <div className="relative rounded-[24px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-sm overflow-hidden p-8 md:p-12 lg:p-14">
 
         <div className="relative z-10 max-w-2xl mx-auto">
           {!showResult ? (
@@ -214,7 +214,7 @@ export default function PathFinder({ setPage }: { setPage: (page: string) => voi
                         <button
                           key={opt.id}
                           onClick={() => handleSelect(opt.id)}
-                          className="group text-left p-5 rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] hover:border-[var(--accent)]/30 hover:shadow-sm transition-all"
+                          className="group text-left p-5 rounded-[16px] border border-[var(--border)] bg-[var(--bg)] hover:border-[var(--accent)]/40 hover:shadow-sm hover:-translate-y-0.5 transition-all"
                         >
                           <div className="w-10 h-10 rounded-xl bg-[var(--bg-soft)] group-hover:bg-[var(--accent-light)] flex items-center justify-center text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors mb-3">
                             <opt.icon size={18} strokeWidth={1.5} />
@@ -256,7 +256,7 @@ export default function PathFinder({ setPage }: { setPage: (page: string) => voi
                   {result.desc}
                 </p>
 
-                <div className="solid-card rounded-[16px] p-5 text-left max-w-md mx-auto mb-8">
+                <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[16px] p-5 text-left max-w-md mx-auto mb-8">
                   <div className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider mb-3">
                     Препоръчани стъпки
                   </div>

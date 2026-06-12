@@ -28,6 +28,11 @@
   --color-green-soft: var(--green-soft);
   --color-green-text: var(--green-text);
 
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-text: var(--secondary-text);
+
   --color-navy: var(--navy);
   --color-navy-dark: var(--navy-dark);
   --color-navy-light: var(--navy-light);
@@ -80,90 +85,96 @@
 }
 
 :root {
-  /* === Academy Brand Palette — SoftUni/EdTech inspired === */
-  --bg:              #ffffff;
-  --bg-soft:         #f8fafc;
-  --surface:         rgba(255, 255, 255, 0.85);
-  --surface-strong:  #ffffff;
+  /* === Soft Modern EdTech Palette === */
+  --bg:              #FDFBF7;
+  --bg-soft:         #F7F4EF;
+  --surface:         rgba(255, 255, 255, 0.92);
+  --surface-strong:  #FFFFFF;
 
-  --text-primary:    #0f172a;
-  --text-secondary:  #475569;
-  --text-tertiary:   #94a3b8;
-  --text-disabled:   #cbd5e1;
+  --text-primary:    #1E293B;
+  --text-secondary:  #64748B;
+  --text-tertiary:   #94A3B8;
+  --text-disabled:   #CBD5E1;
 
-  --ink-900: #0f172a;
-  --ink-800: #1e293b;
-  --ink-700: #334155;
-  --ink-600: #475569;
-  --ink-500: #64748b;
-  --ink-400: #94a3b8;
-  --ink-300: #cbd5e1;
-  --ink-200: #e2e8f0;
-  --ink-100: #f1f5f9;
-  --ink-50:  #f8fafc;
+  --ink-900: #1E293B;
+  --ink-800: #334155;
+  --ink-700: #475569;
+  --ink-600: #64748B;
+  --ink-500: #94A3B8;
+  --ink-400: #CBD5E1;
+  --ink-300: #E2E8F0;
+  --ink-200: #F1F5F9;
+  --ink-100: #F8FAFC;
+  --ink-50:  #FDFBF7;
 
-  /* Premium Orange — primary CTA, accent, energy */
-  --accent:        #ea580c;
-  --accent-hover:  #c2410c;
-  --accent-light:  #fff7ed;
-  --accent-text:   #9a3412;
+  /* Warm Orange — primary CTA, accent, energy */
+  --accent:        #E85D04;
+  --accent-hover:  #C94A02;
+  --accent-light:  #FFF3E6;
+  --accent-text:   #9A3A08;
 
-  --brand:         #ea580c;
-  --brand-dark:    #c2410c;
+  --brand:         #E85D04;
+  --brand-dark:    #C94A02;
 
-  /* Branded palette */
-  --orange:        #f97316;
-  --orange-light:  #fff7ed;
-  --orange-text:   #c2410c;
-  --orange-soft:   #ffedd5;
+  /* Branded orange scale */
+  --orange:        #F97316;
+  --orange-light:  #FFF3E6;
+  --orange-text:   #C2410C;
+  --orange-soft:   #FFEDD5;
+
+  /* Soft Indigo — secondary accent, trust, academy feel */
+  --secondary:        #4F46E5;
+  --secondary-hover:  #3730A3;
+  --secondary-light:  #EEF2FF;
+  --secondary-text:   #312E81;
 
   /* Luxury Green — success, career, premium */
   --green:         #059669;
   --green-dark:    #047857;
-  --green-light:   #ecfdf5;
-  --green-soft:    #d1fae5;
-  --green-text:    #065f46;
+  --green-light:   #ECFDF5;
+  --green-soft:    #D1FAE5;
+  --green-text:    #065F46;
 
-  /* Navy — primary brand color, trust, academy feel */
-  --navy:          #1e3a5f;
-  --navy-dark:     #152a45;
-  --navy-light:    #e0f2fe;
-  --navy-soft:     #dbeafe;
-  --navy-text:     #1e40af;
+  /* Legacy navy remapped to soft indigo for compatibility */
+  --navy:          #4F46E5;
+  --navy-dark:     #3730A3;
+  --navy-light:    #EEF2FF;
+  --navy-soft:     #E0E7FF;
+  --navy-text:     #312E81;
 
-  --cream:         #ffffff;
-  --warm-white:    #f8fafc;
-  --pure-white:    #ffffff;
+  --cream:         #FDFBF7;
+  --warm-white:    #F7F4EF;
+  --pure-white:    #FFFFFF;
 
-  --gradient-warm: linear-gradient(135deg, #fff7ed 0%, #ecfdf5 100%);
-  --gradient-luxury: linear-gradient(135deg, #1e3a5f 0%, #ea580c 100%);
-  --gradient-subtle: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,247,237,0.6) 100%);
-  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #ea580c 100%);
-  --gradient-premium: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --gradient-warm: linear-gradient(135deg, #FFF3E6 0%, #FDFBF7 50%, #EEF2FF 100%);
+  --gradient-luxury: linear-gradient(135deg, #E85D04 0%, #F97316 50%, #FB923C 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,243,230,0.7) 100%);
+  --gradient-hero: radial-gradient(ellipse 80% 60% at 80% 20%, rgba(232,93,4,0.10) 0%, transparent 50%),
+                   radial-gradient(ellipse 60% 50% at 10% 80%, rgba(79,70,229,0.08) 0%, transparent 50%),
+                   linear-gradient(180deg, #FDFBF7 0%, #FFFFFF 100%);
+  --gradient-premium: linear-gradient(135deg, #E85D04 0%, #F97316 100%);
+  --gradient-soft: linear-gradient(135deg, #FFF3E6 0%, #EEF2FF 100%);
 
-  --blue:          #2563eb;
-  --amber:         #d97706;
+  --blue:          #4F46E5;
+  --amber:         #D97706;
   --olive:         #059669;
-  --lavender:      #7c3aed;
+  --lavender:      #7C3AED;
 
   --emerald:       #059669;
-  --emerald-light: #ecfdf5;
-  --emerald-text:  #065f46;
+  --emerald-light: #ECFDF5;
+  --emerald-text:  #065F46;
 
-  --amber:         #d97706;
-  --amber-light:   #fffbeb;
-  --amber-text:    #92400e;
+  --rose:          #DC2626;
+  --rose-light:    #FEF2F2;
+  --rose-text:     #991B1B;
 
-  --rose:          #dc2626;
-  --rose-light:    #fef2f2;
-  --rose-text:     #991b1b;
+  --code-bg:       #F8FAFC;
+  --code-border:   #E2E8F0;
 
-  --code-bg:       #f8fafc;
-  --code-border:   #e2e8f0;
-
-  --bg-elevated:   var(--cream);
-  --border:        rgba(15, 23, 42, 0.08);
-  --border-strong: rgba(15, 23, 42, 0.14);
+  --bg-subtle:     var(--bg-soft);
+  --bg-elevated:   var(--surface-strong);
+  --border:        rgba(30, 41, 59, 0.08);
+  --border-strong: rgba(30, 41, 59, 0.14);
 
   --r-sm:  8px;
   --r-md:  12px;
@@ -171,9 +182,9 @@
   --r-xl:  20px;
   --r-2xl: 28px;
 
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
-  --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 20px 48px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-xs: 0 1px 2px rgba(30, 41, 59, 0.04), 0 1px 3px rgba(30, 41, 59, 0.02);
+  --shadow-sm: 0 4px 16px rgba(30, 41, 59, 0.05), 0 1px 2px rgba(30, 41, 59, 0.03);
+  --shadow-md: 0 20px 48px rgba(30, 41, 59, 0.08), 0 4px 12px rgba(30, 41, 59, 0.03);
 
   --font-sans:    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'DM Sans', system-ui, sans-serif;
   --font-display: 'Source Serif 4', 'DM Sans', Georgia, 'Times New Roman', serif;
@@ -185,84 +196,90 @@
 }
 
 .dark {
-  --bg:              #0f172a;
-  --bg-soft:         #1e293b;
-  --surface:         rgba(30, 41, 59, 0.70);
-  --surface-strong:  #1e293b;
+  --bg:              #171528;
+  --bg-soft:         #1E1B32;
+  --surface:         rgba(30, 27, 50, 0.80);
+  --surface-strong:  #1E1B32;
 
-  --text-primary:    #f8fafc;
-  --text-secondary:  #cbd5e1;
-  --text-tertiary:   #64748b;
-  --text-disabled:   #475569;
+  --text-primary:    #F8FAFC;
+  --text-secondary:  #CBD5E1;
+  --text-tertiary:   #94A3B8;
+  --text-disabled:   #64748B;
 
-  --ink-900: #f8fafc;
-  --ink-800: #f1f5f9;
-  --ink-700: #e2e8f0;
-  --ink-600: #cbd5e1;
-  --ink-500: #94a3b8;
-  --ink-400: #64748b;
+  --ink-900: #F8FAFC;
+  --ink-800: #F1F5F9;
+  --ink-700: #E2E8F0;
+  --ink-600: #CBD5E1;
+  --ink-500: #94A3B8;
+  --ink-400: #64748B;
   --ink-300: #475569;
   --ink-200: #334155;
-  --ink-100: #1e293b;
-  --ink-50:  #0f172a;
+  --ink-100: #1E293B;
+  --ink-50:  #171528;
 
-  --accent:        #fb923c;
-  --accent-hover:  #f97316;
+  --accent:        #FB923C;
+  --accent-hover:  #F97316;
   --accent-light:  #431407;
-  --accent-text:   #fdba74;
+  --accent-text:   #FDBA74;
 
-  --brand:         #fb923c;
-  --brand-dark:    #f97316;
+  --brand:         #FB923C;
+  --brand-dark:    #F97316;
 
-  /* Branded palette dark */
-  --orange:        #fb923c;
+  /* Branded orange scale dark */
+  --orange:        #FB923C;
   --orange-light:  #431407;
-  --orange-text:   #fdba74;
-  --orange-soft:   #7c2d12;
+  --orange-text:   #FDBA74;
+  --orange-soft:   #7C2D12;
 
-  --green:         #34d399;
-  --green-dark:    #10b981;
-  --green-light:   #064e3b;
-  --green-soft:    #065f46;
-  --green-text:    #6ee7b7;
+  /* Soft Indigo dark */
+  --secondary:        #818CF8;
+  --secondary-hover:  #A5B4FC;
+  --secondary-light:  #312E81;
+  --secondary-text:   #C7D2FE;
 
-  --navy:          #60a5fa;
-  --navy-dark:     #3b82f6;
-  --navy-light:    #1e3a5f;
-  --navy-soft:     #1e40af;
-  --navy-text:     #93c5fd;
+  --green:         #34D399;
+  --green-dark:    #10B981;
+  --green-light:   #064E3B;
+  --green-soft:    #065F46;
+  --green-text:    #6EE7B7;
 
-  --cream:         #1e293b;
-  --warm-white:    #0f172a;
-  --pure-white:    #1e293b;
+  --navy:          #818CF8;
+  --navy-dark:     #A5B4FC;
+  --navy-light:    #312E81;
+  --navy-soft:     #3730A3;
+  --navy-text:     #C7D2FE;
 
-  --gradient-warm: linear-gradient(135deg, #431407 0%, #064e3b 100%);
-  --gradient-luxury: linear-gradient(135deg, #60a5fa 0%, #fb923c 100%);
-  --gradient-subtle: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(67,20,7,0.4) 100%);
-  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #c2410c 100%);
-  --gradient-premium: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+  --cream:         #1E1B32;
+  --warm-white:    #171528;
+  --pure-white:    #1E1B32;
 
-  --blue:          #60a5fa;
-  --amber:         #fbbf24;
-  --olive:         #34d399;
-  --lavender:      #a78bfa;
+  --gradient-warm: linear-gradient(135deg, #431407 0%, #171528 50%, #312E81 100%);
+  --gradient-luxury: linear-gradient(135deg, #FB923C 0%, #F97316 50%, #FDBA74 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(23,21,40,0) 0%, rgba(67,20,7,0.5) 100%);
+  --gradient-hero: radial-gradient(ellipse 80% 60% at 80% 20%, rgba(251,146,60,0.12) 0%, transparent 50%),
+                   radial-gradient(ellipse 60% 50% at 10% 80%, rgba(129,140,248,0.10) 0%, transparent 50%),
+                   linear-gradient(180deg, #171528 0%, #1E1B32 100%);
+  --gradient-premium: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
+  --gradient-soft: linear-gradient(135deg, #431407 0%, #312E81 100%);
 
-  --emerald:       #34d399;
-  --emerald-light: #064e3b;
-  --emerald-text:  #6ee7b7;
+  --blue:          #818CF8;
+  --amber:         #FBBF24;
+  --olive:         #34D399;
+  --lavender:      #A78BFA;
 
-  --amber:         #fbbf24;
-  --amber-light:   #451a03;
-  --amber-text:    #fde68a;
+  --emerald:       #34D399;
+  --emerald-light: #064E3B;
+  --emerald-text:  #6EE7B7;
 
-  --rose:          #f87171;
-  --rose-light:    #450a0a;
-  --rose-text:     #fecaca;
+  --rose:          #F87171;
+  --rose-light:    #450A0A;
+  --rose-text:     #FECACA;
 
-  --code-bg:       #1e293b;
+  --code-bg:       #1E1B32;
   --code-border:   #334155;
 
-  --bg-elevated:   #1e293b;
+  --bg-subtle:     var(--bg-soft);
+  --bg-elevated:   #1E1B32;
   --border:        rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
 
@@ -721,7 +738,7 @@ input, textarea, select { font-family: inherit; }
 }
 .btn-primary-glow:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(166, 92, 50, 0.18);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 .btn-primary-glow:active {
   transform: translateY(0) scale(0.98);
@@ -732,16 +749,8 @@ input, textarea, select { font-family: inherit; }
 }
 .card-hover-glow:hover {
   transform: translateY(-3px);
-  border-color: rgba(166, 92, 50, 0.18);
-  box-shadow:
-    0 1px 2px rgba(42, 32, 22, 0.04),
-    0 16px 40px rgba(42, 32, 22, 0.08);
-}
-.dark .card-hover-glow:hover {
-  border-color: rgba(216, 145, 106, 0.18);
-  box-shadow:
-    0 1px 2px rgba(0,0,0,0.20),
-    0 16px 40px rgba(0,0,0,0.16);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
 }
 
 .shine-hover {
