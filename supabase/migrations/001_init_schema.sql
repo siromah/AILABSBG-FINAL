@@ -56,8 +56,8 @@ begin
     new.id,
     new.email,
     coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
-    coalesce(new.raw_user_meta_data->>'role', 'user'),
-    coalesce(new.raw_user_meta_data->>'plan', 'free'),
+    'user',
+    'free',
     coalesce(upper(left(new.raw_user_meta_data->>'full_name', 1)), upper(left(split_part(new.email, '@', 1), 1)))
   );
   return new;

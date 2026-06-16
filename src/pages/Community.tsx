@@ -132,8 +132,6 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   if (feedFilter !== 'all') postsToRender = postsToRender.filter((p: any) => p.type === feedFilter);
   postsToRender.sort((a: any, b: any) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-  const escH = (t: string) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
   return (
     <div className="min-h-screen text-[var(--text-primary)] grain">
       <div className="section-shell py-6 md:py-10">
@@ -356,7 +354,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
                       <PostCard
                         p={p} currentUser={currentUser} openModal={openModal}
                         toggleLike={toggleLike} toggleSave={toggleSave} addComment={addComment}
-                        delPost={delPost} fTime={fTime} getTypeInfo={getTypeInfo} escH={escH}
+                        delPost={delPost} fTime={fTime} getTypeInfo={getTypeInfo}
                       />
                     </motion.div>
                   ))}
@@ -440,7 +438,7 @@ export default function Community({ db, updateDb, currentUser, openModal, showTo
   );
 }
 
-function PostCard({ p, currentUser, openModal, toggleLike, toggleSave, addComment, delPost, fTime, getTypeInfo, escH }: any) {
+function PostCard({ p, currentUser, openModal, toggleLike, toggleSave, addComment, delPost, fTime, getTypeInfo }: any) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -508,7 +506,7 @@ function PostCard({ p, currentUser, openModal, toggleLike, toggleSave, addCommen
           )}
         </div>
 
-        <div className="text-[14px] text-[var(--ink-900)] leading-[1.65] mb-4 whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: escH(p.text) }} />
+        <div className="text-[14px] text-[var(--ink-900)] leading-[1.65] mb-4 whitespace-pre-wrap break-words">{p.text}</div>
 
         {p.tags && p.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
@@ -565,7 +563,7 @@ function PostCard({ p, currentUser, openModal, toggleLike, toggleSave, addCommen
                               <span className="text-[12px] font-semibold text-[var(--ink-900)]">{ca.full_name || 'Потребител'}</span>
                               <span className="text-[10px] text-[var(--text-tertiary)]">{fTime(c.created_at)}</span>
                             </div>
-                            <div className="text-[13px] leading-snug text-[var(--text-primary)] whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: escH(c.text) }} />
+                            <div className="text-[13px] leading-snug text-[var(--text-primary)] whitespace-pre-wrap">{c.text}</div>
                           </div>
                         </div>
                       );

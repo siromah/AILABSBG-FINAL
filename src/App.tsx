@@ -33,6 +33,8 @@ const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Coaching = lazy(() => import('./pages/Coaching'));
+const Missions = lazy(() => import('./pages/Missions'));
+const MissionDetail = lazy(() => import('./pages/MissionDetail'));
 const SystemCheck = lazy(() => import('./pages/SystemCheck'));
 const PrivacyPolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.PrivacyPolicy })));
 const CookiePolicy = lazy(() => import('./pages/LegalPages').then(m => ({ default: m.CookiePolicy })));
@@ -257,6 +259,8 @@ function RequireAuth({ children }: { children: ReactNode }) {
             <Route path="/contact" element={<PageTransition><Contact {...props} /></PageTransition>} />
             <Route path="/pricing" element={<PageTransition><Pricing {...props} /></PageTransition>} />
             <Route path="/coaching" element={<PageTransition><Coaching {...props} /></PageTransition>} />
+            <Route path="/missions" element={<PageTransition><Missions {...props} /></PageTransition>} />
+            <Route path="/missions/:id" element={<PageTransition><MissionDetail {...props} /></PageTransition>} />
             <Route path="/system-check" element={<PageTransition><SystemCheck /></PageTransition>} />
             <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
             <Route path="/terms" element={<PageTransition><TermsOfUse /></PageTransition>} />
@@ -266,7 +270,11 @@ function RequireAuth({ children }: { children: ReactNode }) {
                 <PageTransition><Profile {...props} /></PageTransition>
               </ProtectedRoute>
             } />
-            <Route path="/admin" element={<PageTransition>{currentUser?.isAdmin ? <Admin {...props} /> : <Home {...props} />}</PageTransition>} />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <PageTransition>{currentUser?.isAdmin ? <Admin {...props} /> : <Home {...props} />}</PageTransition>
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<PageTransition><Home {...props} /></PageTransition>} />
           </Routes>
         </Suspense>

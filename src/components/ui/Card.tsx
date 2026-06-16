@@ -2,7 +2,7 @@ import React from 'react';
 
 export function Card({ className = '', children, hover = false, glass = false, ...props }: React.HTMLAttributes<HTMLDivElement> & { hover?: boolean; glass?: boolean }) {
   const baseClasses = glass
-    ? 'glass-card rounded-[28px]'
+    ? 'retina-card'
     : 'premium-card';
   const hoverClasses = hover ? 'cursor-pointer' : '';
   return (

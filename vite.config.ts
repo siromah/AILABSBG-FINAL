@@ -4,7 +4,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/craative-bg-ai-/',
+  base: '/AILABSBG-FINAL/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

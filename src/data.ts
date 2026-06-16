@@ -1,20 +1,3 @@
-export const INIT_USERS = [
-  {id:'u1',fname:'Мария',lname:'Георгиева',email:'maria@demo.com',pass:'demo123',role:'freelancer',bio:'Freelancer в digital marketing. Използвам AI всеки ден.',color:'#fff3ee',tc:'#b84a15',initials:'МГ',isAdmin:false,joined:'2024-01-15',tools:['ChatGPT','Claude','Canva AI'],plan:'free'},
-  {id:'u2',fname:'Стефан',lname:'Димитров',email:'stefan@demo.com',pass:'demo123',role:'business',bio:'E-commerce founder. Автоматизирам всичко с Make.com.',color:'#eef4ff',tc:'#1f5aad',initials:'СД',isAdmin:false,joined:'2024-02-10',tools:['ChatGPT','Make.com','Perplexity'],plan:'free'},
-  {id:'u3',fname:'Виктория',lname:'Николова',email:'victoria@demo.com',pass:'demo123',role:'creator',bio:'Content creator. AI content системи.',color:'#eefbf4',tc:'#157a4d',initials:'ВН',isAdmin:false,joined:'2024-03-05',tools:['Claude','Midjourney','ElevenLabs'],plan:'free'},
-  {id:'admin',fname:'Админ',lname:'Craative',email:'admin@ailabsbg.com',pass:'admin123',role:'admin',bio:'Основател на Craative.',color:'#fff3ee',tc:'#b84a15',initials:'АИ',isAdmin:true,joined:'2024-01-01',tools:['Claude','ChatGPT','Midjourney','Make.com'],plan:'premium'}
-];
-
-export const INIT_POSTS = [
-  {id:'p1',uid:'u1',type:'win',text:'Честно казано, не очаквах толкова бърз резултат. След първия урок за Make.com вече имам работещ automation за email-ите. Не е перфектен, но спестява ми поне 2-3 часа седмично. Ако някой иска да види setup-а, пишете.',tags:['Automation','Make.com','Win'],likes:['u2'],saved:[],comments:[{id:'c1',uid:'u2',text:'Моля те, сподели! Аз се мъча с trigger-ите от седмица.',time:Date.now()-3600000}],time:Date.now()-600000,pinned:true},
-  {id:'p2',uid:'u2',type:'question',text:'Здравейте, опитвам се да напиша system prompt за Claude, който да отговаря на клиенти в e-commerce. Пробвах няколко варианта, но отговорите са или твърде формални, или твърде generic. Някой има ли работещ пример?',tags:['Claude','Customer Support'],likes:['u1'],saved:[],comments:[{id:'c2',uid:'admin',text:'Погледни Prompt Library-то — има template, който може да ти свърши работа като база. Ако искаш, можем да го подобрим заедно на следващия office hours.',time:Date.now()-3000000}],time:Date.now()-3600000,pinned:false}
-];
-
-export const INIT_NOTIFS = [
-  {id:'n1',text:'Мария хареса твоя пост',icon:'heart',time:Date.now()-300000,read:false},
-  {id:'n2',text:'Нов коментар от Стефан',icon:'message',time:Date.now()-900000,read:false}
-];
-
 export const PROMPTS = [
   {id:'pr1',title:'Email sequence automation',cat:'automation',text:'Напиши 5-стъпкова email nurture sequence за [продукт/услуга]. Всеки email трябва да е фокусиран върху конкретна болка на клиента. Тон: приятелски и professional. Включи subject lines.',saves:4,isFree:true},
   {id:'pr2',title:'Instagram caption generator',cat:'content',text:'Ти си expert social media copywriter. Напиши 5 Instagram caption варианта за [тема]. Тонът трябва да е [описание]. Включи CTA. Максимум 150 думи.',saves:7,isFree:true},
@@ -88,3 +71,286 @@ export const PRICING_PLANS = [
     features: ['Всичко от Pro','1-на-1 AI Coaching','Личен AI roadmap','Преглед на твоите workflows','Приоритет при въпроси']
   }
 ];
+
+// ============================================
+// MISSIONS MODULE — Duolingo-style learning
+// ============================================
+
+export type MissionQuestionType = 'mcq' | 'truefalse' | 'fill';
+
+export type MissionQuestion = {
+  type: MissionQuestionType;
+  question: string;
+  options?: string[];
+  answer: string;
+  explanation: string;
+};
+
+export type MissionLesson = {
+  id: string;
+  title: string;
+  goal: string;
+  content: string;
+  xp: number;
+  questions: MissionQuestion[];
+};
+
+export type MissionModule = {
+  id: string;
+  title: string;
+  lessons: MissionLesson[];
+};
+
+export type DailyMission = {
+  id: string;
+  title: string;
+  description: string;
+  xp: number;
+  action: string;
+};
+
+export type Flashcard = {
+  id: string;
+  front: string;
+  back: string;
+  moduleId: string;
+};
+
+export type MissionBadgeDef = {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  condition: 'firstLesson' | 'streak7' | 'xp100' | 'moduleComplete' | 'referrals5' | 'streak30';
+};
+
+export const MISSIONS_MODULES: MissionModule[] = [
+  {
+    id: 'm1',
+    title: 'МОДУЛ 1 — Основи на AI',
+    lessons: [
+      {
+        id: 'l-m1-1',
+        title: 'Какво е AI',
+        goal: 'Да разбереш какво е изкуствен интелект и къде се използва.',
+        content: 'Изкуственият интелект (AI) е способността на машините да извършват задачи, които обикновено изискват човешки интелект — разпознаване на говор, вземане на решения, превод, генериране на текст и изображения.',
+        xp: 20,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Кое е пример за AI приложение?',
+            options: ['Печатане на документ', 'Гласов асистент като Siri', 'Зареждане на уеб страница'],
+            answer: 'Гласов асистент като Siri',
+            explanation: 'Гласовите асистенти разпознават реч, разбират смисъла и отговарят — това е класически AI.'
+          },
+          {
+            type: 'truefalse',
+            question: 'AI може да учи от данни, без да бъде изрично програмиран за всяка ситуация.',
+            answer: 'Вярно',
+            explanation: 'Модерният AI, особено машинното обучение, учи от примери и данни.'
+          },
+          {
+            type: 'fill',
+            question: 'AI е съкращение от _______ интелект.',
+            answer: 'изкуствен',
+            explanation: 'AI идва от Artificial Intelligence, което на български е изкуствен интелект.'
+          }
+        ]
+      },
+      {
+        id: 'l-m1-2',
+        title: 'Как работят LLM',
+        goal: 'Да разбереш основната идея зад големите езикови модели.',
+        content: 'Големите езикови модели (LLM) предвиждат следващата дума в последователност. Те са обучени върху огромно количество текст и могат да отговарят на въпроси, да обобщават и да пишат код.',
+        xp: 25,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Какво прави LLM по същество?',
+            options: ['Търси в Google', 'Предвижда следващата дума', 'Съхранява файлове'],
+            answer: 'Предвижда следващата дума',
+            explanation: 'LLM предвиждат вероятността за всяка следваща дума и я избират.'
+          },
+          {
+            type: 'truefalse',
+            question: 'LLM разбират текста по същия начин като хората.',
+            answer: 'Невярно',
+            explanation: 'LLM симулират разбиране чрез статистически модели, без истинско съзнание.'
+          }
+        ]
+      },
+      {
+        id: 'l-m1-3',
+        title: 'Prompt Engineering',
+        goal: 'Да напишеш ясен и ефективен prompt.',
+        content: 'Prompt engineering е изкуството да даваш ясни инструкции на AI. Добрият prompt включва роля, задача, контекст и желан формат.',
+        xp: 30,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Кой елемент НЕ е част от добрия prompt?',
+            options: ['Роля', 'Задача', 'Брой думи в речника на AI', 'Формат'],
+            answer: 'Брой думи в речника на AI',
+            explanation: 'Роля, задача, контекст и формат са основните елементи на добрия prompt.'
+          },
+          {
+            type: 'fill',
+            question: '„Ти си expert copywriter. Напиши email..." задава _______ в prompt-а.',
+            answer: 'роля',
+            explanation: 'Първото изречение задава ролята, която AI трябва да изпълнява.'
+          }
+        ]
+      },
+      {
+        id: 'l-m1-4',
+        title: 'AI Агенти',
+        goal: 'Да разбереш какво са AI агентите и как действат автономно.',
+        content: 'AI агентите са системи, които могат да планират, да използват инструменти и да изпълняват многостъпкови задачи с минимален човешки надзор.',
+        xp: 35,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Кое описва AI агент?',
+            options: ['Модел, който отговаря на един въпрос', 'Система, която изпълнява многостъпкови задачи автономно', 'База данни с отговори'],
+            answer: 'Система, която изпълнява многостъпкови задачи автономно',
+            explanation: 'Агентите комбинират планиране, памет и инструменти, за да действат самостоятелно.'
+          },
+          {
+            type: 'truefalse',
+            question: 'AI агентите винаги работят без никаква проверка от човек.',
+            answer: 'Невярно',
+            explanation: 'Дори добрите агенти се нуждаят от oversight и граници.'
+          }
+        ]
+      },
+      {
+        id: 'l-m1-5',
+        title: 'Автоматизации',
+        goal: 'Да свържеш AI с инструменти като Make.com и Zapier.',
+        content: 'Автоматизациите свързват тригери и действия. AI може да анализира входящи имейли, да генерира отговори и да ги изпраща автоматично.',
+        xp: 40,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Какъв е редът в типична автоматизация?',
+            options: ['Действие → Тригер → AI', 'Тригер → AI → Действие', 'AI → Действие → Тригер'],
+            answer: 'Тригер → AI → Действие',
+            explanation: 'Първо идва събитие (тригер), после AI обработва, накрая се изпълнява действие.'
+          },
+          {
+            type: 'fill',
+            question: 'Make.com и Zapier са _______ платформи.',
+            answer: 'автоматизация',
+            explanation: 'Те свързват различни приложения и автоматизират workflows.'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'm2',
+    title: 'МОДУЛ 2 — AI за работа',
+    lessons: [
+      {
+        id: 'l-m2-1',
+        title: 'Email автоматизация',
+        goal: 'Да автоматизираш email отговори с AI.',
+        content: 'AI може да класифицира имейли, да извлича ключова информация и да чернова персонализирани отговори, спестявайки часове.',
+        xp: 30,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Какво е първата стъпка при email автоматизация?',
+            options: ['Да изпрашь 1000 имейла', 'Да класифицираш входящите имейли', 'Да изтриеш старата поща'],
+            answer: 'Да класифицираш входящите имейли',
+            explanation: 'Класификацията определя какъв тип действие е необходимо.'
+          }
+        ]
+      },
+      {
+        id: 'l-m2-2',
+        title: 'AI за съдържание',
+        goal: 'Да създадеш content workflow с AI.',
+        content: 'От една идея AI може да генерира outline, чернова, социални постове и SEO описания. Човекът добавя финална редакция и автентичен глас.',
+        xp: 35,
+        questions: [
+          {
+            type: 'truefalse',
+            question: 'AI може напълно да замени човешката креативност.',
+            answer: 'Невярно',
+            explanation: 'AI ускорява production, но човекът носи уникална гледна точка и глас.'
+          }
+        ]
+      },
+      {
+        id: 'l-m2-3',
+        title: 'AI за анализ',
+        goal: 'Да анализираш данни с AI асистент.',
+        content: 'AI може да обобщава таблици, да намира тенденции и да генерира отчети от неструктурирани данни.',
+        xp: 40,
+        questions: [
+          {
+            type: 'mcq',
+            question: 'Кое е силна страна на AI при анализа?',
+            options: ['Да създава оригинални данни', 'Да обобщава големи количества информация', 'Да замества финансов одитор'],
+            answer: 'Да обобщава големи количества информация',
+            explanation: 'AI е най-силен в синтеза и обобщаването на данни.'
+          }
+        ]
+      }
+    ]
+  }
+];
+
+export const MISSIONS_DAILY: DailyMission[] = [
+  {
+    id: 'd1',
+    title: 'Научи как работят AI агентите',
+    description: 'Завърши урока „AI Агенти" от Модул 1.',
+    xp: 50,
+    action: 'Започни'
+  },
+  {
+    id: 'd2',
+    title: 'Ревизирай 5 флашкарти',
+    description: 'Прегледай флашкарти и затвърди знанията си.',
+    xp: 25,
+    action: 'Ревизирай'
+  },
+  {
+    id: 'd3',
+    title: 'Запази 3 нови prompt-а',
+    description: 'Разгледай Prompt Library и запази 3 полезни prompt-а.',
+    xp: 30,
+    action: 'Към Prompt-ите'
+  }
+];
+
+export const FLASHCARDS: Flashcard[] = [
+  { id: 'f1', front: 'Какво е Prompt?', back: 'Инструкция към AI модел.', moduleId: 'm1' },
+  { id: 'f2', front: 'Какво прави LLM?', back: 'Предвижда следващата дума в последователност.', moduleId: 'm1' },
+  { id: 'f3', front: 'Какво е AI агент?', back: 'Система, която изпълнява многостъпкови задачи автономно.', moduleId: 'm1' },
+  { id: 'f4', front: 'Какво е тригер в автоматизация?', back: 'Събитие, което стартира workflow.', moduleId: 'm1' },
+  { id: 'f5', front: 'Какво е роля в prompt?', back: 'Задава перспективата или експертизата, която AI трябва да използва.', moduleId: 'm1' },
+  { id: 'f6', front: 'Кое е предимство на AI за съдържание?', back: 'Ускорява production и дава варианти за чернови.', moduleId: 'm2' },
+  { id: 'f7', front: 'Как AI помага при анализ?', back: 'Обобщава големи количества информация и намира тенденции.', moduleId: 'm2' },
+  { id: 'f8', front: 'Какво е workflow?', back: 'Последователност от стъпки, която превръща вход в изход.', moduleId: 'm2' }
+];
+
+export const MISSIONS_BADGES: MissionBadgeDef[] = [
+  { id: 'firstLesson', title: 'Първи урок', description: 'Завърши първия урок в Мисии.', icon: '🏆', condition: 'firstLesson' },
+  { id: 'streak7', title: '7 дневен стрийк', description: 'Учи 7 поредни дни.', icon: '🔥', condition: 'streak7' },
+  { id: 'xp100', title: '100 XP', description: 'Събери 100 XP от мисии.', icon: '⭐', condition: 'xp100' },
+  { id: 'moduleComplete', title: 'Завършен модул', description: 'Завърши цял модул.', icon: '🎓', condition: 'moduleComplete' },
+  { id: 'referrals5', title: 'Поканил 5 приятели', description: 'Сподели платформата с 5 приятели.', icon: '🤝', condition: 'referrals5' },
+  { id: 'streak30', title: '30 дневен стрийк', description: 'Учи 30 поредни дни.', icon: '👑', condition: 'streak30' }
+];
+
+export const XP_REWARDS = {
+  lessonCompleted: 20,
+  quizCompleted: 30,
+  flashcardReviewed: 5,
+  dailyMission: 50,
+  referral: 50,
+  wrongAnswer: 5,
+};

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
-import { Users, Check, ArrowRight, Calendar, Clock, MessageSquare, Target, Zap, BookOpen, Send, Mail, User } from 'lucide-react';
+import { Users, Check, ArrowRight, Calendar, Clock, MessageSquare, Target, Zap, BookOpen, Send, Mail, User, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Input } from '../components/ui/Input';
+import { useAuth } from '../contexts/AuthContext';
 
 const WHO_IS_IT_FOR = [
   { icon: Target, title: 'Предприемачи', desc: 'Искаш да автоматизираш бизнеса си, но не знаеш откъде да започнеш.' },
@@ -37,17 +38,49 @@ const TOPICS = [
   'AI workflow за екипна продуктивност',
 ];
 
-export default function Coaching({ showToast }: any) {
+export default function Coaching({ showToast, currentUser, openModal }: any) {
   useDocumentTitle('Coaching');
+  const { session } = useAuth();
   const [form, setForm] = useState({ name: '', email: '', company: '', goal: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!currentUser) {
+      openModal('login');
+      return;
+    }
     if (!form.name || !form.email || !form.goal) return;
-    localStorage.setItem('craative_coaching_request', JSON.stringify(form));
-    setSubmitted(true);
-    showToast('Запитването е изпратено. Ще се свържем с теб скоро.');
+
+    setLoading(true);
+    try {
+      const res = await fetch('/api/coaching', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`,
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          goal: form.goal,
+          budget: form.company ? `Компания/роля: ${form.company}` : undefined,
+          message: form.goal,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSubmitted(true);
+        showToast('Запитването е изпратено. Ще се свържем с теб скоро.');
+      } else {
+        showToast(data.error || 'Грешка при изпращане. Опитай отново.', true);
+      }
+    } catch {
+      showToast('Грешка при изпращане. Опитай отново.', true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -299,8 +332,9 @@ export default function Coaching({ showToast }: any) {
                       required
                     />
                   </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    <Send size={15} className="mr-2" /> Изпрати запитване
+                  <Button type="submit" size="lg" className="w-full" disabled={loading}>
+                    {loading ? <Loader2 size={15} className="mr-2 animate-spin" /> : <Send size={15} className="mr-2" />}
+                    {loading ? 'Изпращам...' : 'Изпрати запитване'}
                   </Button>
                   <p className="text-[11px] text-[var(--text-tertiary)] text-center">
                     Не споделяме информацията ти с трети страни. Първият разговор е безплатен и без ангажимент.

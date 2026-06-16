@@ -16,7 +16,8 @@ import {
   Bookmark,
   LogOut,
   X,
-  Tag
+  Tag,
+  Target
 } from 'lucide-react';
 import { Avatar } from './ui/Avatar';
 
@@ -58,11 +59,12 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
     window.scrollTo(0, 0);
   };
 
-  const activeClass = "font-medium text-[var(--accent)] bg-[var(--accent-light)]";
-  const inactiveClass = "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-soft)]";
+  const activeClass = "font-semibold text-[var(--accent)] underline underline-offset-[6px] decoration-2 decoration-[var(--accent)]";
+  const inactiveClass = "text-[var(--text-secondary)] hover:text-[var(--text-primary)]";
 
   const navLinks = [
     {id: 'home', label: 'Начало', icon: Home, route: '/'},
+    {id: 'missions', label: 'Мисии', icon: Target, route: '/missions'},
     {id: 'lessons', label: 'Академия', icon: GraduationCap, route: '/lessons'},
     {id: 'prompts', label: 'Prompt-и', icon: Sparkles, route: '/prompts'},
     {id: 'community', label: 'Общност', icon: MessageSquare, route: '/community'},
@@ -72,7 +74,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
 
   return (
     <>
-      <nav className={`sticky top-0 z-40 h-[56px] transition-all duration-300 ${scrolled ? 'retina-glass nav-scrolled' : 'bg-transparent'}`}>
+      <nav className={`sticky top-0 z-40 h-[60px] transition-all duration-200 ${scrolled ? 'retina-glass nav-scrolled' : 'bg-transparent'}`}>
         <div className="section-shell h-full flex items-center justify-between">
 
           {/* LEFT: Logo */}
@@ -81,7 +83,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
               <div className="w-8 h-8 rounded-xl bg-[var(--gradient-premium)] flex items-center justify-center shadow-sm">
                 <div className="w-3 h-3 bg-white/90 rounded-[4px]" />
               </div>
-              <span className="font-display font-medium text-[17px] tracking-tight text-[var(--ink-900)]">AILABS.BG</span>
+              <span className="font-display font-semibold text-[17px] tracking-tight text-[var(--ink-900)]">AILABS.BG</span>
             </div>
 
             {/* CENTER (Desktop): Nav Links */}
@@ -91,7 +93,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                   key={item.id}
                   to={item.route}
                   end={item.route === '/'}
-                  className={({ isActive }) => `text-[13px] h-9 px-3.5 rounded-full flex items-center transition-all duration-200 ${isActive ? activeClass : inactiveClass}`}
+                  className={({ isActive }) => `text-[14px] h-10 px-3 rounded-lg flex items-center transition-colors duration-200 ${isActive ? activeClass : inactiveClass}`}
                 >
                   {item.label}
                 </NavLink>
@@ -100,13 +102,13 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
           </div>
 
           {/* RIGHT: Search + Notif + Theme + Avatar */}
-          <div className="flex items-center gap-1 md:gap-1.5 relative" ref={dropdownRef}>
+          <div className="flex items-center gap-1.5 md:gap-2 relative" ref={dropdownRef}>
             <button
-              className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--bg-soft)] transition-colors hidden sm:flex"
+              className="p-2.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--bg-soft)] transition-colors duration-200 hidden sm:flex"
               onClick={() => navigate('/prompts')}
               aria-label="Търси в prompt-ите"
             >
-              <Search size={17} />
+              <Search size={18} />
             </button>
 
             <div className="hidden sm:block">
@@ -220,7 +222,7 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                   <div className="w-8 h-8 rounded-xl bg-[var(--gradient-premium)] flex justify-center items-center">
                     <div className="w-3 h-3 bg-white/90 rounded-[4px]" />
                   </div>
-                  <span className="font-display font-medium text-[16px] text-[var(--ink-900)]">AILABS.BG</span>
+                  <span className="font-display font-semibold text-[16px] text-[var(--ink-900)]">AILABS.BG</span>
                 </div>
                 <button onClick={() => setMobMenu(false)} className="p-1.5 text-[var(--text-secondary)] hover:bg-[var(--bg-soft)] rounded-full transition-colors"><X size={18}/></button>
               </div>
@@ -232,9 +234,9 @@ export default function Nav({ page, setPage, openModal, db, updateDb, showToast,
                     to={item.route}
                     end={item.route === '/'}
                     onClick={() => setMobMenu(false)}
-                    className={({ isActive }) => `flex items-center gap-3 px-3 py-3 rounded-xl text-[14px] font-medium transition-colors ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]'}`}
+                    className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 rounded-lg text-[15px] font-medium transition-colors ${isActive ? 'text-[var(--accent)] underline underline-offset-4 decoration-2 decoration-[var(--accent)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-soft)]'}`}
                   >
-                    <item.icon size={18} className={page === item.id ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'} />
+                    <item.icon size={20} className={page === item.id ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)]'} />
                     {item.label}
                   </NavLink>
                 ))}

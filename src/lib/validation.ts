@@ -4,7 +4,14 @@ import { z } from 'zod';
 // Base schemas
 // ============================================
 export const EmailSchema = z.string().email('Невалиден имейл адрес').max(254);
-export const PasswordSchema = z.string().min(8, 'Паролата трябва да е поне 8 символа').max(128);
+export const PasswordSchema = z
+  .string()
+  .min(8, 'Паролата трябва да е поне 8 символа')
+  .max(128)
+  .regex(/[A-Z]/, 'Паролата трябва да съдържа поне една главна буква')
+  .regex(/[a-z]/, 'Паролата трябва да съдържа поне една малка буква')
+  .regex(/[0-9]/, 'Паролата трябва да съдържа поне една цифра')
+  .regex(/[^A-Za-z0-9]/, 'Паролата трябва да съдържа поне един специален символ');
 export const UuidSchema = z.string().uuid();
 export const IdSchema = z.string().min(1).max(64);
 
@@ -98,6 +105,15 @@ export const ContactFormSchema = z.object({
   email: EmailSchema,
   subject: z.string().max(200).optional(),
   message: z.string().min(1).max(5000),
+});
+
+// ============================================
+// AI Tutor Feedback
+// ============================================
+export const AITutorFeedbackSchema = z.object({
+  missionTitle: z.string().min(1).max(200),
+  taskTitle: z.string().min(1).max(200),
+  answer: z.string().min(1).max(10000),
 });
 
 // ============================================

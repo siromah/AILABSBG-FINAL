@@ -49,6 +49,22 @@ export function Register() {
       setError('Паролата трябва да е поне 8 символа.');
       return;
     }
+    if (!/[A-Z]/.test(password)) {
+      setError('Паролата трябва да съдържа поне една главна буква.');
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError('Паролата трябва да съдържа поне една малка буква.');
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      setError('Паролата трябва да съдържа поне една цифра.');
+      return;
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      setError('Паролата трябва да съдържа поне един специален символ.');
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError('Паролите не съвпадат.');

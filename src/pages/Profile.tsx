@@ -53,7 +53,7 @@ export function Profile({ db, setPage }: any) {
 
   const handleGoalSelect = (goalId: string) => {
     setSelectedGoal(goalId);
-    localStorage.setItem('craative_goal', goalId);
+    localStorage.setItem('ailabs_goal', goalId);
   };
 
   // ONBOARDING for new users

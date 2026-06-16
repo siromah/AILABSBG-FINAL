@@ -176,23 +176,23 @@
   --border:        rgba(30, 41, 59, 0.08);
   --border-strong: rgba(30, 41, 59, 0.14);
 
-  --r-sm:  8px;
-  --r-md:  12px;
-  --r-lg:  16px;
-  --r-xl:  20px;
-  --r-2xl: 28px;
+  --r-sm:  4px;
+  --r-md:  6px;
+  --r-lg:  8px;
+  --r-xl:  12px;
+  --r-2xl: 16px;
 
-  --shadow-xs: 0 1px 2px rgba(30, 41, 59, 0.04), 0 1px 3px rgba(30, 41, 59, 0.02);
-  --shadow-sm: 0 4px 16px rgba(30, 41, 59, 0.05), 0 1px 2px rgba(30, 41, 59, 0.03);
-  --shadow-md: 0 20px 48px rgba(30, 41, 59, 0.08), 0 4px 12px rgba(30, 41, 59, 0.03);
+  --shadow-xs: 0 1px 1px rgba(30, 41, 59, 0.03);
+  --shadow-sm: 0 1px 2px rgba(30, 41, 59, 0.04);
+  --shadow-md: 0 4px 12px rgba(30, 41, 59, 0.05);
 
-  --font-sans:    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'DM Sans', system-ui, sans-serif;
-  --font-display: 'Source Serif 4', 'DM Sans', Georgia, 'Times New Roman', serif;
-  --font-mono:    'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
 
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition: 300ms var(--ease-out);
+  --transition: 250ms var(--ease-out);
 }
 
 .dark {
@@ -283,9 +283,9 @@
   --border:        rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.20), 0 1px 3px rgba(0,0,0,0.12);
-  --shadow-sm: 0 4px 24px rgba(0,0,0,0.18), 0 1px 2px rgba(0,0,0,0.12);
-  --shadow-md: 0 24px 64px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-xs: 0 1px 1px rgba(0,0,0,0.20);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.18);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -317,77 +317,70 @@ input, textarea, select { font-family: inherit; }
    RETINA GLASS
    ============================================ */
 .retina-glass {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.50),
-    0 1px 3px rgba(0,0,0,0.04);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border-bottom: 1px solid var(--border);
 }
 .dark .retina-glass {
-  background: rgba(28, 28, 30, 0.72);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    0 1px 3px rgba(0,0,0,0.20);
+  background: rgba(28, 28, 30, 0.92);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ============================================
+   PREMIUM CARD
+   ============================================ */
+:where(.premium-card) {
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: border-color 0.2s ease, transform 0.2s var(--ease-out);
+}
+:where(.premium-card):hover {
+  border-color: var(--border-strong);
+}
+.dark :where(.premium-card) {
+  background: var(--bg-elevated);
+  border-color: var(--border);
+}
+.dark :where(.premium-card):hover {
+  border-color: var(--border-strong);
 }
 
 /* ============================================
    RETINA CARD
    ============================================ */
-.retina-card {
-  background: rgba(255, 255, 255, 0.80);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: var(--r-xl);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.60),
-    0 1px 2px rgba(0,0,0,0.04),
-    0 8px 32px rgba(0,0,0,0.04);
-  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), border-color 0.3s ease;
+:where(.retina-card) {
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: border-color 0.2s ease, transform 0.2s var(--ease-out);
 }
-.retina-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(0, 0, 0, 0.10);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.60),
-    0 1px 2px rgba(0,0,0,0.04),
-    0 16px 48px rgba(0,0,0,0.06);
+:where(.retina-card):hover {
+  border-color: var(--border-strong);
 }
-.dark .retina-card {
-  background: rgba(28, 28, 30, 0.70);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 1px 2px rgba(0,0,0,0.20),
-    0 8px 32px rgba(0,0,0,0.16);
+.dark :where(.retina-card) {
+  background: var(--bg-elevated);
+  border-color: var(--border);
 }
-.dark .retina-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 1px 2px rgba(0,0,0,0.20),
-    0 16px 48px rgba(0,0,0,0.20);
+.dark :where(.retina-card):hover {
+  border-color: var(--border-strong);
 }
 
 /* ============================================
    SOLID CARD (for content readability)
    ============================================ */
-.solid-card {
+:where(.solid-card) {
   background: var(--surface-strong);
   border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.03);
-  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  border-radius: var(--r-lg);
+  transition: border-color 0.2s ease;
 }
-.solid-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 16px 40px rgba(0,0,0,0.05);
+:where(.solid-card):hover {
+  border-color: var(--border-strong);
 }
-.dark .solid-card:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.20), 0 16px 40px rgba(0,0,0,0.18);
+.dark :where(.solid-card):hover {
+  border-color: var(--border-strong);
 }
 
 /* ============================================
@@ -416,15 +409,15 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-display);
   font-size: clamp(40px, 5.5vw, 80px);
   font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 .display-lg {
   font-family: var(--font-display);
   font-size: clamp(32px, 4vw, 56px);
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
@@ -432,17 +425,18 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-display);
   font-size: clamp(24px, 2.6vw, 40px);
   font-weight: 500;
-  line-height: 1.14;
-  letter-spacing: -0.01em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 .font-display {
   font-family: var(--font-display);
 }
 .label-caps {
+  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-tertiary);
 }

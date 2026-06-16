@@ -18,22 +18,22 @@ export function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-300 rounded-full gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
-  
+  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-lg gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]';
+
   const sizeClasses = {
-    sm: 'h-8 px-4 text-[13px]',
-    md: 'h-10 px-5 text-[14px]',
-    lg: 'h-[52px] px-8 text-[15px]'
+    sm: 'min-h-[36px] px-4 text-[13px]',
+    md: 'min-h-[44px] px-5 text-[14px]',
+    lg: 'min-h-[52px] px-8 text-[15px]'
   };
 
   const variantClasses = {
-    primary: 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-sm hover:shadow-md btn-primary-glow border-0',
-    secondary: 'bg-[var(--surface-strong)] text-[var(--text-primary)] border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-soft)] shadow-xs',
+    primary: 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] border-0',
+    secondary: 'bg-[var(--surface-strong)] text-[var(--text-primary)] border border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-soft)]',
     ghost: 'bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-soft)]/60',
     danger: 'bg-[var(--rose-light)] text-[var(--rose)] border border-[var(--rose)]/20 hover:bg-[var(--rose)]/10'
   };
 
-  const disabledClasses = (disabled || isLoading) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.97]';
+  const disabledClasses = (disabled || isLoading) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98]';
 
   return (
     <button 

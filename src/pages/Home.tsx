@@ -100,7 +100,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) return;
-    localStorage.setItem('craative_lead_email', email);
+    localStorage.setItem('ailabs_lead_email', email);
     setEmailSubmitted(true);
     setTimeout(() => setEmail(''), 3000);
   };
@@ -110,8 +110,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           HERO — Soft, warm, inviting
          ═══════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[92vh] md:min-h-[95vh] flex items-center overflow-hidden bg-[var(--gradient-hero)]">
-        <div className="section-shell relative z-10 w-full pt-28 md:pt-36 pb-24 md:pb-32">
+      <section ref={heroRef} className="relative min-h-[90vh] md:min-h-[92vh] flex items-center overflow-hidden bg-[var(--gradient-hero)]">
+        <div className="section-shell relative z-10 w-full pt-24 md:pt-32 pb-20 md:pb-28">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-6 xl:col-span-5">
@@ -129,7 +129,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                 </span>
               </h1>
 
-              <p className="hero-desc text-[17px] md:text-[19px] text-[var(--text-secondary)] max-w-lg leading-[1.7] mb-10 opacity-0">
+              <p className="hero-desc text-[18px] md:text-[20px] text-[var(--text-secondary)] max-w-xl leading-[1.6] mb-10 opacity-0">
                 Уроци, общност и 1:1 помощ за хора, които искат да използват AI в работа, учене, реклама, съдържание и бизнес — без празна теория.
               </p>
 
@@ -178,7 +178,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             {/* Right — visual */}
             <div className="hero-visual lg:col-span-6 xl:col-span-7 relative hidden lg:block opacity-0">
               <div className="relative w-full aspect-[4/3] max-w-[560px] ml-auto">
-                <div className="absolute inset-0 rounded-[28px] overflow-hidden shadow-lg border border-[var(--border)] bg-[var(--surface-strong)]">
+                <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg border border-[var(--border)] bg-[var(--surface-strong)]">
                   <img
                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80"
                     alt="AILABS.BG — практическо AI обучение"
@@ -205,14 +205,14 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           TRUST BAR
          ═══════════════════════════════════════ */}
-      <section className="section-shell pb-10 md:pb-14">
+      <section className="section-shell pb-12 md:pb-16">
         <div className="text-center gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.15em] uppercase text-[var(--text-tertiary)] mb-5">
+          <p className="text-[13px] font-medium tracking-[0.1em] uppercase text-[var(--text-tertiary)] mb-5">
             Инструментите, които изучаваме
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-80">
             {['ChatGPT', 'Claude', 'Gemini', 'Midjourney', 'Make.com', 'Notion AI'].map((tool) => (
-              <span key={tool} className="text-[15px] font-medium text-[var(--text-secondary)]">{tool}</span>
+              <span key={tool} className="text-[16px] font-medium text-[var(--text-secondary)]">{tool}</span>
             ))}
           </div>
         </div>
@@ -221,8 +221,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           STATS BAR
          ═══════════════════════════════════════ */}
-      <section className="relative z-20 -mt-4 mx-4 md:mx-8 lg:mx-auto max-w-5xl">
-        <div className="bg-[var(--surface-strong)] rounded-[20px] shadow-sm border border-[var(--border)] p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <section className="relative z-20 mx-4 md:mx-8 lg:mx-auto max-w-5xl">
+        <div className="bg-[var(--surface-strong)] rounded-2xl shadow-sm border border-[var(--border)] p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
             { value: '500+', label: 'Членове на общността' },
             { value: `${totalLessons}+`, label: 'Практически урока' },
@@ -231,7 +231,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-[28px] md:text-[34px] font-semibold text-[var(--accent)] tracking-tight">{stat.value}</div>
-              <div className="text-[13px] text-[var(--text-secondary)] mt-1">{stat.label}</div>
+              <div className="text-[14px] text-[var(--text-secondary)] mt-1.5">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -243,11 +243,11 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="py-24 md:py-32">
         <div className="section-shell">
           <div className="text-center mb-16 md:mb-20 gsap-section">
-            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">За платформата</p>
+            <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">За платформата</p>
             <h2 className="display-lg text-[var(--ink-900)] mb-5">
               Какво е AILABS.BG?
             </h2>
-            <p className="text-[17px] md:text-[19px] text-[var(--text-secondary)] leading-[1.7] max-w-2xl mx-auto">
+            <p className="text-[18px] md:text-[20px] text-[var(--text-secondary)] leading-[1.6] max-w-2xl mx-auto">
               Българска AI академия и общност, създадена за практическо учене — без излишна теория,
               без сложни термини и без объъркване. Учим се да използваме AI в реални задачи, заедно.
             </p>
@@ -266,7 +266,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               };
               const c = colorMap[card.color];
               return (
-                <div key={i} className="gsap-item bg-[var(--surface-strong)] border border-[var(--border)] rounded-[24px] p-8 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div key={i} className="gsap-item bg-[var(--surface-strong)] border border-[var(--border)] rounded-xl p-8 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                   <div className={`w-12 h-12 rounded-2xl ${c.bg} ${c.text} flex items-center justify-center mb-5`}>
                     <card.icon size={22} strokeWidth={1.5} />
                   </div>
@@ -284,7 +284,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
          ═══════════════════════════════════════ */}
       <section className="section-shell pb-24 md:pb-32">
         <div className="text-center mb-14 md:mb-16 gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Мнения</p>
+          <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Мнения</p>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             Какво казват членовете
           </h2>
@@ -314,7 +314,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
               avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80',
             },
           ].map((t, i) => (
-            <div key={i} className="gsap-item bg-[var(--surface-strong)] border border-[var(--border)] rounded-[24px] p-7 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+            <div key={i} className="gsap-item bg-[var(--surface-strong)] border border-[var(--border)] rounded-xl p-7 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-center gap-1 text-[var(--accent)] mb-4">
                 {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
               </div>
@@ -352,7 +352,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
          ═══════════════════════════════════════ */}
       <section className="section-shell py-24 md:py-32">
         <div className="text-center mb-16 md:mb-20 gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Обучение</p>
+          <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Обучение</p>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             Избери своя AI път
           </h2>
@@ -367,7 +367,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             return (
               <div
                 key={path.id}
-                className="gsap-item group cursor-pointer bg-[var(--surface-strong)] rounded-[20px] border border-[var(--border)] p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                className="gsap-item group cursor-pointer bg-[var(--surface-strong)] rounded-xl border border-[var(--border)] p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
                 onClick={() => setPage('lessons')}
               >
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300" style={{ backgroundColor: light, color: accent }}>
@@ -392,9 +392,9 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           HOW IT WORKS
          ═══════════════════════════════════════ */}
-      <section className="section-shell py-24 md:py-32 bg-[var(--bg-soft)] rounded-[32px] md:rounded-[40px] my-8 md:my-12">
+      <section className="section-shell py-24 md:py-32 bg-[var(--bg-soft)] rounded-2xl md:rounded-[40px] my-8 md:my-12">
         <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20 gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Процес</p>
+          <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Процес</p>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             Как работи?
           </h2>
@@ -431,7 +431,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell py-24 md:py-32">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12 md:mb-16 gsap-section">
           <div>
-            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Академия</p>
+            <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Академия</p>
             <h2 className="display-lg text-[var(--ink-900)] mb-3">
               Започни с тези уроци
             </h2>
@@ -448,7 +448,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {academyLessons.map((lesson: any, idx: number) => (
             <div
               key={lesson.id}
-              className="gsap-item group cursor-pointer bg-[var(--surface-strong)] rounded-[24px] border border-[var(--border)] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+              className="gsap-item group cursor-pointer bg-[var(--surface-strong)] rounded-xl border border-[var(--border)] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
               onClick={() => setPage('lessons')}
             >
               <div className="relative aspect-[16/10] overflow-hidden">
@@ -496,13 +496,13 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       {/* ═══════════════════════════════════════
           PROMPTS + EVENTS
          ═══════════════════════════════════════ */}
-      <section className="section-shell py-24 md:py-32 bg-[var(--bg-soft)] rounded-[32px] md:rounded-[40px] my-8 md:my-12">
+      <section className="section-shell py-24 md:py-32 bg-[var(--bg-soft)] rounded-2xl md:rounded-[40px] my-8 md:my-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
           {/* Prompts */}
           <div className="gsap-section">
             <div className="flex items-end justify-between gap-4 mb-8">
               <div>
-                <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Библиотека</p>
+                <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Библиотека</p>
                 <h2 className="display-md text-[var(--ink-900)]">
                   Готови prompt-и
                 </h2>
@@ -551,7 +551,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           <div className="gsap-section">
             <div className="flex items-end justify-between gap-4 mb-8">
               <div>
-                <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Събития</p>
+                <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Събития</p>
                 <h2 className="display-md text-[var(--ink-900)]">
                   Предстоящи
                 </h2>
@@ -568,7 +568,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                   className="group cursor-pointer"
                   onClick={() => setPage('events')}
                 >
-                  <div className="flex gap-4 p-4 rounded-[16px] bg-[var(--surface-strong)] hover:bg-[var(--bg)] transition-colors duration-300 border border-[var(--border)] shadow-xs">
+                  <div className="flex gap-4 p-4 rounded-xl bg-[var(--surface-strong)] hover:bg-[var(--bg)] transition-colors duration-300 border border-[var(--border)] shadow-xs">
                     <div className="shrink-0 w-14 h-14 rounded-xl bg-[var(--bg-soft)] flex flex-col items-center justify-center border border-[var(--border)]">
                       <div className="text-[18px] font-bold text-[var(--ink-900)] leading-none">{e.day}</div>
                       <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--accent)]">{e.mo}</div>
@@ -596,7 +596,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
          ═══════════════════════════════════════ */}
       <section className="section-shell py-24 md:py-32">
         <div className="text-center mb-16 md:mb-20 gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Резултати</p>
+          <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Резултати</p>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             Какво ще можеш след това?
           </h2>
@@ -609,7 +609,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           {OUTCOMES.map((item) => (
             <div
               key={item.text}
-              className="gsap-item group flex items-center gap-4 p-5 rounded-[16px] bg-[var(--surface-strong)] border border-[var(--border)] shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300"
+              className="gsap-item group flex items-center gap-4 p-5 rounded-xl bg-[var(--surface-strong)] border border-[var(--border)] shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300"
             >
               <div className="w-10 h-10 rounded-xl bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center shrink-0">
                 <item.icon size={18} strokeWidth={1.5} />
@@ -626,8 +626,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell pb-24 md:pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <div className="gsap-section">
-            <div className="rounded-[24px] bg-[var(--surface-strong)] p-8 md:p-10 h-full border border-[var(--border)] shadow-sm">
-              <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Общност</p>
+            <div className="rounded-xl bg-[var(--surface-strong)] p-8 md:p-10 h-full border border-[var(--border)] shadow-sm">
+              <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Общност</p>
               <h2 className="display-md text-[var(--ink-900)] mb-4">
                 Не си сам в това
               </h2>
@@ -652,8 +652,8 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           </div>
 
           <div className="gsap-section">
-            <div className="rounded-[24px] bg-[var(--surface-strong)] p-8 md:p-10 h-full border border-[var(--border)] shadow-sm">
-              <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--green)] mb-4">Коучинг</p>
+            <div className="rounded-xl bg-[var(--surface-strong)] p-8 md:p-10 h-full border border-[var(--border)] shadow-sm">
+              <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--green)] mb-4">Коучинг</p>
               <h2 className="display-md text-[var(--ink-900)] mb-4">
                 1:1 AI Коучинг
               </h2>
@@ -683,7 +683,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           EMAIL CAPTURE
          ═══════════════════════════════════════ */}
       <section className="section-shell pb-24 md:pb-32">
-        <div className="max-w-3xl mx-auto text-center gsap-section p-8 md:p-14 rounded-[32px] bg-[var(--gradient-soft)] border border-[var(--border)] relative overflow-hidden">
+        <div className="max-w-3xl mx-auto text-center gsap-section p-8 md:p-14 rounded-2xl bg-[var(--gradient-soft)] border border-[var(--border)] relative overflow-hidden">
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent)] text-white text-[11px] font-medium mb-6">
               <Mail size={11} />
@@ -698,7 +698,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             </p>
 
             {emailSubmitted ? (
-              <div className="text-center p-10 rounded-[24px] border border-[var(--border)] bg-[var(--surface-strong)] max-w-md mx-auto">
+              <div className="text-center p-10 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] max-w-md mx-auto">
                 <div className="w-14 h-14 rounded-full bg-[var(--green-light)] flex items-center justify-center text-[var(--green)] mx-auto mb-4">
                   <Check size={24} />
                 </div>
@@ -714,7 +714,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
                     placeholder="твоят@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full h-[56px] pl-12 pr-4 rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all"
+                    className="w-full h-[56px] pl-12 pr-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] transition-all"
                     required
                   />
                 </div>
@@ -735,7 +735,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
          ═══════════════════════════════════════ */}
       <section className="section-shell pb-24 md:pb-32">
         <div className="text-center mb-16 md:mb-20 gsap-section">
-          <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">Цени</p>
+          <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">Цени</p>
           <h2 className="display-lg text-[var(--ink-900)] mb-5">
             Ясни планове, без изненади
           </h2>
@@ -780,7 +780,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
             return (
               <div
                 key={plan.name}
-                className={`gsap-item relative h-full rounded-[24px] p-7 md:p-8 flex flex-col bg-[var(--surface-strong)] border transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
+                className={`gsap-item relative h-full rounded-xl p-7 md:p-8 flex flex-col bg-[var(--surface-strong)] border transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
                   isPro ? 'border-[var(--accent)] shadow-sm' : 'border-[var(--border)] shadow-xs'
                 }`}
               >
@@ -837,7 +837,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
       <section className="section-shell pb-24 md:pb-32">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-16 md:mb-20 gsap-section">
-            <p className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[var(--accent)] mb-4">FAQ</p>
+            <p className="text-[13px] font-semibold tracking-[0.15em] uppercase text-[var(--accent)] mb-4">FAQ</p>
             <h2 className="display-lg text-[var(--ink-900)] mb-5">
               Всичко, което трябва да знаеш
             </h2>
@@ -849,7 +849,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
           <div className="flex flex-col gap-3">
             {FAQS.map((faq, idx) => (
               <div key={idx} className="gsap-item">
-                <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] overflow-hidden">
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] overflow-hidden">
                   <button
                     className="w-full text-left p-5 flex items-center justify-between gap-4 hover:bg-[var(--bg-soft)]/50 transition-colors"
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
@@ -889,7 +889,7 @@ export default function Home({ checkAuthThenGo, setPage }: any) {
          ═══════════════════════════════════════ */}
       <section className="section-shell pb-24 md:pb-32">
         <div className="gsap-section">
-          <div className="relative rounded-[32px] overflow-hidden bg-[var(--gradient-luxury)]">
+          <div className="relative rounded-2xl overflow-hidden bg-[var(--gradient-luxury)]">
             <div className="absolute inset-0 bg-[var(--ink-900)]/10" />
 
             <div className="relative z-10 p-10 md:p-16 lg:p-20 text-center">

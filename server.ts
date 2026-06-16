@@ -19,6 +19,7 @@ import {
   SavedPromptSchema,
   CoachingRequestSchema,
   ContactFormSchema,
+  AITutorFeedbackSchema,
   AdminUpdateUserSchema,
   AdminDeleteUserSchema,
 } from './src/lib/validation';
@@ -151,6 +152,9 @@ function validateBody(schema: any) {
 // Safe Error Response
 // ============================================
 function safeError(err: unknown): { error: string } {
+  if (process.env.NODE_ENV === 'production') {
+    return { error: 'An unexpected error occurred. Please try again later.' };
+  }
   if (err instanceof Error) {
     return { error: err.message || 'An error occurred.' };
   }
@@ -203,6 +207,47 @@ async function getAIUsageToday(userId: string): Promise<number> {
 }
 
 // ============================================
+// Contact Email Sender
+// Configure RESEND_API_KEY to send real emails.
+// ============================================
+interface ContactEmailPayload {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+}
+
+async function sendContactEmail(payload: ContactEmailPayload): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.CONTACT_EMAIL_TO || 'hello@ailabs.bg';
+  const from = process.env.CONTACT_EMAIL_FROM || 'AILABS.BG <noreply@ailabs.bg>';
+
+  if (!apiKey || apiKey === 'your_resend_api_key') {
+    return false;
+  }
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to,
+        subject: payload.subject || 'Ново запитване от AILABS.BG',
+        text: `Име: ${payload.name}\nИмейл: ${payload.email}\n\n${payload.message}`,
+        reply_to: payload.email,
+      }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+// ============================================
 // Server
 // ============================================
 async function startServer() {
@@ -226,16 +271,40 @@ async function startServer() {
 
   app.disable('x-powered-by');
 
-  // CORS - restrict in production
+  // CORS - explicit origins only in production
+  const rawOrigins = process.env.ALLOWED_ORIGINS || '';
   const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean)
-    : ['http://localhost:8080', 'http://localhost:5173', 'http://127.0.0.1:8080'];
+    ? rawOrigins.split(',').map(o => o.trim()).filter(Boolean)
+    : ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:8080'];
 
   app.use((req: Request, res: Response, next: NextFunction) => {
     const origin = req.headers.origin;
-    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+    const isAllowed = origin && allowedOrigins.includes(origin);
+    const allowsAny = allowedOrigins.includes('*');
+
+    if (process.env.NODE_ENV === 'production') {
+      if (allowedOrigins.length === 0) {
+        // Misconfigured production: deny cross-origin requests
+        if (req.method === 'OPTIONS') {
+          res.status(403).json({ error: 'CORS not configured.' });
+          return;
+        }
+        // Same-origin requests may still pass through
+        if (origin) {
+          res.status(403).json({ error: 'CORS not configured.' });
+          return;
+        }
+      } else if (isAllowed || allowsAny) {
+        res.setHeader('Access-Control-Allow-Origin', allowsAny ? '*' : origin);
+      } else if (origin) {
+        res.status(403).json({ error: 'Origin not allowed.' });
+        return;
+      }
+    } else {
+      // Development: be permissive for local tooling
       res.setHeader('Access-Control-Allow-Origin', origin || '*');
     }
+
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     if (req.method === 'OPTIONS') {
@@ -341,13 +410,77 @@ Site Context: ${body.siteContext || 'AILABSBG Platform'}
   });
 
   // ============================================
+  // AI Tutor Feedback (AUTHENTICATED + RATE LIMITED)
+  // ============================================
+  app.post('/api/ai-tutor-feedback', requireUser, aiLimiter, validateBody(AITutorFeedbackSchema), async (req: Request, res: Response) => {
+    try {
+      const { missionTitle, taskTitle, answer } = req.body;
+      const user = (req as AuthenticatedRequest).user!;
+
+      // Daily quota check
+      const DAILY_AI_LIMIT = 50;
+      const usageToday = await getAIUsageToday(user.id);
+      if (usageToday >= DAILY_AI_LIMIT) {
+        res.status(429).json({ error: 'Достигнахте дневния лимит за AI асистента. Опитайте отново утре.' });
+        return;
+      }
+
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey === 'your_api_key_here') {
+        res.status(503).json({ error: 'AI асистентът не е конфигуриран.' });
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+
+      const prompt = `Ти си AI учител в AILABS.BG — българска AI образователна платформа. Ученикът току-що изпълни практическа задача.
+
+Мисия: ${missionTitle}
+Задача: ${taskTitle}
+
+Отговор на ученика:
+${answer}
+
+Дай конструктивна обратна връзка на български. Структурирай я така:
+1. Какво е добре в отговора (конкретно).
+2. Какво липсва или може да се подобри.
+3. Конкретни предложения за подобрение.
+
+Бъди насърчителен, но честен. Отговорът трябва да е под 250 думи. Не давай оценки като числа.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        config: { temperature: 0.7 },
+      });
+
+      const feedback = response.text;
+      if (typeof feedback !== 'string') {
+        res.status(500).json({ error: 'Възникна проблем с AI отговора.' });
+        return;
+      }
+
+      await trackAIUsage(user.id);
+      return res.json({ feedback });
+    } catch (error) {
+      console.error('AI Tutor Feedback Error:', error);
+      res.status(500).json(safeError(error));
+    }
+  });
+
+  // ============================================
   // Contact Form (RATE LIMITED)
   // ============================================
   app.post('/api/contact', contactLimiter, validateBody(ContactFormSchema), async (req: Request, res: Response) => {
     try {
       const { name, email, subject, message } = req.body;
-      // In production, send email via SendGrid/Resend/SES here
-      console.log('[Contact]', { name, email, subject, message: message.slice(0, 200) });
+      // Configure one of these env vars to send real emails:
+      // RESEND_API_KEY, SENDGRID_API_KEY, or AWS SES credentials.
+      const emailSent = await sendContactEmail({ name, email, subject, message });
+      if (!emailSent) {
+        res.status(503).json({ error: 'Изпращането на имейл не е конфигурирано. Моля, свържете се с нас директно на hello@ailabs.bg.' });
+        return;
+      }
       res.json({ success: true, message: 'Съобщението е изпратено успешно.' });
     } catch (error) {
       res.status(500).json(safeError(error));

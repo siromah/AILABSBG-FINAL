@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Home, GraduationCap, MessageSquare, Sparkles, Calendar, Tag, User, Settings, FileText, ArrowUpRight, X } from 'lucide-react';
+import { Search, Home, GraduationCap, MessageSquare, Sparkles, Calendar, Tag, User, Settings, FileText, ArrowUpRight, X, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PROMPTS, LESSONS_MODS, EVENTS_DATA } from '../data';
 
 const PAGES = [
   { id: 'home', label: 'Начало', route: '/', icon: Home },
   { id: 'lessons', label: 'Академия', route: '/lessons', icon: GraduationCap },
+  { id: 'missions', label: 'Мисии', route: '/missions', icon: Target },
   { id: 'community', label: 'Общност', route: '/community', icon: MessageSquare },
   { id: 'prompts', label: 'Prompt Library', route: '/prompts', icon: Sparkles },
   { id: 'events', label: 'Събития', route: '/events', icon: Calendar },

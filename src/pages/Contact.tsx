@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { motion } from 'motion/react';
-import { Mail, Send, User, MessageSquare, Clock, CheckCircle, ArrowRight } from 'lucide-react';
+import { Mail, Send, User, MessageSquare, Clock, CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 export default function Contact({ showToast }: any) {
@@ -9,6 +9,7 @@ export default function Contact({ showToast }: any) {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<{name?:string, email?:string, message?:string}>({});
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     const e: typeof errors = {};
@@ -27,13 +28,35 @@ export default function Contact({ showToast }: any) {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    setSent(true);
-    setForm({ name: '', email: '', message: '' });
-    showToast('Съобщението е изпратено успешно');
-    timerRef.current = setTimeout(() => setSent(false), 5000);
+
+    setLoading(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSent(true);
+        setForm({ name: '', email: '', message: '' });
+        showToast('Съобщението е изпратено успешно');
+        timerRef.current = setTimeout(() => setSent(false), 5000);
+      } else {
+        showToast(data.error || 'Грешка при изпращане. Опитай отново.', true);
+      }
+    } catch {
+      showToast('Грешка при изпращане. Опитай отново.', true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,8 +143,9 @@ export default function Contact({ showToast }: any) {
                     {errors.message && <p className="text-[12px] text-[var(--rose)] mt-1">{errors.message}</p>}
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full h-12 text-[15px] gap-2">
-                    <Send size={16} /> Изпрати съобщение
+                  <Button type="submit" size="lg" className="w-full h-12 text-[15px] gap-2" disabled={loading}>
+                    {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                    {loading ? 'Изпращам...' : 'Изпрати съобщение'}
                   </Button>
                 </div>
               </form>
