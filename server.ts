@@ -31,6 +31,7 @@ dotenv.config();
 const PORT = Number(process.env.PORT) || 8080;
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const isProduction = process.env.NODE_ENV === 'production';
 
 // ============================================
 // Supabase Admin Client (server-side ONLY)
@@ -252,13 +253,16 @@ async function sendContactEmail(payload: ContactEmailPayload): Promise<boolean> 
 // ============================================
 async function startServer() {
   const app = express();
+  const scriptSrc = isProduction
+    ? ["'self'", "'unsafe-inline'"]
+    : ["'self'", "'unsafe-inline'", "'unsafe-eval'"];
 
   // Security headers
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        scriptSrc,
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "https:", "blob:"],
@@ -273,17 +277,17 @@ async function startServer() {
 
   // CORS - explicit origins only in production
   const rawOrigins = process.env.ALLOWED_ORIGINS || '';
-  const allowedOrigins = process.env.NODE_ENV === 'production'
+  const allowedOrigins = isProduction
     ? rawOrigins.split(',').map(o => o.trim()).filter(Boolean)
     : ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:8080'];
+  const hasWildcardOrigin = allowedOrigins.includes('*');
 
   app.use((req: Request, res: Response, next: NextFunction) => {
     const origin = req.headers.origin;
     const isAllowed = origin && allowedOrigins.includes(origin);
-    const allowsAny = allowedOrigins.includes('*');
 
-    if (process.env.NODE_ENV === 'production') {
-      if (allowedOrigins.length === 0) {
+    if (isProduction) {
+      if (allowedOrigins.length === 0 || hasWildcardOrigin) {
         // Misconfigured production: deny cross-origin requests
         if (req.method === 'OPTIONS') {
           res.status(403).json({ error: 'CORS not configured.' });
@@ -294,8 +298,8 @@ async function startServer() {
           res.status(403).json({ error: 'CORS not configured.' });
           return;
         }
-      } else if (isAllowed || allowsAny) {
-        res.setHeader('Access-Control-Allow-Origin', allowsAny ? '*' : origin);
+      } else if (isAllowed) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
       } else if (origin) {
         res.status(403).json({ error: 'Origin not allowed.' });
         return;
@@ -895,7 +899,7 @@ ${answer}
   // ============================================
   // Vite / Static Serving
   // ============================================
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProduction) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
